@@ -1,6 +1,8 @@
 #ifndef ENEMY_H_
 #define ENEMY_H_
 
+#include <string>
+
 #include "Entity.h"
 #include "Consumable.h"
 #include "Equipable.h"
@@ -17,6 +19,7 @@
  */
 class Enemy : public Entity {
  private:
+ std::string name;
  protected:
  public:
     // Constructor which requires health, energy, armour, and attack information
