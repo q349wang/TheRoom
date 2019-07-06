@@ -1,5 +1,7 @@
 #include "BattleManager.h"
 #include "../ADTs/Command/Command.h"
+#include "../ADTs/Entity/Enemy.h"
+#include "../ADTs/Entity/Player.h"
 
 using namespace std;
 
@@ -52,14 +54,15 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
         }
 
         Item *item = nullptr;
-        for (auto enemy : *eList)
+        for (auto equip : player->)
         {
-            if (enemy != nullptr && enemy->getName() = name)
+            if (equip != nullptr && equip->getName() = name)
             {
-                target = enemy;
+                item = equip;
                 break;
             }
         }
+        if (item )
         player->useItem();
         break;
     }
