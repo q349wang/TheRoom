@@ -37,30 +37,42 @@ void Entity::equipEquipable(Equipable& equip_item) {
 
 /**
  */
-void attack(Enemy*) {
+const std::vector<Equipable*>& Entity::currentEquipables() {
+    return equipables_;
+}
+
+/**
+ */
+const std::vector<Consumable*>& Entity::currentConsumables() {
+    return consumables_;
+}
+
+/**
+ */
+void Entity::attack(Enemy*) {
 
 }
 
 /**
  */
-bool checkMove(std::vector<int>) {
+bool Entity::checkMove(std::vector<int>) {
 
 }
 
 /**
  */
-void takeDamage(double) {
-
+void Entity::takeDamage(double damage) {
+    health_ =  health_ - damage;
 }
 
 /**
  */
-void useEnergy(double) {
-
+void Entity::useEnergy(double energy) {
+    energy_ = energy_ - energy;
 }
 
 /**
  */
-bool isDead() {
+bool Entity::isDead() {
 
 }

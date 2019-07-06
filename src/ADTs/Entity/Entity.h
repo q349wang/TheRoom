@@ -32,6 +32,9 @@ class Entity {
     void addConsumable(Consumable&);
     void equipEquipable(Equipable&);
 
+    const std::vector<Equipable*>& currentEquipables();
+    const std::vector<Consumable*>& currentConsumables();
+
     void attack(Enemy*);
     bool checkMove(std::vector<int>);
 
