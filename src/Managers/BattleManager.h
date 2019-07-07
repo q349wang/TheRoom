@@ -30,8 +30,8 @@ public:
 	void startBattle(std::vector<Enemy *> *);
 	void runBattle();
 
-	bool isBattleEnded();
-	bool canExitBattle();
-	std::string getMsg();
+	bool isBattleEnded() const;
+	bool canExitBattle() const;
+	std::string getMsg() const;
 };
 #endif
