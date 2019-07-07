@@ -88,5 +88,11 @@ void Entity::useEnergy(double energy) {
 /**
  */
 bool Entity::isDead() {
-    return (health_ <= DEAD_HEALTH) ? (true) : (false);
+    return (health_ <= BASE_HEALTH_ENERGY) ? (true) : (false);
+}
+
+/**
+ */
+bool Entity::isOutOfEnergy() {
+    return (energy_ <= BASE_HEALTH_ENERGY) ? (true) : (false);
 }

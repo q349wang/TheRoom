@@ -26,7 +26,7 @@ class Entity {
     std::vector<Equipable*> equipables_;
     std::vector<Equipable*> equiped_;
 
-    static const double DEAD_HEALTH = 0.0; 
+    static const double BASE_HEALTH_ENERGY = 0.0; 
 
  protected:   
  public:
@@ -51,6 +51,7 @@ class Entity {
     void takeDamage(double);
     void useEnergy(double);
     bool isDead();
+    bool isOutOfEnergy();
 };
 
 #endif

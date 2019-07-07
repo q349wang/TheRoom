@@ -1,3 +1,3 @@
-#include "Map.h"
+#include "Tile.h"
 
 using namespace std;
