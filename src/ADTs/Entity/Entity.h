@@ -19,6 +19,7 @@ class Entity {
     std::vector<Consumable*> consumables_;
     std::vector<Equipable*> equipables_;
     std::vector<Equipable*> equiped_;
+    std::string name_;
 
  protected:   
  public:
@@ -41,6 +42,7 @@ class Entity {
     void takeDamage(double);
     void useEnergy(double);
     bool isDead();
+    std::string getName() const;
 };
 
 #endif

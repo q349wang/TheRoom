@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 
 #include "../HelperClasses/Subject.h"
 
@@ -10,24 +11,27 @@ class Command;
 class Enemy;
 class Player;
 
-class BattleManager : public Subject {
-    std::vector<Enemy*>* eList;
-    Player* player;
+class BattleManager : public Subject
+{
+	std::vector<Enemy *> *eList;
+	Player *player;
 
-    bool battleEnded;
-    std::string msg;
-    int eLeft;
-    public:
-    BattleManager(Player *);
-    ~BattleManager();
+	bool battleEnded;
+	bool exitBattle;
+	std::ostringstream msg;
+	int eLeft;
 
-    void runEnemyTurn();
-    bool runPlayerTurn(const Command&);
-    void startBattle(std::vector<Enemy*>*);
-    void runBattle();
-    void endBattle();
+public:
+	BattleManager(Player *);
+	~BattleManager();
 
-    bool isBattleEnded();
-    std::string getMsg();
+	void runEnemyTurn();
+	bool runPlayerTurn(const Command &);
+	void startBattle(std::vector<Enemy *> *);
+	void runBattle();
+
+	bool isBattleEnded();
+	bool canExitBattle();
+	std::string getMsg();
 };
 #endif

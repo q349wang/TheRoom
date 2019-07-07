@@ -76,3 +76,10 @@ void Entity::useEnergy(double energy) {
 bool Entity::isDead() {
 
 }
+
+/**
+ * 
+ */
+string Entity::getName() const {
+    return name_;
+}

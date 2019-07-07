@@ -7,10 +7,9 @@
 
 class Enemy: public Entity {
  private:
- std::string name;
  protected:
  public:
- std::string getName();
+ std::string getName() const;
 };
 
 #endif
