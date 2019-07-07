@@ -34,3 +34,4 @@
 *.pdf
 
 .vscode
+*.json
