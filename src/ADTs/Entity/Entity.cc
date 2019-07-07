@@ -17,6 +17,18 @@ double Entity::getEnergy() {
 
 /**
  */
+double Entity::getAttack() {
+    return attackStrength_;
+}
+
+/**
+ */
+pair<int,int> Entity::getPosition() {
+    return position_;
+}
+
+/**
+ */
 void Entity::addEquipable(Equipable& new_equip) {
     equipables_.emplace_back(&new_equip);
 }
@@ -52,13 +64,12 @@ const std::vector<Consumable*>& Entity::currentConsumables() {
 /**
  */
 void Entity::attack(Entity* enemy) {
-    //TODO
-    enemy->takeDamage(10.0);
+    enemy->takeDamage(attackStrength_);
 }
 
 /**
  */
-bool Entity::checkMove(std::vector<int>) {
+bool Entity::checkMove(pair<int,int>) {
     //TODO
 }
 

@@ -3,9 +3,11 @@
 
 #include<vector>
 #include<memory>
+#include<utility>
 
 class Consumable;
 class Equipable;
+class Map;
 
 /**
  * Class: Entity
@@ -13,9 +15,13 @@ class Equipable;
  */
 class Entity {
  private:
+    Map* current_map_;
+    
     double health_;
     double energy_;
-    
+    double attackStrength_;
+
+    std::pair <int,int> position_;
     std::vector<Consumable*> consumables_;
     std::vector<Equipable*> equipables_;
     std::vector<Equipable*> equiped_;
@@ -29,6 +35,8 @@ class Entity {
 
     double getHealth();
     double getEnergy();
+    double getAttack();
+    std::pair<int,int> getPosition();
     
     void addEquipable(Equipable&);
     void addConsumable(Consumable&);
@@ -38,7 +46,7 @@ class Entity {
     const std::vector<Consumable*>& currentConsumables();
 
     void attack(Entity*);
-    bool checkMove(std::vector<int>);
+    bool checkMove(pair<int,int>);
 
     void takeDamage(double);
     void useEnergy(double);
