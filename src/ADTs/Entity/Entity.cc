@@ -156,3 +156,10 @@ bool Entity::isOutOfEnergy() {
 void Entity::updatePosition(pair<int, int> location) {
     position_ = location;
 }
+
+/**
+ * 
+ */
+string Entity::getName() const {
+    return name_;
+}

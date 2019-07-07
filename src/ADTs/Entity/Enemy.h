@@ -19,7 +19,6 @@
  */
 class Enemy : public Entity {
  private:
- std::string name;
  protected:
  public:
     // Constructor which requires health, energy, armour, and attack information
