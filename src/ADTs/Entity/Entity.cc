@@ -30,8 +30,10 @@ void Entity::addConsumable(Consumable& new_consume) {
 /**
  */
 void Entity::equipEquipable(Equipable& equip_item) {
-    for(auto& existing_items: equipables_) {
-        
+    for(auto& existing_item: equipables_) {
+        if(existing_item == &equip_item) {
+            //TODO
+        }
     }
 }
 
@@ -49,14 +51,15 @@ const std::vector<Consumable*>& Entity::currentConsumables() {
 
 /**
  */
-void Entity::attack(Enemy*) {
-
+void Entity::attack(Entity* enemy) {
+    //TODO
+    enemy->takeDamage(10.0);
 }
 
 /**
  */
 bool Entity::checkMove(std::vector<int>) {
-
+    //TODO
 }
 
 /**
@@ -74,5 +77,5 @@ void Entity::useEnergy(double energy) {
 /**
  */
 bool Entity::isDead() {
-
+    return (health_ <= DEAD_HEALTH) ? (true) : (false);
 }

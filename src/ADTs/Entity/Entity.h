@@ -6,7 +6,6 @@
 
 class Consumable;
 class Equipable;
-class Enemy;
 
 /**
  * Class: Entity
@@ -16,9 +15,12 @@ class Entity {
  private:
     double health_;
     double energy_;
+    
     std::vector<Consumable*> consumables_;
     std::vector<Equipable*> equipables_;
     std::vector<Equipable*> equiped_;
+
+    static const double DEAD_HEALTH = 0.0; 
 
  protected:   
  public:
@@ -35,7 +37,7 @@ class Entity {
     const std::vector<Equipable*>& currentEquipables();
     const std::vector<Consumable*>& currentConsumables();
 
-    void attack(Enemy*);
+    void attack(Entity*);
     bool checkMove(std::vector<int>);
 
     void takeDamage(double);
