@@ -1,19 +1,20 @@
-#ifndef TRAVEL_MANAGER_
-#define TRAVEL_MANAGER_
+#include "TravelManager.h"
+#include "../../ADTs/Entity/Player.h"
+TravelManager::TravelManager(Map* map, Player* player):
+    player{player},
+    map{map}
+    {}
+void TravelManager::makeMove() {
 
-#include "../HelperClasses/Subject.h"
+}
 
-class Map;
-class Player;
+void TravelManager::startTravel() {
 
-class TravelManager : public Subject {
-    Map* map;
-    Player* player;
-    public:
-    TravelManager(Map*, Player*);
-    ~TravelManager();
+    runTravel();
+}
 
-    void makeMove();
-    void runTravel();
-};
-#endif
+void TravelManager::runTravel() {
+    while(!map->OnEnemy()) {
+
+    }
+}
