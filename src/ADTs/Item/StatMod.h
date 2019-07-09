@@ -1,5 +1,5 @@
-#ifndef _ROOM_H_
-#define _ROOM_H_
+#ifndef _STAT_MOD_H_
+#define _STAT_MOD_H_
 #include <string>
 #include <unordered_set>
 using namespace std;
