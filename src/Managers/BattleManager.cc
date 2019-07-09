@@ -9,12 +9,12 @@
 
 using namespace std;
 
-BattleManager::BattleManager(Player *player) : player{player},
-																							 battleEnded{false},
-																							 exitBattle{false},
-																							 eList{nullptr},
-																							 msg{},
-																							 eLeft{0} {}
+BattleManager::BattleManager(Player *player) : 
+	player{player},
+	battleEnded{false},
+	eList{nullptr},
+	msg{},
+	eLeft{0} {}
 
 BattleManager::~BattleManager() {}
 
@@ -173,9 +173,9 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
 void BattleManager::startBattle(std::vector<Enemy *> *enemies)
 {
 	battleEnded = false;
-	exitBattle = false;
 	eList = enemies;
 	eLeft = (eList != nullptr) ? eList->size() : 0;
+	runBattle();
 }
 
 void BattleManager::runBattle()
@@ -227,15 +227,14 @@ void BattleManager::runBattle()
 		}
 		runEnemyTurn();
 	}
-	exitBattle = true;
+	msg.clear();
+	msg << "Battle over";
 	notifyObservers();
 }
 
-string BattleManager::getMsg()
+string BattleManager::getMsg() const
 {
 	return msg.str();
 }
 
-bool BattleManager::isBattleEnded() { return battleEnded; }
-
-bool BattleManager::canExitBattle() { return exitBattle; }
+bool BattleManager::isBattleEnded() const { return battleEnded; }

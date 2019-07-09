@@ -17,13 +17,14 @@ class BattleManager : public Subject
 	Player *player;
 
 	bool battleEnded;
-	bool exitBattle;
 	std::ostringstream msg;
 	int eLeft;
 
 public:
 	BattleManager(Player *);
 	~BattleManager();
+	// No copying BattleManager
+    BattleManager(const BattleManager&) = delete;
 
 	void runEnemyTurn();
 	bool runPlayerTurn(const Command &);
@@ -31,7 +32,6 @@ public:
 	void runBattle();
 
 	bool isBattleEnded() const;
-	bool canExitBattle() const;
 	std::string getMsg() const;
 };
 #endif
