@@ -17,7 +17,6 @@ class BattleManager : public Subject
 	Player *player;
 
 	bool battleEnded;
-	std::ostringstream msg;
 	int eLeft;
 
 public:

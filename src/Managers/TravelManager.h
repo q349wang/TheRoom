@@ -6,21 +6,23 @@
 
 class Map;
 class Player;
+class Command;
 
 class TravelManager : public Subject {
     Map* map;
     Player* player;
 
     bool toBattle;
-    std::ostringstream msg;
     public:
     TravelManager(Map*, Player*);
     ~TravelManager();
     // No copying TravelManager
     TravelManager(const TravelManager&) = delete;
 
-    void makeMove();
+    void makeMove(const Command&);
     void startTravel();
     void runTravel();
+
+    const Map* getMap() const;
 };
 #endif

@@ -1,6 +1,8 @@
 #include "Subject.h"
 #include "Observer.h"
 
+using namespace std;
+
 Subject::Subject() {}
 Subject::~Subject() {}
 
@@ -19,4 +21,12 @@ void Subject::detach(Observer* o) {
 
 void Subject::notifyObservers() {
 	for(auto ob : observers) ob->notify();
+}
+
+string Subject::getMsg() const { return msg.str(); }
+
+void Subject::setMessageAndNotify(string message) {
+    msg.clear();
+    msg << message;
+    notifyObservers();
 }
