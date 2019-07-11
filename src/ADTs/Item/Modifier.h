@@ -6,7 +6,7 @@ class Modifier: public Item {
  protected:
   Item *component;
  public:
-  Modifier(Item *component);
+  Modifier(std::string);
   virtual ~Modifier();
 };
 

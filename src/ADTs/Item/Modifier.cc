@@ -1,5 +1,7 @@
 #include "Item.h"
 #include "Modifier.h"
 
-Modifier::Modifier(Item *_component): component{_component} {};
+using namespace std;
+
+Modifier::Modifier(string placeholder): Item{placeholder}{}
 Modifier::~Modifier() {delete component;}
