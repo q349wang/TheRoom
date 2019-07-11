@@ -2,10 +2,9 @@
 #include <string>
 using namespace std;
 
-Curse::Curse(Item *_component): Modifier{_component} {
+Curse::Curse(Item * name,float _adder, float _multiplier): Modifier{name} {
     component->updateName("Curse");
-    float a;
-    float b;
-    component->statModifiers.emplace_back(new StatMod(a,b));
-
+    StatMod* toInsert = new StatMod(_adder,_multiplier);
+    component->getStatMod().emplace_back(toInsert);
+    component->getModifiers().insert({"Curse",toInsert});
 }

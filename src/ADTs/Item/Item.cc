@@ -14,3 +14,12 @@ void Item::updateName(string toAppend){
 map<string,StatMod> getModifiers(){
     return modifiers;
 }
+void Item::setString(string input){
+    name = input;
+}
+Item::~Item(){
+    for(int i=0;i<statModifiers.size();i++){
+        delete statModifiers[i];
+    }
+    statModifiers.clear();
+}
