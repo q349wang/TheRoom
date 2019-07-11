@@ -6,7 +6,7 @@
 
 class Blessing: public Modifier {
  public:
-  Blessing(Item *);
+  Blessing(Item *,float,float);
 };
 
 #endif

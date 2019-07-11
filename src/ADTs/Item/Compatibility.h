@@ -6,7 +6,7 @@
 
 class Compatability: public Modifier {
  public:
-  Compatability(Item *);
+  Compatability(Item *,std::string);
 };
 
 #endif

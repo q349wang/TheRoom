@@ -11,6 +11,8 @@ class StatMod {
     public:
         StatMod(float,float);
         ~StatMod();
+        float getAdder();
+        float getMultiplier();
 };
 
 #endif

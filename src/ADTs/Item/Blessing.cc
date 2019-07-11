@@ -3,11 +3,9 @@
 #include "StatMod.h"
 using namespace std;
 
-Blessing::Blessing(Item* name): Modifier{name} {
+Blessing::Blessing(Item* name, float _adder, float _multiplier): Modifier{name} {
     component->updateName("Blessing");
-    float a = 0;
-    float b = 0;
-    StatMod* toInsert = new StatMod(a,b);
+    StatMod* toInsert = new StatMod(_adder,_multiplier);
     component->getStatMod().emplace_back(toInsert);
     component->getModifiers().insert({"Blessing",toInsert});
 };

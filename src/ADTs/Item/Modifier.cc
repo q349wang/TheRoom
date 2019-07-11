@@ -4,4 +4,4 @@
 using namespace std;
 
 Modifier::Modifier(Item * item): component{item}{}
-Modifier::~Modifier() {delete component;}
+Modifier::~Modifier() {}

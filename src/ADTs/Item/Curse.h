@@ -6,7 +6,7 @@
 
 class Curse: public Modifier {
  public:
-  Curse(Item *);
+  Curse(Item *,float,float);
 };
 
 #endif

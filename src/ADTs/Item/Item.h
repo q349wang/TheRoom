@@ -13,8 +13,8 @@ class Item{
         vector<StatMod *> &getStatMod();
         std::map<std::string,StatMod *> &getModifiers();
         std::string getName();
-        void updateName(std::string toAppend);
-        virtual std::map<std::string,StatMod> useItem()=0;
+        void updateName(std::string);
+       // virtual std::map<std::string,StatMod> useItem()=0;
         virtual ~Item();
         void setString(std::string);
 };

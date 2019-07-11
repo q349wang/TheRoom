@@ -2,6 +2,6 @@
 #include <string>
 using namespace std;
 
-Compatability::Compatability(Item * name): Modifier{name} {
-    component->updateName("Class name");
+Compatability::Compatability(Item * name,string className): Modifier{name} {
+    component->updateName(className);
 }
