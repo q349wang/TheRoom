@@ -6,7 +6,7 @@
 
 class Curse: public Modifier {
  public:
-  Curse(std::string name);
+  Curse(Item *);
 };
 
 #endif

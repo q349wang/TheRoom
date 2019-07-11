@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 
-Curse::Curse(string name): Modifier{name} {
+Curse::Curse(Item * name): Modifier{name} {
     component->updateName("Curse");
     float a;
     float b;

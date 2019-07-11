@@ -11,12 +11,12 @@ class Item{
     vector<StatMod *> statModifiers;
     public:
         vector<StatMod *> &getStatMod();
-        Item(std::string _name);
         std::map<std::string,StatMod *> &getModifiers();
         std::string getName();
         void updateName(std::string toAppend);
-        virtual std::map<std::string,StatMod> useItem();
+        virtual std::map<std::string,StatMod> useItem()=0;
         virtual ~Item();
+        void setString(std::string);
 };
 
 #endif

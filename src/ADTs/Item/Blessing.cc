@@ -3,7 +3,7 @@
 #include "StatMod.h"
 using namespace std;
 
-Blessing::Blessing(string name): Modifier{name} {
+Blessing::Blessing(Item* name): Modifier{name} {
     component->updateName("Blessing");
     float a = 0;
     float b = 0;

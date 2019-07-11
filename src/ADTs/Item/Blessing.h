@@ -6,7 +6,7 @@
 
 class Blessing: public Modifier {
  public:
-  Blessing(std::string);
+  Blessing(Item *);
 };
 
 #endif

@@ -3,5 +3,5 @@
 
 using namespace std;
 
-Modifier::Modifier(string placeholder): Item{placeholder}{}
+Modifier::Modifier(Item * item): component{item}{}
 Modifier::~Modifier() {delete component;}

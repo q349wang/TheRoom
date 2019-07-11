@@ -4,6 +4,8 @@
 #include "Item.h"
 
 class Consumable: public Item {
+    Consumable(std::string);
+    ~Consumable();
 };
 
 #endif

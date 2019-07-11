@@ -6,7 +6,10 @@
 
 class Equipable: public Item {
     public:
-        std::map<std::string,StatMod> getPassive();
+       // std::map<std::string,StatMod> getPassive();
+        Equipable(std::string);
+        ~Equipable();
+
 };
 
 #endif

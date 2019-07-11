@@ -2,8 +2,6 @@
 #include "StatMod.h"
 using namespace std;
 
-Item::Item(string _name): name{_name} {}
-
 string Item::getName(){
     return name;
 }
@@ -16,4 +14,10 @@ vector<StatMod *> &Item::getStatMod(){
 }
 map<std::string,StatMod *> &Item::getModifiers(){
     return modifiers;
+}
+void Item::setString(string input){
+    name = input;
+}
+Item::~Item(){
+    
 }
