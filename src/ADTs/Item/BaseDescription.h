@@ -7,6 +7,7 @@
 class BaseDescription : public ItemDescription {
     std::string name;
 
+    std::map<std::string, StatMod> baseInfo;
     std::map<std::string, StatMod> modifierList;
 
    public:

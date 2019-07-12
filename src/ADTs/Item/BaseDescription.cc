@@ -2,11 +2,12 @@
 using namespace std;
 
 BaseDescription::BaseDescription(string name) : name{name} {}
-BaseDescription::BaseDescription(string name, map<string, StatMod> modList) : name{name}, modifierList{modList} {}
+BaseDescription::BaseDescription(string name, map<string, StatMod> modList) : name{name}, baseInfo{modList} {}
 BaseDescription::~BaseDescription() {}
 map<std::string, StatMod> &BaseDescription::getModifiers() {
 	if (needsReload) {
 		modifierList.clear();
+		modifierList = baseInfo;
 		needsReload = false;
 	}
     return modifierList;

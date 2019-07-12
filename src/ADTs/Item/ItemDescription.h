@@ -5,12 +5,14 @@
 #include <vector>
 #include "StatMod.h"
 
-class ItemDescription {
-   protected:
+class ItemDescription
+{
+protected:
     bool needsReload = true;
-    void combineMods(std::map<std::string, StatMod> &, const std::string &,
+
+public:
+    static void combineMods(std::map<std::string, StatMod> &, const std::string &,
                      const StatMod &);
-   public:
     virtual std::map<std::string, StatMod> &getModifiers() = 0;
     virtual void reload();
     virtual std::string getName() = 0;
