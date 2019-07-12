@@ -38,7 +38,7 @@ ${TESTEXEC}: ${TESTOBJS} ${OBJECTS}
 -include ${TESTDEPS}
 -include ${TESTEDDEPS}
 
-.PHONY: cleanTest
+-include ${TESTDEPS}
 
 cleanTest:
 	rm  -f ${TESTOBJS} ${TESTEXEC} ${TESTDEPS}
