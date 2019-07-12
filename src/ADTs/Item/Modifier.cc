@@ -3,7 +3,9 @@
 
 using namespace std;
 
-Modifier::Modifier(shared_ptr<ItemDescription> item) : component{item} {}
+Modifier::Modifier(shared_ptr<ItemDescription> item) : component{item} {
+    reload();
+}
 Modifier::~Modifier() {}
 
 string Modifier::getName() { return component->getName(); }

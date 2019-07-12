@@ -14,6 +14,8 @@ class StatMod {
         double getAdder();
         double getMultiplier();
         bool isNone();
+
+        bool operator==(const StatMod&);
 };
 
 #endif
