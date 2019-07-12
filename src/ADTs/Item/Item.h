@@ -1,22 +1,29 @@
 #ifndef _ITEM_H_
 #define _ITEM_H_
-#include <string>
-#include <StatMod.h>
 #include <map>
+#include <memory>
+#include <string>
+#include <vector>
+#include "StatMod.h"
 
-class Item{
+class ItemDescription;
+
+class Item {
     std::string name;
-    StatMod *StatMod;
-    std::map<std::string,StatMod> modifiers;
-    vector<StatMod *> statModifiers;
-    public:
-        vector<StatMod *> &getStatMod();
-        std::map<std::string,StatMod *> &getModifiers();
-        std::string getName();
-        void updateName(std::string);
-       // virtual std::map<std::string,StatMod> useItem()=0;
-        virtual ~Item();
-        void setString(std::string);
+
+    virtual void afterUse();
+
+   protected:
+    std::shared_ptr<ItemDescription> desc;
+
+   public:
+    virtual std::map<std::string, StatMod> &getModifiers();
+    virtual std::map<std::string, StatMod> getItemActive();
+    virtual std::string getShortName();
+    virtual std::string getName();
+    map<std::string, StatMod> useItem(std::string);
+    Item(std::string, std::shared_ptr<ItemDescription>);
+    virtual ~Item() = 0;
 };
 
 #endif

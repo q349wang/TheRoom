@@ -1,12 +1,9 @@
 #include "Consumable.h"
-#include <utility>
-#include <string>
 
 using namespace std;
 
-Consumable::Consumable(string _name){
-    setString(_name);
-}
-Consumable::~Consumable(){
-    
-}
+void Consumable::afterUse() { desc = make_shared<ItemDescription>(getName()); }
+
+Consumable::Consumable(string name, shared_ptr<ItemDescription> active)
+    : Item{name, active} {}
+Consumable::~Consumable() {}

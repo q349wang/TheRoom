@@ -1,12 +1,15 @@
 #ifndef __BLESSING_H__
 #define __BLESSING_H__
 #include "Modifier.h"
-#include "Item.h"
-#include <string>
 
 class Blessing: public Modifier {
+  std::string name;
+  StatMod stat;
  public:
-  Blessing(Item *_component);
+  Blessing(std::string, StatMod, std::shared_ptr<ItemDescription>);
+  ~Blessing();
+  std::string getName() override;
+  map<std::string, StatMod>& getModifiers() override;
 };
 
 #endif

@@ -1,25 +1,25 @@
 #include "Item.h"
-#include "StatMod.h"
+#include "ItemDescription.h"
+
 using namespace std;
 
-Item::Item(string _name, StatMod *_StatMod): name{_name},StatMod{_StatMod} {}
+string Item::getShortName() { return name; }
 
-std::string Item::getName(){
-    return name;
+string Item::getName() { return desc->getName(); }
+
+map<string, StatMod>& Item::getModifiers() {
+    return desc->getModifiers;
 }
-void Item::updateName(string toAppend){
-    name+=toAppend;
-    return;
+
+void Item::afterUse() {}
+
+map<string, StatMod> Item::useItem(string heroType) {
+    map<string, StatMod> itemMods{getModifiers()};
+
+    afterUse();
+    return itemMods;
 }
-map<string,StatMod> getModifiers(){
-    return modifiers;
-}
-void Item::setString(string input){
-    name = input;
-}
-Item::~Item(){
-    for(int i=0;i<statModifiers.size();i++){
-        delete statModifiers[i];
-    }
-    statModifiers.clear();
-}
+
+Item::Item(string name, shared_ptr<ItemDescription> desc)
+    : name{name}, desc{desc} {}
+Item::~Item() {}

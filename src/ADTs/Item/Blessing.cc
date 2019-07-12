@@ -1,11 +1,15 @@
 #include "Blessing.h"
 #include <string>
-#include "StatMod.h"
 using namespace std;
 
-Blessing::Blessing(Item* name, float _adder, float _multiplier): Modifier{name} {
-    component->updateName(" Blessing");
-    StatMod* toInsert = new StatMod(_adder,_multiplier);
-    component->getStatMod().emplace_back(toInsert);
-    component->getModifiers().insert({"Blessing",toInsert});
-};
+Blessing::Blessing(string name, StatMod stat, shared_ptr<ItemDescription> item)
+    : name{name}, stat{stat}, Modifier{item} {}
+
+string Blessing::getName() { return "Blessed " + name + " " + component->getName(); }
+map<string, StatMod>& Blessing::getModifiers() {
+    map<string, StatMod>& modMap = component->getModifiers();
+    if (needsReload) {
+        combineMods(modMap, name, stat);
+    }
+    return modMap;
+}

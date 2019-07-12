@@ -2,17 +2,18 @@
 #define _STAT_MOD_H_
 #include <string>
 #include <unordered_set>
-using namespace std;
 
 class StatMod {
-    float adder;
-    float multiplier;
-    unordered_set <string> classes;
+
+    double adder;
+    double multiplier;
     public:
-        StatMod(float,float);
+        StatMod(double adder = 0,double multiplier = 0);
+        StatMod(StatMod, StatMod);
         ~StatMod();
-        float getAdder();
-        float getMultiplier();
+        double getAdder();
+        double getMultiplier();
+        bool isNone();
 };
 
 #endif

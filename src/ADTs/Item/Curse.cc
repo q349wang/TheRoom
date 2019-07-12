@@ -2,9 +2,14 @@
 #include <string>
 using namespace std;
 
-Curse::Curse(Item * name,float _adder, float _multiplier): Modifier{name} {
-    component->updateName(" Curse");
-    StatMod* toInsert = new StatMod(_adder,_multiplier);
-    component->getStatMod().emplace_back(toInsert);
-    component->getModifiers().insert({"Curse",toInsert});
+Curse::Curse(string name, StatMod stat, shared_ptr<ItemDescription> item)
+    : name{name}, stat{stat}, Modifier{item} {}
+
+string Curse::getName() { return "Cursed " + name + " " + component->getName(); }
+map<string, StatMod>& Curse::getModifiers() {
+    map<string, StatMod>& modMap = component->getModifiers();
+    if (needsReload) {
+        combineMods(modMap, name, StatMod{-stat.getAdder, 1.0 / stat.getMultiplier});
+    }
+    return modMap;
 }

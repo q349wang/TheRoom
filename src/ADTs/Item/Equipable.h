@@ -1,12 +1,15 @@
 #ifndef _EQUIPABLE_H_
 #define _EQUIPABLE_H_
-#include <string>
-#include "StatMod.h"
 #include "Item.h"
+#include "ItemDescription.h"
 
-class Equipable: public Item {
-    public:
-        std::map<std::string,StatMod> userItem;
+class Equipable : public Item {
+    std::shared_ptr<ItemDescription> passive;
+
+   public:
+    std::map<std::string, StatMod> getPassive();
+    Equipable(std::string, std::shared_ptr<ItemDescription>, std::shared_ptr<ItemDescription>);
+    ~Equipable();
 };
 
 #endif

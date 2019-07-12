@@ -1,12 +1,15 @@
 #ifndef __COMPATIBILITY_H__
 #define __COMPATIBILITY_H__
 #include "Modifier.h"
-#include "Item.h"
-#include <string>
 
 class Compatability: public Modifier {
+  std::string heroClass;
+  StatMod stat;
  public:
-  Compatability(Item *_component);
+  Compatability(std::string, StatMod, std::shared_ptr<ItemDescription>);
+  ~Compatability();
+  std::string getName() override;
+  map<std::string, StatMod>& getModifiers() override;
 };
 
 #endif
