@@ -93,11 +93,13 @@ shared_ptr<Item> ItemManager::createItem(int level)
     if (type == 0)
     {
         shared_ptr<ItemDescription> desc = generateDescription(level, 0, numMods);
+        return make_shared<Equipable>(desc->getName(), desc);
     }
     // Create Consumable
     else
     {
         shared_ptr<ItemDescription> desc = generateDescription(level, 1, numMods);
+        return make_shared<Consumable>(desc->getName(), desc);
     }
 }
 
