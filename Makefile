@@ -2,9 +2,20 @@ CXX = g++-5
 CXXFLAGS = -g -std=c++14 -Wall -O -MMD
 EXEC = TheRoom
 SOURCEDIR = src
+TESTDIR = test
+
+TESTEXEC = TestRunner
+
 SOURCES := ${shell find ${SOURCEDIR} -name '*.cc'}
+TESTERS := ${shell find ${TESTDIR} -name '*.cc'}
+
 OBJECTS = ${SOURCES:.cc=.o}
 DEPENDS = ${OBJECTS:.o=.d}
+
+TESTOBJS = ${TESTERS:.cc=.o}
+TESTEDOBJS = ${TESTERS:Tests.cc=.o}
+TESTDEPS = ${TESTOBJS:.o=.d}
+TESTEDDEPS = ${TESTEDOBJS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
 	${CXX} ${CXXFLAGS} ${OBJECTS} -lX11 -o ${EXEC}
@@ -20,15 +31,14 @@ all: ${OBJECTS}
 clean:
 	rm ${OBJECTS} ${EXEC} ${DEPENDS}
 
-myprogram: ${OBJECTS}
-	${CXX} ${CXXFLAGS} ${OBJECTS} -o myprogram
+${TESTEXEC}: ${TESTOBJS} ${TESTEDOBJS}
+	${CXX} ${CXXFLAGS} ${TESTOBJS} ${TESTEDOBJS} -o ${TESTEXEC}
+
+-include ${TESTDEPS}
+
+-include ${TESTEDDEPS}
 
 .PHONY: cleanTest
 
 cleanTest:
-	rm ${OBJECTS} myprogram ${DEPENDS}
-
-.PHONY: cleanAll
-
-cleanAll:
-	rm ${OBJECTS} ${DEPENDS}
+	rm ${TESTOBJS} ${TESTEXEC} ${TESTDEPS}
