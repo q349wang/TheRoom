@@ -14,3 +14,8 @@ double StatMod::getMultiplier() { return multiplier; }
 
 // We have a resolution of 0.1 for stat modifiers
 bool StatMod::isNone() { return abs(adder) < 0.1 && abs(multiplier) < 0.1; }
+
+bool StatMod::operator==(const StatMod &other)
+{
+    return adder == other.adder && multiplier == other.multiplier;
+}
