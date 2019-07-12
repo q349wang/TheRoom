@@ -7,7 +7,7 @@ XWindowManager::XWindowManager() {
     if (d == NULL) {
         fprintf(stderr, "Cannot connect to X server %s\n", "simey:0");
         exit(-1);
-    }
+    }:
 }
 
 XWindowManager::~XWindowManager() {
