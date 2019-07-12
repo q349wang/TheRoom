@@ -9,7 +9,7 @@ class Compatability: public Modifier {
   Compatability(std::string, StatMod, std::shared_ptr<ItemDescription>);
   ~Compatability();
   std::string getName() override;
-  map<std::string, StatMod>& getModifiers() override;
+  std::map<std::string, StatMod>& getModifiers() override;
 };
 
 #endif

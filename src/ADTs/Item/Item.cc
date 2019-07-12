@@ -8,7 +8,7 @@ string Item::getShortName() { return name; }
 string Item::getName() { return desc->getName(); }
 
 map<string, StatMod>& Item::getModifiers() {
-    return desc->getModifiers;
+    return desc->getModifiers();
 }
 
 void Item::afterUse() {}

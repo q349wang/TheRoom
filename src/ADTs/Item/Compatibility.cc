@@ -3,7 +3,7 @@
 using namespace std;
 
 Compatability::Compatability(string heroClass, StatMod stat, shared_ptr<ItemDescription> item)
-    : heroClass{heroClass}, stat{stat}, Modifier{item} {}
+    : Modifier{item}, heroClass{heroClass}, stat{stat} {}
 
 Compatability::~Compatability(){}
 

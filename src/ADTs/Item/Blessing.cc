@@ -3,7 +3,8 @@
 using namespace std;
 
 Blessing::Blessing(string name, StatMod stat, shared_ptr<ItemDescription> item)
-    : name{name}, stat{stat}, Modifier{item} {}
+    : Modifier{item}, name{name}, stat{stat} {}
+Blessing::~Blessing() {}
 
 string Blessing::getName() { return "Blessed " + name + " " + component->getName(); }
 map<string, StatMod>& Blessing::getModifiers() {

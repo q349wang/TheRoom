@@ -11,7 +11,7 @@ class BaseDescription : public ItemDescription {
 
    public:
     BaseDescription(std::string);
-    BaseDescription(std::string, map<std::string, StatMod>);
+    BaseDescription(std::string, std::map<std::string, StatMod>);
     ~BaseDescription();
 
     std::map<std::string, StatMod> &getModifiers() override;

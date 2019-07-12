@@ -9,7 +9,7 @@ class Blessing: public Modifier {
   Blessing(std::string, StatMod, std::shared_ptr<ItemDescription>);
   ~Blessing();
   std::string getName() override;
-  map<std::string, StatMod>& getModifiers() override;
+  std::map<std::string, StatMod>& getModifiers() override;
 };
 
 #endif

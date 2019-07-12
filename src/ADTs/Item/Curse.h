@@ -9,7 +9,7 @@ class Curse: public Modifier {
   Curse(std::string, StatMod, std::shared_ptr<ItemDescription>);
   ~Curse();
   std::string getName() override;
-  map<std::string, StatMod>& getModifiers() override;
+  std::map<std::string, StatMod>& getModifiers() override;
 };
 
 #endif
