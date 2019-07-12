@@ -15,7 +15,6 @@ using namespace std;
 int main() {
     Consumable *x = new Consumable{"Potion"};
     cout << x->getName() << endl;
-    string a = "Hello";
     Blessing{x,7,8};
     Curse{x,12,15};
     cout << x->getName() << endl;
