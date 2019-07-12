@@ -6,6 +6,8 @@
 class BaseDescription;
 class Equipable;
 class Consumable;
+class Item;
+class ItemDescription;
 
 class ItemManager
 {
