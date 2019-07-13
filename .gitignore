@@ -32,5 +32,6 @@
 *.app
 
 *.pdf
+*.json
 
 .vscode
