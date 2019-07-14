@@ -5,18 +5,6 @@ using namespace std;
 
 BaseDescriptionTests::BaseDescriptionTests() {}
 BaseDescriptionTests::~BaseDescriptionTests() {}
-bool BaseDescriptionTests::compareMap(std::map<std::string, StatMod> lhs, std::map<std::string, StatMod> rhs)
-{
-    if (lhs.size() != rhs.size())
-        return false;
-    for (auto mapKey : lhs)
-    {
-        if (!(lhs[mapKey.first] == rhs[mapKey.first]))
-            return false;
-    }
-
-    return true;
-}
 
 bool BaseDescriptionTests::runTests()
 {
