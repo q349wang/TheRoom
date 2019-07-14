@@ -8,7 +8,6 @@
 class StatMod;
 
 class BaseDescriptionTests : public Tests {
-    bool compareMap(std::map<std::string, StatMod>, std::map<std::string, StatMod>);
     public:
     BaseDescriptionTests();
     ~BaseDescriptionTests();
