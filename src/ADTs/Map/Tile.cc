@@ -44,17 +44,17 @@ void WallTile::insertEnemy(shared_ptr<Enemy> enemy) {
 }
 
 /**
- * Signature: bool available()
+ * Signature: const bool available()
  * Purpose: Determines if a specified tile is available
  */
-bool Tile::available() {
+bool Tile::available() const {
     return true;
 }
 
 /**
- * Signature: bool available()
+ * Signature: const bool available()
  * Purpose: Determines if a specified tile is available
  */
-bool WallTile::available() {
+bool WallTile::available() const {
     return false;
 }

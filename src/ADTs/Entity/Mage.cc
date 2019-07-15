@@ -27,14 +27,14 @@ Mage::Mage(int teleport, double health, double energy, double attack, pair<int, 
  * Note: Returns false if special move was unsuccessful, and true otherwise
  */
 bool Mage::useSpecial(pair<int, int> location) {
-    if(((abs(location.first - position_.first) ==  teleport_amount_) &&
+    if(((abs(location.first - position_.first) <=  teleport_amount_) &&
        ((location.second - position_.second) == 0)) || 
-       ((abs(location.second - position_.second) ==  teleport_amount_) &&
+       ((abs(location.second - position_.second) <=  teleport_amount_) &&
        ((location.first - position_.first) == 0)) && 
        (current_map_->tile(location.first, location.second).available()) &&
        (this->specialReady())) {
            position_ = location;
-           return true;           
+           return true;
     }
 
     return false;

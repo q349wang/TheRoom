@@ -33,7 +33,7 @@ class Tile {
    virtual void insertEnemy(std::shared_ptr<Enemy>);
 
    // Determines if a specified tile is available to be moved on
-   virtual bool available();
+   virtual bool available() const;
 };
 
 /**
@@ -92,7 +92,7 @@ class WallTile : public Tile {
    void insertEnemy(std::shared_ptr<Enemy>) override;
 
    // Determines if a specified tile is available to be moved on
-   bool available() override;
+   bool available() const override;
 };
 
 #endif
