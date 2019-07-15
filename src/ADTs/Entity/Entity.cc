@@ -45,6 +45,14 @@ double Entity::getAttack() {
 }
 
 /**
+ * Signature dobule getArmour()
+ * Purpose: Provides an entity's current armour
+ */
+double Entity::getArmour() {
+    return armour_;
+}
+
+/**
  * Signature: pair<int, int> getPosition()
  * Purpose: Provides an entity's current position
  */
@@ -102,16 +110,18 @@ const vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
  *          Additionally returns the attack amount
  */
 double Entity::attack(shared_ptr<Entity> enemy) {
-    enemy->takeDamage(attackStrength_);
-    return attackStrength_;
+    return enemy->takeDamage(attackStrength_);
 }
 
 /**
  * Signature: void takeDamage(double)
  * Purpose: Reduces the health of the current entity by a specified amount
+ *          Additionally returns actual damage taken, skewed by armour
  */
-void Entity::takeDamage(double damage) {
-    health_ =  health_ - damage;
+double Entity::takeDamage(double damage) {
+    double weighted_damage = (100/(100+armour_))*damage;
+    health_ =  health_ - weighted_damage;
+    return weighted_damage;
 }
 
 /**

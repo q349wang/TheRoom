@@ -102,3 +102,11 @@ using namespace std;
     const Tile& Map::tile(int x, int y) {
         return *map_[x][y];
     }
+
+    /**
+     * Signature: const vector<vector<shared_ptr<Tile>>>& getMap()
+     * Purpose: Provides a const reference to the current map
+     */
+    const vector<vector<shared_ptr<Tile>>>& Map::getMap() {
+        return map_;
+    }

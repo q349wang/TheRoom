@@ -96,6 +96,9 @@ class Map {
   // Provides a const reference to a specified tile
   // Note: Coordinates are assumed to exist, otherwise will throw exception
   const Tile& tile(int x, int y);
+
+  // Provides const reference to the current map
+  const std::vector<std::vector<std::shared_ptr<Tile>>>& getMap();
 };
 
 #endif

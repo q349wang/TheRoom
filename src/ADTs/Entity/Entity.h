@@ -21,10 +21,11 @@ class Entity {
   // Maintain a reference to the current map associated with the entity
   std::shared_ptr<Map> current_map_;
     
-  // Maintain entity health, energy, and attack information
+  // Maintain entity health, energy, armour, and attack information
   double health_;
   double energy_;
   double attackStrength_;
+  double armour_;
 
   // Maintain entity's current position
   std::pair<int,int> position_;
@@ -61,6 +62,7 @@ class Entity {
   double getHealth();
   double getEnergy();
   double getAttack();
+  double getArmour();
   std::pair<int,int> getPosition();
   
   // Inserts specfied equipable/consumable to current collection
@@ -78,13 +80,13 @@ class Entity {
   double attack(std::shared_ptr<Entity>);
   
   // Check if a specified move is valid for the entity
-  virtual bool checkMove(std::pair<int,int>) = 0;
+  virtual bool checkMove(char) = 0;
 
-  // Make a move in a specified direction (indicated using 'R', 'L', 'U' 'D')
+  // Make a move in a specified direction (indicated using 'N', 'E', 'S', 'W')
   virtual bool makeMove(char) = 0;
 
   // Take damage or consume energy by a specified amount
-  void takeDamage(double);
+  double takeDamage(double);
   void useEnergy(double);
 
   // Determine if an entity is dead or out of energy

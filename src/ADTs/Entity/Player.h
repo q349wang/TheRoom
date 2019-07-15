@@ -48,7 +48,7 @@ class Player: public Entity {
     bool specialReady();
 
     // Checks if a provided move is possible for player
-    bool checkMove(std::pair<int, int>) override;
+    bool checkMove(char) override;
 
     // Make a move in a specified direction (indicated using 'R', 'L', 'U' 'D')
     // Note: If move is successful, will return true, otherwise false
@@ -66,89 +66,6 @@ class Player: public Entity {
 
     // Picks up all items from current tile and empties tile as well
     void pickUpItems();
-};
-
-/**
- * Class: Ranger - Derived Class
- * Purpose: Player maintains information specific to an player within a game,
- *          including but not limited to health, energy, strength, current position,
- *          consumables, equipables, and special move information;
- */
-class Ranger : public Player {
- private:
- protected:
- public:
-    // Constructor which requires health, energy, and attack information
-    Ranger(double health, double energy, double attack, 
-           std::pair<int,int> position,
-           std::vector<std::shared_ptr<Consumable>> consumables = {}, 
-           std::vector<std::shared_ptr<Equipable>> equipables = {});
-
-    // Default destructor
-    ~Ranger();
-
-    // Utilize special movement to a specified position
-    // Returns true if successful, and false otherwise
-    bool useSpecial(std::pair<int, int>) override;
-
-    // Provides a collection of coordinates that can be moved to under a special move
-    std::vector<std::pair<int, int>> specialMoves() override;
-};
-
-/**
- * Class: Mage - Derived Class
- * Purpose: Player maintains information specific to an player within a game,
- *          including but not limited to health, energy, strength, current position,
- *          consumables, equipables, and special move information;
- */
-class Mage : public Player {
- private:
- protected:
-    int teleport_amount_;
- public:
-    // Constructor which requires health, energy, and attack information
-    Mage(int teleport, double health, double energy, double attack, 
-         std::pair<int,int> position,
-         std::vector<std::shared_ptr<Consumable>> consumables = {}, 
-         std::vector<std::shared_ptr<Equipable>> equipables = {});
-    
-    // Default destructor
-    ~Mage();
-
-    // Utilize special movement to a specified position
-    // Returns true if successful, and false otherwise
-    bool useSpecial(std::pair<int, int>) override;
-
-    // Provides a collection of coordinates that can be moved to under a special move
-    std::vector<std::pair<int, int>> specialMoves() override;
-};
-
-/**
- * Class: Warrior - Derived Class
- * Purpose: Player maintains information specific to an player within a game,
- *          including but not limited to health, energy, strength, current position,
- *          consumables, equipables, and special move information;
- */
-class Warrior : public Player {
- private:
- protected:
- public:
-
-    // Constructor which requires health, energy, and attack information
-    Warrior(double health, double energy, double attack, 
-            std::pair<int,int> position,
-            std::vector<std::shared_ptr<Consumable>> consumables = {}, 
-            std::vector<std::shared_ptr<Equipable>> equipables = {});
-
-    // Default destructor
-    ~Warrior();
-
-    // Utilize special movement to a specified position
-    // Returns true if successful, and false otherwise
-    bool useSpecial(std::pair<int, int>) override;
-
-    // Provides a collection of coordinates that can be moved to under a special move
-    std::vector<std::pair<int, int>> specialMoves() override;
 };
 
 #endif
