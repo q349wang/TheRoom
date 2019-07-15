@@ -9,13 +9,13 @@ StatMod::StatMod(StatMod first, StatMod second)
       multiplier{first.multiplier + second.multiplier} {}
 
 StatMod::~StatMod() {}
-double StatMod::getAdder() { return adder; }
-double StatMod::getMultiplier() { return multiplier; }
+double StatMod::getAdder() const { return adder; }
+double StatMod::getMultiplier() const { return multiplier; }
 
 // We have a resolution of 0.1 for stat modifiers
-bool StatMod::isNone() { return abs(adder) < 0.1 && abs(multiplier) < 0.1; }
+bool StatMod::isNone() const { return abs(adder) < 0.1 && abs(multiplier) < 0.1; }
 
-bool StatMod::operator==(const StatMod &other)
+bool StatMod::operator==(const StatMod &other) const
 {
     return adder == other.adder && multiplier == other.multiplier;
 }

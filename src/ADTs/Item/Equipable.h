@@ -3,12 +3,20 @@
 #include "Item.h"
 #include "ItemDescription.h"
 
+/**
+ * Class that represents equipable items
+ * Do not break after 1 use
+ * Also have passive stats which are not
+ * affected by modifiers and are not
+ * used with useItem
+ */
+
 class Equipable : public Item {
-    std::shared_ptr<ItemDescription> passive;
+    std::map<std::string, StatMod> passive;
 
    public:
-    std::map<std::string, StatMod> getPassive();
-    Equipable(std::string, std::shared_ptr<ItemDescription>, std::shared_ptr<ItemDescription>);
+    std::map<std::string, StatMod> getPassive() const;
+    Equipable(std::string, std::shared_ptr<ItemDescription>, std::map<std::string, StatMod> );
     ~Equipable();
 };
 

@@ -4,6 +4,12 @@
 #include <string>
 #include "ItemDescription.h"
 
+/*
+    Class used as base case for decorator
+    pattern. Stores the name of the item
+    as well as the modifiers and base stats
+    of the item
+ */
 class BaseDescription : public ItemDescription {
     std::string name;
 
@@ -16,7 +22,7 @@ class BaseDescription : public ItemDescription {
     ~BaseDescription();
 
     std::map<std::string, StatMod> &getModifiers() override;
-    std::string getName() override;
+    std::string getName() const override;
 };
 
 #endif
