@@ -22,22 +22,23 @@ using namespace std;
        unordered_map<string, vector<shared_ptr<Enemy>>> enemies = {}) : start_{start}, current_{start}, player_{player}, 
                                                                 items_{items}, enemies_{enemies} {
         
+        vector<shared_ptr<Tile>> column = {};
+            
         // Iterate through the provided map specifications to construct map tiles
         for(auto row = map.begin; row != map.end(); ++row) {
-            vector<shared_ptr<Tile>> column = {};
             for(auto col = row->begin(); col != row->end(); ++col) {
                 // If the tile is marked as 'E' it is assumed to be an exit tile
                 if(col == 'E') {
-                    column.emplace_back(make_shared<Tile>(ExitTile{}));
+                    column.emplace_back(make_shared<ExitTile>(ExitTile{}));
                     exits_.emplace(coord{(row - map.begin), (col - row->begin())}.position, column.back());
                 }
                 // If the tile is marked as 'W' it is assumed to be an wall tile   
                 else if (col == 'W') {
-                    column.emplace_back(make_shared<Tile>(WallTile{}));
+                    column.emplace_back(make_shared<WallTile>(WallTile{}));
                 } 
                 // Any other input is assumed to be a basic space tile
                 else {
-                    column.emplace_back(make_shared<Tile>(SpaceTile{})); 
+                    column.emplace_back(make_shared<SpaceTile>(SpaceTile{})); 
                 }
             }
             map.emplace_back(column);
@@ -51,7 +52,7 @@ using namespace std;
     */
     void Map::insertItem(shared_ptr<Item> item, pair<int, int> coordinates) {
         coord location = coord{coordinates};
-        map_[location.x_][location.y_].get()->insertItem(item);
+        ((map_.at(location.x_)).at(location.y_))->insertItem(item);
         
         if(items_.find(location.position) == items_.end()) {
             items_.emplace(location.position, vector<shared_ptr<Item>>{item});
@@ -68,9 +69,8 @@ using namespace std;
      */
     void Map::insertEnemy(shared_ptr<Enemy> enemy, pair<int, int> coordinates) {
         coord location = coord{coordinates};
-        map_[location.x_][location.y_]->insertEnemy(enemy);
-        enemies_.emplace(location.position, enemy);
-
+        ((map_.at(location.x_)).at(location.y_))->insertEnemy(enemy);
+        
         if(enemies_.find(location.position) == enemies_.end()) {
             enemies_.emplace(location.position, vector<shared_ptr<Enemy>>{enemy});
         } 
@@ -100,7 +100,7 @@ using namespace std;
      * Purpose: Provides a const reference to a specified tile
      */
     const Tile& Map::tile(int x, int y) {
-        return *map_[x][y];
+        return *((map_.at(x)).at(y));
     }
 
     /**
@@ -109,4 +109,12 @@ using namespace std;
      */
     const vector<vector<shared_ptr<Tile>>>& Map::getMap() {
         return map_;
+    }
+
+    /**
+     * Signature: void moveEnemies()
+     * Purpose: Moves all enemies currently on the map towards the player
+     */
+    void Map::moveEnemies() {
+        
     }

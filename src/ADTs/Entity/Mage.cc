@@ -46,30 +46,33 @@ bool Mage::useSpecial(pair<int, int> location) {
  * Note: This is an expensive operation, taking O(max{Row, Column}) time
  */
 vector<pair<int, int>> Mage::specialMoves() {
-     vector<pair<int, int>> special_moves = {};
+    vector<pair<int, int>> special_moves = {};
+    
+    for(int teleport = 1; teleport <= teleport_amount_; teleport++) {
+        
+        // Determine if a teleport in the right direction is possible
+        if(((position_.first + teleport) < current_map_->numColumns()) &&
+           (current_map_->tile((position_.first + teleport), position_.second).available())) {
+            special_moves.emplace_back((position_.first + teleport), position_.second);
+        }
+        
+        // Determine if a teleport in the left direction is possible
+        if(((position_.first - teleport) >= 0) &&
+           (current_map_->tile((position_.first - teleport), position_.second).available())) {
+            special_moves.emplace_back((position_.first - teleport), position_.second);
+        }
 
-    // Determine if a teleport in the right direction is possible
-    if(((position_.first + teleport_amount_) < current_map_->numColumns()) &&
-       (current_map_->tile((position_.first + teleport_amount_), position_.second).available())) {
-        special_moves.emplace_back((position_.first + teleport_amount_), position_.second);
-    }
+        // Determine if a teleport in the up direction is possible
+        if(((position_.second + teleport) < current_map_->numRows(position_.first)) &&
+           (current_map_->tile(position_.first, (position_.second + teleport)).available())) {
+            special_moves.emplace_back(position_.first, (position_.second + teleport));
+        }
 
-    // Determine if a teleport in the left direction is possible
-    else if(((position_.first - teleport_amount_) >= 0) &&
-            (current_map_->tile((position_.first - teleport_amount_), position_.second).available())) {
-        special_moves.emplace_back((position_.first - teleport_amount_), position_.second);
-    }
-
-    // Determine if a teleport in the up direction is possible
-    else if(((position_.second + teleport_amount_) < current_map_->numRows(position_.first)) &&
-            (current_map_->tile(position_.first, (position_.second + teleport_amount_)).available())) {
-        special_moves.emplace_back(position_.first, (position_.second + teleport_amount_));
-    }
-
-    // Determine if a teleport in the down direction is possible
-    else if(((position_.second - teleport_amount_) >= 0) &&
-            (current_map_->tile(position_.first, (position_.second + teleport_amount_)).available())) {
-        special_moves.emplace_back(position_.first, (position_.second - teleport_amount_));
+        // Determine if a teleport in the down direction is possible
+        if(((position_.second - teleport) >= 0) &&
+           (current_map_->tile(position_.first, (position_.second + teleport)).available())) {
+            special_moves.emplace_back(position_.first, (position_.second - teleport));
+        }
     }
 
     return special_moves;

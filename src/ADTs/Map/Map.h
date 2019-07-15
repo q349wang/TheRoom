@@ -65,8 +65,8 @@ class Map {
       std::unordered_map<std::string, std::vector<std::shared_ptr<Item>>> items = {},
       std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>> enemies = {});
 
-  // Map copy constructor
-  Map(Map &other);
+  // Delete Map copy constructor to ensure appropriate behaviour
+  Map(Map &other) = delete;
 
   // Map move constructor
   Map(Map &&other);
@@ -99,6 +99,9 @@ class Map {
 
   // Provides const reference to the current map
   const std::vector<std::vector<std::shared_ptr<Tile>>>& getMap();
+
+  // Moves all enemies currently on the map
+  void moveEnemies();
 };
 
 #endif
