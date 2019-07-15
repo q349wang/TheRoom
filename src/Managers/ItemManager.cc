@@ -17,7 +17,7 @@ ItemManager::ItemManager()
     srand(time(NULL));
 }
 
-shared_ptr<BaseDescription> ItemManager::generateBaseItem(int level, int type)
+shared_ptr<BaseDescription> ItemManager::generateBaseItem(int level, int type) const
 {
 
     string itemName = type == 0 ? equipNames[rand() % equipNames.size()]
@@ -38,7 +38,7 @@ shared_ptr<BaseDescription> ItemManager::generateBaseItem(int level, int type)
     return make_shared<BaseDescription>(itemName, baseStats);
 }
 
-shared_ptr<ItemDescription> ItemManager::generateDescription(int level, int type, int numMods)
+shared_ptr<ItemDescription> ItemManager::generateDescription(int level, int type, int numMods) const
 {
     if (numMods == 0)
     {
@@ -83,7 +83,7 @@ shared_ptr<ItemDescription> ItemManager::generateDescription(int level, int type
     }
 }
 
-shared_ptr<Item> ItemManager::createItem(int level)
+shared_ptr<Item> ItemManager::createItem(int level) const
 {
     // Consumables are three times as likely to appear compared to Equipment
     int type = rand() % 4;
@@ -96,7 +96,7 @@ shared_ptr<Item> ItemManager::createItem(int level)
 
         // Generate passive
         map<string, StatMod> passiveStats;
-        // Every five levels, max number of base stats increases by 1
+        // Every five levels, max number of passive stats increases by 1
         int numBase = rand() % (level / 5);
         for (int i = 0; i < numBase; i++)
         {
@@ -117,7 +117,8 @@ shared_ptr<Item> ItemManager::createItem(int level)
     }
 }
 
-vector<shared_ptr<Item>> ItemManager::createItemGroup(int level)
+// Generates a group of items (ideal for battle drops)
+vector<shared_ptr<Item>> ItemManager::createItemGroup(int level) const
 {
     // Every 2 levels max number of items increases by 1
     int numItems = rand() % (level / 2);

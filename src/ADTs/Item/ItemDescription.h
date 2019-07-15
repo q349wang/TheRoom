@@ -5,6 +5,10 @@
 #include <vector>
 #include "StatMod.h"
 
+/**
+ * Stores the description of an item
+ * using a decorator design pattern.
+ */
 class ItemDescription
 {
 protected:
@@ -15,7 +19,7 @@ public:
                      const StatMod &);
     virtual std::map<std::string, StatMod> &getModifiers() = 0;
     virtual void reload();
-    virtual std::string getName() = 0;
+    virtual std::string getName() const = 0;
     virtual ~ItemDescription() = 0;
 };
 

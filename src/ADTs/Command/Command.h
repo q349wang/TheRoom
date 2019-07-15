@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 
+/* ADT which stores the command and arguments of a command
+ * inputted by user into stdin
+ */
 class Command {
     char cmd;
     std::vector<std::string> args;

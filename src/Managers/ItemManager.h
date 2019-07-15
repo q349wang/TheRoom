@@ -9,6 +9,10 @@ class Consumable;
 class Item;
 class ItemDescription;
 
+/**
+ * Factory class that creates items and item groups
+ * randomly which scale based on the level inputted
+ */
 class ItemManager
 {
     const std::vector<std::string> equipNames = {
@@ -40,13 +44,13 @@ class ItemManager
         "Mage",
         "Warrior",
     };
-    std::shared_ptr<ItemDescription> generateDescription(int, int, int);
-    std::shared_ptr<BaseDescription> generateBaseItem(int, int);
+    std::shared_ptr<ItemDescription> generateDescription(int, int, int) const;
+    std::shared_ptr<BaseDescription> generateBaseItem(int, int) const;
 
 public:
     ItemManager();
-    std::shared_ptr<Item> createItem(int);
-    std::vector<std::shared_ptr<Item>> createItemGroup(int);
+    std::shared_ptr<Item> createItem(int) const;
+    std::vector<std::shared_ptr<Item>> createItemGroup(int) const;
 };
 
 #endif

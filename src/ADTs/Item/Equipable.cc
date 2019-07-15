@@ -2,7 +2,7 @@
 
 using namespace std;
 
-map<string, StatMod> Equipable::getPassive() { return passive; }
+map<string, StatMod> Equipable::getPassive() const { return passive; }
 
 Equipable::Equipable(string name, shared_ptr<ItemDescription> active,
                      map<string, StatMod>  passive)
