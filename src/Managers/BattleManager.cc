@@ -9,7 +9,7 @@
 
 using namespace std;
 
-BattleManager::BattleManager(Player *player)
+BattleManager::BattleManager(shared_ptr<Player>player)
     : player{player}, battleEnded{false}, eList{nullptr}, msg{}, eLeft{0} {}
 
 BattleManager::~BattleManager() {}
@@ -36,7 +36,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd) {
     bool invalidCmd = false;
     switch (cmd.getCommand()) {
         case 'D': {
-            Item *item = nullptr;
+            shared_ptr<Item> item = nullptr;
             name = args[1];
             for (auto equip : player->currentEquipables()) {
                 if (equip != nullptr && equip->getName() == name) {
@@ -66,7 +66,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd) {
                 break;
             }
             string name = args[0];
-            Entity *target = (name == "me") ? player : nullptr;
+            shared_ptr<Entity> target = (name == "me") ? player : nullptr;
             for (auto enemy : *eList) {
                 if (enemy != nullptr && enemy->getName() == name) {
                     target = enemy;
@@ -74,7 +74,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd) {
                 }
             }
 
-            Item *item = nullptr;
+            shared_ptr<Item> item = nullptr;
             name = args[1];
             for (auto equip : player->currentEquipables()) {
                 if (equip != nullptr && equip->getName() == name) {
@@ -118,7 +118,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd) {
                 break;
             }
             string name = args[0];
-            Enemy *target = nullptr;
+            shared_ptr<Entity> target = nullptr;
             for (auto enemy : *eList) {
                 if (enemy != nullptr && enemy->getName() == name) {
                     target = enemy;
