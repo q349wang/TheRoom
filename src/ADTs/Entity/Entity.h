@@ -75,7 +75,7 @@ class Entity {
   const std::vector<std::shared_ptr<Consumable>>& currentConsumables();
 
   // Perform an attack on a specified enemy
-  void attack(std::shared_ptr<Entity>);
+  double attack(std::shared_ptr<Entity>);
   
   // Check if a specified move is valid for the entity
   virtual bool checkMove(std::pair<int,int>) = 0;

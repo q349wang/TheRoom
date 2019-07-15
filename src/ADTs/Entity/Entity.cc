@@ -97,11 +97,13 @@ const vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
 }
 
 /**
- * Signature: void attack(shared_ptr<Entity>)
+ * Signature: double attack(shared_ptr<Entity>)
  * Purpose: Performs attack on a specified entity
+ *          Additionally returns the attack amount
  */
-void Entity::attack(shared_ptr<Entity> enemy) {
+double Entity::attack(shared_ptr<Entity> enemy) {
     enemy->takeDamage(attackStrength_);
+    return attackStrength_;
 }
 
 /**
