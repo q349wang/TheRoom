@@ -1,57 +1,95 @@
 #ifndef ENTITY_H_
 #define ENTITY_H_
 
-#include<vector>
-#include<memory>
-#include<utility>
+#include "Consumable.h"
+#include "Equipable.h"
+#include "Map.h"
 
-class Consumable;
-class Equipable;
-class Map;
+#include <vector>
+#include <memory>
+#include <utility>
 
 /**
- * Class: Entity
- * Purpose: Declaration of the abstract base Entity.
+ * Class: Entity - Abstract Base Class
+ * Purpose: Entity maintains information specific to an entity within a game,
+ *          including but not limited to health, energy, strength, current position,
+ *          consumables, and equipables.
  */
 class Entity {
  private:
-    Map* current_map_;
+ protected:
+  // Maintain a reference to the current map associated with the entity
+  std::shared_ptr<Map> current_map_;
     
-    double health_;
-    double energy_;
-    double attackStrength_;
+  // Maintain entity health, energy, and attack information
+  double health_;
+  double energy_;
+  double attackStrength_;
 
-    std::pair <int,int> position_;
-    std::vector<Consumable*> consumables_;
-    std::vector<Equipable*> equipables_;
-    std::vector<Equipable*> equiped_;
+  // Maintain entity's current position
+  std::pair<int,int> position_;
 
-    static const double BASE_HEALTH_ENERGY = 0.0; 
+  // Maintain a collection of available consumables, 
+  // equipables, and equiped items
+  std::vector<std::shared_ptr<Consumable>> consumables_;
+  std::vector<std::shared_ptr<Equipable>> equipables_;
 
- protected:   
+  // Maintain all equiped items and relevant information
+  std::vector<std::shared_ptr<Equipable>> equipabled_;
+
+  // Maintain entity base health and energy amount
+  // Note: Entity with health lower than this amount
+  //       is considered to be inactive within the game
+  //       Similarly, entities with energy lower than
+  //       this amount cannot attack without regenerating
+  static const double BASE_HEALTH_ENERGY = 0.0; 
+
+  // Makes a specified move, without checking if valid
+  void updatePosition(std::pair<int, int>);
+   
  public:
-    Entity(){};
-    virtual ~Entity()=0;
+  // Constructor which requires health, energy, and attack information
+  Entity(double health, double energy, double attack, 
+         std::pair<int,int> position,
+         std::vector<std::shared_ptr<Consumable>> consumables = {}, 
+         std::vector<std::shared_ptr<Equipable>> equipables = {});
 
-    double getHealth();
-    double getEnergy();
-    double getAttack();
-    std::pair<int,int> getPosition();
-    
-    void addEquipable(Equipable&);
-    void addConsumable(Consumable&);
-    void equipEquipable(Equipable&);
+  // Pure virtual destructor to ensure Entity is an ABC
+  virtual ~Entity() = 0;
 
-    const std::vector<Equipable*>& currentEquipables();
-    const std::vector<Consumable*>& currentConsumables();
+  // Provides entity's current health, energy, attack, or position
+  double getHealth();
+  double getEnergy();
+  double getAttack();
+  std::pair<int,int> getPosition();
+  
+  // Inserts specfied equipable/consumable to current collection
+  void addEquipable(std::shared_ptr<Equipable>);
+  void addConsumable(std::shared_ptr<Consumable>);
 
-    void attack(Entity*);
-    bool checkMove(pair<int,int>);
+  // Equiping item, specified by the equipable name
+  void equipEquipable(std::string);
 
-    void takeDamage(double);
-    void useEnergy(double);
-    bool isDead();
-    bool isOutOfEnergy();
+  // Provides a const reference to equipables/consumables
+  const std::vector<std::shared_ptr<Equipable>>& currentEquipables();
+  const std::vector<std::shared_ptr<Consumable>>& currentConsumables();
+
+  // Perform an attack on a specified enemy
+  void attack(std::shared_ptr<Entity>);
+  
+  // Check if a specified move is valid for the entity
+  virtual bool checkMove(std::pair<int,int>) = 0;
+
+  // Make a move in a specified direction (indicated using 'R', 'L', 'U' 'D')
+  virtual bool makeMove(char) = 0;
+
+  // Take damage or consume energy by a specified amount
+  void takeDamage(double);
+  void useEnergy(double);
+
+  // Determine if an entity is dead or out of energy
+  bool isDead();
+  bool isOutOfEnergy();
 };
 
 #endif
