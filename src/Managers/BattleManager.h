@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <memory>
 
 #include "../HelperClasses/Subject.h"
 
@@ -13,21 +14,21 @@ class Player;
 
 class BattleManager : public Subject
 {
-	std::vector<Enemy *> *eList;
-	Player *player;
+	std::vector<shared_ptr<Enemy>>* eList;
+	std::shared_ptr<Player> player;
 
 	bool battleEnded;
 	int eLeft;
 
 public:
-	BattleManager(Player *);
+	BattleManager(std::shared_ptr<Player>);
 	~BattleManager();
 	// No copying BattleManager
     BattleManager(const BattleManager&) = delete;
 
 	void runEnemyTurn();
 	bool runPlayerTurn(const Command &);
-	void startBattle(std::vector<Enemy *> *);
+	void startBattle(std::vector<std::shared_ptr<Enemy>> *);
 	void runBattle();
 
 	bool isBattleEnded() const;
