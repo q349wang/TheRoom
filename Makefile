@@ -30,7 +30,7 @@ all: ${OBJECTS}
 .PHONY: clean
 
 clean:
-	rm ${OBJECTS} ${EXEC} ${DEPENDS}
+	rm -f ${OBJECTS} ${EXEC} ${DEPENDS}
 
 ${TESTEXEC}: ${TESTOBJS} ${OBJECTS}
 	${CXX} ${CXXFLAGS} ${TESTOBJS} ${OBJECTS} -o ${TESTEXEC}
@@ -41,6 +41,6 @@ ${TESTEXEC}: ${TESTOBJS} ${OBJECTS}
 .PHONY: cleanTest
 
 cleanTest:
-	rm ${TESTOBJS} ${TESTEXEC} ${TESTDEPS}
+	rm  -f ${TESTOBJS} ${TESTEXEC} ${TESTDEPS}
 
 print-%  : ; @echo $* = $($*)
