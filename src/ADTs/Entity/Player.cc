@@ -1,8 +1,6 @@
 #include "Player.h"
-#include "Entity.h"
-#include "Consumable.h"
-#include "Equipable.h"
-#include "Map.h"
+#include "../Map/Map.h"
+#include "../Map/Tile.h"
 
 #include <vector>
 #include <memory>
@@ -16,8 +14,8 @@ using namespace std;
  * Purpose: Constructor which requires intial player's health, energy, and position
  */
 Player::Player(double health, double energy, double attack, double armour, pair<int, int> position,
-               vector<shared_ptr<Consumable>> consumables = {}, 
-               vector<shared_ptr<Equipable>> equipables = {}) :
+               vector<shared_ptr<Consumable>> consumables, 
+               vector<shared_ptr<Equipable>> equipables) :
                Entity{health, energy, attack, armour, position, consumables, equipables} {}
 
 /**

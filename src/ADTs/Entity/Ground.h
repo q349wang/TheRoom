@@ -1,9 +1,7 @@
 #ifndef GROUND_H_
 #define GROUND_H_
 
-#include "Entity.h"
-#include "Consumable.h"
-#include "Equipable.h"
+#include "Enemy.h"
 
 #include <memory>
 #include <vector>

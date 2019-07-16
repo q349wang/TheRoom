@@ -1,10 +1,6 @@
 #ifndef WARRIOR_H_ 
 #define WARRIOR_H_
 
-#include "Entity.h"
-#include "Consumable.h"
-#include "Equipable.h"
-#include "Map.h"
 #include "Player.h"
 
 #include <vector>

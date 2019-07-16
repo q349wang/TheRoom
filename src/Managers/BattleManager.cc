@@ -10,7 +10,7 @@
 using namespace std;
 
 BattleManager::BattleManager(shared_ptr<Player>player)
-    : player{player}, battleEnded{false}, eList{nullptr}, msg{}, eLeft{0} {}
+    : eList{nullptr}, player{player}, battleEnded{false}, eLeft{0} {}
 
 BattleManager::~BattleManager() {}
 
@@ -37,7 +37,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd) {
     switch (cmd.getCommand()) {
         case 'D': {
             shared_ptr<Item> item = nullptr;
-            name = args[1];
+            string name = args[1];
             for (auto equip : player->currentEquipables()) {
                 if (equip != nullptr && equip->getName() == name) {
                     item = equip;
@@ -56,7 +56,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd) {
                 invalidCmd = true;
                 break;
             }
-            setMessageAndNotify(item->getDetails());
+            setMessageAndNotify(item->getName());
             return false;
             break;
         }
@@ -94,8 +94,9 @@ bool BattleManager::runPlayerTurn(const Command &cmd) {
                 invalidCmd = true;
                 break;
             }
-            player->useItem(target, item);
-            setMessageAndNotify("Player used item " + item.getName() + " on " +
+            // TODO
+            //player->useItem(target, item);
+            setMessageAndNotify("Player used item " + item->getName() + " on " +
                                 target->getName() + " .");
             if (target->getHealth() == 0) {
                 for (auto enemy : *eList) {
@@ -161,7 +162,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd) {
     return !invalidCmd;
 }
 
-void BattleManager::startBattle(std::vector<Enemy *> *enemies) {
+void BattleManager::startBattle(vector<shared_ptr<Enemy>> *enemies) {
     battleEnded = false;
     eList = enemies;
     eLeft = (eList != nullptr) ? eList->size() : 0;

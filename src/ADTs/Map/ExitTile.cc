@@ -1,13 +1,11 @@
-#include "Tile.h"
-#include "Item.h"
-#include "Enemy.h"
-#include "Tile.h"
 #include "ExitTile.h"
 
 #include <memory>
 #include <exception>
 
 using namespace std;
+
+ExitTile::ExitTile() {}
 
 /**
  * Signature: ~ExitTile()

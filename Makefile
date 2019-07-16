@@ -1,4 +1,4 @@
-CXX = g++
+CXX = g++-5
 CXXFLAGS = -g -std=c++14 -Wall -O -MMD
 EXEC = TheRoom
 SOURCEDIR = src

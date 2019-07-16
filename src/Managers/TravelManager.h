@@ -3,18 +3,19 @@
 
 #include "../HelperClasses/Subject.h"
 #include <sstream>
+#include <memory>
 
 class Map;
 class Player;
 class Command;
 
 class TravelManager : public Subject {
-    Map* map;
-    Player* player;
+    std::weak_ptr<Map> map;
+    std::weak_ptr<Player> player;
 
     bool toBattle;
     public:
-    TravelManager(Map*, Player*);
+    TravelManager(std::shared_ptr<Map>, std::shared_ptr<Player>);
     ~TravelManager();
     // No copying TravelManager
     TravelManager(const TravelManager&) = delete;
@@ -23,6 +24,6 @@ class TravelManager : public Subject {
     void startTravel();
     void runTravel();
 
-    const Map* getMap() const;
+    const std::weak_ptr<Map> getMap() const;
 };
 #endif

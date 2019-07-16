@@ -1,6 +1,5 @@
-#include "Consumable.h"
-#include "Equipable.h"
-#include "Map.h"
+#include "Entity.h"
+#include "../Map/Map.h"
 
 #include <vector>
 #include <memory>
@@ -14,11 +13,15 @@ using namespace std;
  * Purpose: Constructor which requires intial entity's health, energy, and position
  */
 Entity::Entity(double health, double energy, double attack, double armour, pair<int, int> position,
-               vector<shared_ptr<Consumable>> consumables = {}, 
-               vector<shared_ptr<Equipable>> equipables = {}) :
+               vector<shared_ptr<Consumable>> consumables, 
+               vector<shared_ptr<Equipable>> equipables) :
                health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
                position_{position}, consumables_{consumables_}, 
                equipables_{equipables} {}
+Entity::~Entity() {}
+
+// Base health and energy
+const double Entity::BASE_HEALTH_ENERGY = 0.0;
 
 /**
  * Signature: double getHealth()

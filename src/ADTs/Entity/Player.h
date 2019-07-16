@@ -2,9 +2,6 @@
 #define PLAYER_H_
 
 #include "Entity.h"
-#include "Consumable.h"
-#include "Equipable.h"
-#include "Map.h"
 
 #include <vector>
 #include <memory>

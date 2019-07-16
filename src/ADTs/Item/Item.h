@@ -18,7 +18,7 @@ class Item {
 
    public:
     virtual std::map<std::string, StatMod> &getModifiers();
-    virtual std::map<std::string, StatMod> getItemActive();
+    //virtual std::map<std::string, StatMod> getItemActive();
     virtual std::string getShortName();
     virtual std::string getName();
     std::map<std::string, StatMod> useItem(std::string);

@@ -1,8 +1,8 @@
 #ifndef TILE_H_
 #define TILE_H_
 
-#include "Item.h"
-#include "Enemy.h"
+#include "../Item/Item.h"
+#include "../Entity/Enemy.h"
 
 #include <memory>
 
@@ -34,10 +34,10 @@ class Tile {
   virtual void insertEnemy(std::shared_ptr<Enemy>);
 
   // Provides a const reference to all items on a given tile
-  const std::vector<std::shared_ptr<Item>>& getItems();
+  const std::vector<std::shared_ptr<Item>>& getItems() const;
 
   // Provides a const reference to all enemies on a give tile
-  const std::vector<std::shared_ptr<Enemy>>& getEnemies();
+  const std::vector<std::shared_ptr<Enemy>>& getEnemies() const;
 
   // Provides all items on current tile and clears all items on the tile
   std::vector<std::shared_ptr<Item>> pickupItems();

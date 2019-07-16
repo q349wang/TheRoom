@@ -14,7 +14,7 @@ class Player;
 
 class BattleManager : public Subject
 {
-	std::vector<shared_ptr<Enemy>>* eList;
+	std::vector<std::shared_ptr<Enemy>>* eList;
 	std::shared_ptr<Player> player;
 
 	bool battleEnded;

@@ -1,9 +1,6 @@
-#include "Entity.h"
-#include "Consumable.h"
-#include "Equipable.h"
-#include "Map.h"
-#include "Player.h"
 #include "Warrior.h"
+#include "../Map/Map.h"
+#include "../Map/Tile.h"
 
 #include <vector>
 #include <memory>
@@ -17,8 +14,8 @@ using namespace std;
  * Purpose: Constructor which requires intial warrior's health, energy, and position
  */
 Warrior::Warrior(double health, double energy, double attack, double armour, pair<int, int> position,
-                 vector<shared_ptr<Consumable>> consumables = {}, 
-                 vector<shared_ptr<Equipable>> equipables = {}) :
+                 vector<shared_ptr<Consumable>> consumables, 
+                 vector<shared_ptr<Equipable>> equipables) :
                  Player{health, energy, attack, armour, position, consumables, equipables} {}
 
 

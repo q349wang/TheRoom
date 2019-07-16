@@ -1,9 +1,7 @@
 #ifndef FLYING_H_
 #define FLYING_H_
 
-#include "Entity.h"
-#include "Consumable.h"
-#include "Equipable.h"
+#include "Enemy.h"
 
 #include <memory>
 #include <vector>

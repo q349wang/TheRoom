@@ -1,13 +1,14 @@
 #ifndef ENTITY_H_
 #define ENTITY_H_
 
-#include "Consumable.h"
-#include "Equipable.h"
-#include "Map.h"
+#include "../Item/Consumable.h"
+#include "../Item/Equipable.h"
 
 #include <vector>
 #include <memory>
 #include <utility>
+
+class Map;
 
 /**
  * Class: Entity - Abstract Base Class
@@ -27,6 +28,8 @@ class Entity {
   double attackStrength_;
   double armour_;
 
+  std::string name_;
+
   // Maintain entity's current position
   std::pair<int,int> position_;
 
@@ -43,7 +46,7 @@ class Entity {
   //       is considered to be inactive within the game
   //       Similarly, entities with energy lower than
   //       this amount cannot attack without regenerating
-  static const double BASE_HEALTH_ENERGY = 0.0; 
+  static const double BASE_HEALTH_ENERGY; 
 
   // Makes a specified move, without checking if valid
   void updatePosition(std::pair<int, int>);
@@ -97,7 +100,7 @@ class Entity {
   bool isOutOfEnergy();
 
   // Provides entity's name
-  virtual std::string getName() = 0;
+  virtual std::string getName() const = 0;
 };
 
 #endif

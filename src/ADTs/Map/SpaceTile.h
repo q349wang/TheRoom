@@ -1,8 +1,6 @@
 #ifndef SPACETILE_H_
 #define SPACETILE_H_
 
-#include "Item.h"
-#include "Enemy.h"
 #include "Tile.h"
 
 #include <memory>

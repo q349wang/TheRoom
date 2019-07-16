@@ -8,111 +8,116 @@
 #include "../ADTs/Entity/Player.h"
 #include "../ADTs/Item/Item.h"
 #include "../ADTs/Map/Map.h"
+#include "../ADTs/Map/Tile.h"
 
 using namespace std;
 
-TravelManager::TravelManager(Map *map, Player *player)
-    : player{player}, map{map} {}
+TravelManager::TravelManager(shared_ptr<Map> map, shared_ptr<Player> player)
+    : map{map}, player{player} {}
 
 void TravelManager::makeMove(const Command &cmd)
 {
-    vector<string> args = cmd.getArgs();
-    switch (cmd.getCommand())
+    if (auto pp = player.lock())
     {
-    case 'T':
-    {
-        if (args.size() != 2)
+        vector<string> args = cmd.getArgs();
+        switch (cmd.getCommand())
         {
-            setMessageAndNotify("Invalid Command");
-            return;
-        }
-        pair<int, int> coords;
-        try
+        case 'T':
         {
-            coords.first = stoi(args[0]);
-            coords.second = stoi(args[1]);
-        }
-        catch (const std::invalid_argument &e)
-        {
-            setMessageAndNotify("Invalid location for special move");
-            return;
-        }
-
-        if (!player->specialReady())
-        {
-            setMessageAndNotify("Special on cooldown!");
-            return;
-        }
-
-        if (!player->useSpecial(coords))
-        {
-            setMessageAndNotify("Invalid location for special move");
-            return;
-        }
-    }
-    case 'M':
-    {
-        if (args.size() != 1 || !player->checkMove(args[0]))
-        {
-            setMessageAndNotify("Invalid Command");
-            return;
-        }
-
-        player->move(args[0]);
-    }
-    case 'P':
-    {
-        // TO DO
-    }
-    case 'L':
-    {
-        stringstream desc;
-        for (auto equip : player->currentEquipables())
-        {
-            desc << equip->getName() << endl;
-        }
-        for (auto pots : player->currentConsumables())
-        {
-            desc << pots->getName() << endl;
-        }
-        setMessageAndNotify(desc.str());
-        return;
-    }
-    case 'U':
-    {
-        if (args.size() != 1)
-        {
-            setMessageAndNotify("Invalid Command");
-            return;
-        }
-        shared_ptr<Item> item = nullptr;
-        string name = args[0];
-        for (auto equip : player->currentEquipables())
-        {
-            if (equip != nullptr && equip->getName() == name)
+            if (args.size() != 2)
             {
-                item = equip;
-                break;
+                setMessageAndNotify("Invalid Command");
+                return;
+            }
+            pair<int, int> coords;
+            try
+            {
+                coords.first = stoi(args[0]);
+                coords.second = stoi(args[1]);
+            }
+            catch (const std::invalid_argument &e)
+            {
+                setMessageAndNotify("Invalid location for special move");
+                return;
+            }
+
+            if (!pp->specialReady())
+            {
+                setMessageAndNotify("Special on cooldown!");
+                return;
+            }
+
+            if (!pp->useSpecial(coords))
+            {
+                setMessageAndNotify("Invalid location for special move");
+                return;
             }
         }
-        if (item == nullptr)
+        case 'M':
         {
-            for (auto pots : player->currentConsumables())
+            if (args.size() != 1 || !pp->checkMove(args[0].at(0)))
             {
-                if (pots != nullptr && pots->getName() == name)
+                setMessageAndNotify("Invalid Command");
+                return;
+            }
+
+            pp->makeMove(args[0].at(0));
+        }
+        case 'P':
+        {
+            // TO DO
+        }
+        case 'L':
+        {
+            stringstream desc;
+            for (auto equip : pp->currentEquipables())
+            {
+                desc << equip->getName() << endl;
+            }
+            for (auto pots : pp->currentConsumables())
+            {
+                desc << pots->getName() << endl;
+            }
+            setMessageAndNotify(desc.str());
+            return;
+        }
+        case 'U':
+        {
+            if (args.size() != 1)
+            {
+                setMessageAndNotify("Invalid Command");
+                return;
+            }
+            shared_ptr<Item> item = nullptr;
+            string name = args[0];
+            for (auto equip : pp->currentEquipables())
+            {
+                if (equip != nullptr && equip->getName() == name)
                 {
-                    item = pots;
+                    item = equip;
                     break;
                 }
             }
+            if (item == nullptr)
+            {
+                for (auto pots : pp->currentConsumables())
+                {
+                    if (pots != nullptr && pots->getName() == name)
+                    {
+                        item = pots;
+                        break;
+                    }
+                }
+            }
+            if (item == nullptr)
+            {
+                setMessageAndNotify("Invalid Command");
+                return;
+            }
+            //TODO
+            //player->useItem(player, item);
         }
-        if (item == nullptr)
-        {
-            setMessageAndNotify("Invalid Command");
-            return;
         }
-        player->useItem(player, item);
-    }
     }
 }
 
@@ -124,51 +129,57 @@ void TravelManager::startTravel()
 
 void TravelManager::runTravel()
 {
-    while (!map->OnEnemy())
+    if (auto mp = map.lock())
     {
-        char cmd;
-        vector<string> args;
-        cin >> cmd;
-        switch (cmd)
+        if (auto pp = player.lock())
         {
-        case 'M':
-        {
-            setMessageAndNotify("Input Direction (N,S,E,W)");
-            string dir;
-            cin >> dir;
-            args.emplace_back(dir);
-            break;
-        }
-        case 'A':
-        {
-            setMessageAndNotify("Input Location (x,y)");
-            string x, y;
-            cin >> x >> y;
-            args.emplace_back(x);
-            args.emplace_back(y);
-            break;
-        }
-        case 'P':
-        {
-            break;
-        }
-        case 'L':
-        case 'U':
-        {
-            setMessageAndNotify("Input Item");
-            string name;
-            getline(cin, name);
-            args.emplace_back(name);
-            break;
-        }
-        }
+            while (!((mp->tile(pp->getPosition())).getEnemies().size() == 0))
+            {
+                char cmd;
+                vector<string> args;
+                cin >> cmd;
+                switch (cmd)
+                {
+                case 'M':
+                {
+                    setMessageAndNotify("Input Direction (N,S,E,W)");
+                    string dir;
+                    cin >> dir;
+                    args.emplace_back(dir);
+                    break;
+                }
+                case 'A':
+                {
+                    setMessageAndNotify("Input Location (x,y)");
+                    string x, y;
+                    cin >> x >> y;
+                    args.emplace_back(x);
+                    args.emplace_back(y);
+                    break;
+                }
+                case 'P':
+                {
+                    break;
+                }
+                case 'L':
+                case 'U':
+                {
+                    setMessageAndNotify("Input Item");
+                    string name;
+                    getline(cin, name);
+                    args.emplace_back(name);
+                    break;
+                }
+                }
 
-        Command fullCmd(cmd, args);
+                Command fullCmd(cmd, args);
 
-        makeMove(fullCmd);
+                makeMove(fullCmd);
+            }
+            setMessageAndNotify("Enemy encountered! Starting battle!");
+            toBattle = true;
+        }
     }
-    setMessageAndNotify("Enemy encountered! Starting battle!");
-    toBattle = true;
 }
 
-const Map *TravelManager::getMap() const { return map; }
+const weak_ptr<Map> TravelManager::getMap() const { return map; }
