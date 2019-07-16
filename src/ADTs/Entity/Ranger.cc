@@ -16,8 +16,14 @@ using namespace std;
 Ranger::Ranger(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables, 
                vector<shared_ptr<Equipable>> equipables) :
-               Player{health, energy, attack, armour, position, consumables, equipables} {}
+               Player{health, energy, attack, armour, position, "Ranger", consumables, equipables} {}
+
+/**
+ * Signature: ~Entity()
+ * Purpose: Defualt Destructor
+ */
 Ranger::~Ranger() {}
+
 /**
  * Signature: bool useSpecial(pair<int, int>)
  * Purpose: Utilizes special move to specified location if possible
@@ -120,12 +126,4 @@ vector<pair<int, int>> Ranger::specialMoves() {
     }
     
     return special_moves;
-}
-
-/**
- * Signature: string getName()
- * Purpose: Provides name of ranger
- */
-string Ranger::getName() {
-    return "ranger";
 }

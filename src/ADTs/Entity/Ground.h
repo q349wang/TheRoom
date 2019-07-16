@@ -32,9 +32,6 @@ public:
 
     // Check if a specified move is valid for the entity
     bool checkMove(char) override;
-
-    // Provides name of the ground enemy
-    std::string getName() override;
 };
 
 #endif

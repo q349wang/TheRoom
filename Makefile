@@ -2,9 +2,21 @@ CXX = g++-5
 CXXFLAGS = -g -std=c++14 -Wall -O -MMD
 EXEC = TheRoom
 SOURCEDIR = src
+TESTDIR = test
+
+TESTEXEC = TestRunner
+
 SOURCES := ${shell find ${SOURCEDIR} -name '*.cc'}
+TESTFILES := ${shell find ${TESTDIR} -name '*.cc'}
+
 OBJECTS = ${SOURCES:.cc=.o}
 DEPENDS = ${OBJECTS:.o=.d}
+
+TESTOBJS = ${TESTFILES:.cc=.o}
+TESTERS = ${filter %Tests.cc, ${TESTFILES}}
+TESTEDOBJS = ${subst test/, src/, ${TESTERS:Tests.cc=.o}}
+TESTDEPS = ${TESTOBJS:.o=.d}
+TESTEDDEPS = ${TESTEDOBJS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
 	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
@@ -18,17 +30,17 @@ all: ${OBJECTS}
 .PHONY: clean
 
 clean:
-	rm ${OBJECTS} ${EXEC} ${DEPENDS}
+	rm -f ${OBJECTS} ${EXEC} ${DEPENDS}
 
-myprogram: ${OBJECTS}
-	${CXX} ${CXXFLAGS} ${OBJECTS} -o myprogram
+${TESTEXEC}: ${TESTOBJS} ${OBJECTS}
+	${CXX} ${CXXFLAGS} ${TESTOBJS} ${OBJECTS} -o ${TESTEXEC}
+
+-include ${TESTDEPS}
+-include ${TESTEDDEPS}
 
 .PHONY: cleanTest
 
 cleanTest:
-	rm ${OBJECTS} myprogram ${DEPENDS}
+	rm  -f ${TESTOBJS} ${TESTEXEC} ${TESTDEPS}
 
-.PHONY: cleanAll
-
-cleanAll:
-	rm ${OBJECTS} ${DEPENDS}
+print-%  : ; @echo $* = $($*)

@@ -12,13 +12,19 @@ using namespace std;
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial entity's health, energy, and position
  */
-Entity::Entity(double health, double energy, double attack, double armour, pair<int, int> position,
-               vector<shared_ptr<Consumable>> consumables, 
+Entity::Entity(double health, double energy, double attack, double armour, 
+               pair<int, int> position, string name,
+               vector<shared_ptr<Consumable>> consumables,
                vector<shared_ptr<Equipable>> equipables) :
                health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
                position_{position}, consumables_{consumables_}, 
-               equipables_{equipables} {}
-Entity::~Entity() {}
+               equipables_{equipables}, name_{name} {}
+
+/**
+ * Signature: ~Entity()
+ * Purpose: Defualt Destructor
+ */
+Entity::~Entity(){}
 
 // Base health and energy
 const double Entity::BASE_HEALTH_ENERGY = 0.0;
@@ -77,18 +83,6 @@ void Entity::addEquipable(shared_ptr<Equipable> new_equip) {
  */    
 void Entity::addConsumable(shared_ptr<Consumable> new_consume) {
     consumables_.emplace_back(new_consume);
-}
-
-/**
- * Signature: void equipEquipable(shared_ptr<Equipable>);
- * Purpose: Utilizes a specified equipable item
- */
-void Entity::equipEquipable(string equip_name) {
-    for(auto& existing_equip: equipables_) {
-        if(equip_name == existing_equip->getName()) {
-            existing_equip->useItem(equip_name); // TODO implement use item functionality 
-        }
-    }
 }
 
 /**
@@ -161,8 +155,9 @@ void Entity::updatePosition(pair<int, int> location) {
 }
 
 /**
- * 
+ * Signature: string getName()
+ * Purpose: Provides an entity's name
  */
-string Entity::getName() const {
+string Entity::getName() {
     return name_;
 }

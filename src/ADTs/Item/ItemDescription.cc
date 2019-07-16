@@ -4,6 +4,7 @@ using namespace std;
 
 ItemDescription::~ItemDescription() {}
 
+// Function to indicate if the cached modifiers should be reloaded
 void ItemDescription::reload() {
     needsReload = true;
     return;

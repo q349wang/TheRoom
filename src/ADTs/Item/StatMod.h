@@ -3,6 +3,12 @@
 #include <string>
 #include <unordered_set>
 
+
+/**
+ * Stores the adder and
+ * multiplier information for
+ * a single stat
+ */
 class StatMod {
 
     double adder;
@@ -11,9 +17,11 @@ class StatMod {
         StatMod(double adder = 0,double multiplier = 0);
         StatMod(StatMod, StatMod);
         ~StatMod();
-        double getAdder();
-        double getMultiplier();
-        bool isNone();
+        double getAdder() const;
+        double getMultiplier() const;
+        bool isNone() const;
+
+        bool operator==(const StatMod&) const;
 };
 
 #endif

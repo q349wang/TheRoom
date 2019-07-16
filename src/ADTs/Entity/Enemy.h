@@ -22,7 +22,7 @@ protected:
 public:
       // Constructor which requires health, energy, armour, and attack information
       Enemy(double health, double energy, double attack, double armour,
-            std::pair<int, int> position,
+            std::pair<int, int> position, std::string name,
             std::vector<std::shared_ptr<Consumable>> consumables = {},
             std::vector<std::shared_ptr<Equipable>> equipables = {});
 
@@ -37,9 +37,6 @@ public:
 
       // Drops all enemy items onto current tile
       void dropAllItems();
-
-      // Provides name of the enemy
-      virtual std::string getName() = 0;
 };
 
 #endif

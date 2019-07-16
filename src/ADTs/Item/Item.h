@@ -8,6 +8,10 @@
 
 class ItemDescription;
 
+/**
+ * Contains the description of an item
+ * and the behaviour of the item when used
+ */
 class Item {
     std::string name;
 
@@ -18,9 +22,7 @@ class Item {
 
    public:
     virtual std::map<std::string, StatMod> &getModifiers();
-    //virtual std::map<std::string, StatMod> getItemActive();
-    virtual std::string getShortName();
-    virtual std::string getName();
+    virtual std::string getName() const;
     std::map<std::string, StatMod> useItem(std::string);
     Item(std::string, std::shared_ptr<ItemDescription>);
     virtual ~Item() = 0;

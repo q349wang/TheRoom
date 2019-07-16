@@ -3,9 +3,7 @@
 
 using namespace std;
 
-string Item::getShortName() { return name; }
-
-string Item::getName() { return desc->getName(); }
+string Item::getName() const { return desc->getName(); }
 
 map<string, StatMod>& Item::getModifiers() {
     return desc->getModifiers();
@@ -13,7 +11,7 @@ map<string, StatMod>& Item::getModifiers() {
 
 void Item::afterUse() {}
 
-map<string, StatMod> Item::useItem(string heroType) {
+map<string, StatMod> Item::useItem() {
     map<string, StatMod> itemMods{getModifiers()};
 
     afterUse();

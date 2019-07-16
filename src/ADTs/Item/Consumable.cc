@@ -3,7 +3,7 @@
 
 using namespace std;
 
-// After use, clear the stats of a consumable
+// After using a consumable item all stats are deleted
 void Consumable::afterUse() { desc = make_shared<BaseDescription>(getName()); }
 
 Consumable::Consumable(string name, shared_ptr<ItemDescription> active)
