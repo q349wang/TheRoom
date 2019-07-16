@@ -1,7 +1,4 @@
 #include "Enemy.h"
-#include "Entity.h"
-#include "Consumable.h"
-#include "Equipable.h"
 
 #include <memory>
 #include <vector>
@@ -15,9 +12,11 @@ using namespace std;
  * Purpose: Constructor which requires intial enemy's health, energy, and position
  */
 Enemy::Enemy(double health, double energy, double attack, double armour, pair<int, int> position,
-             vector<shared_ptr<Consumable>> consumables = {}, 
-             vector<shared_ptr<Equipable>> equipables = {}) :
+             vector<shared_ptr<Consumable>> consumables, 
+             vector<shared_ptr<Equipable>> equipables) :
              Entity{health, energy, attack, armour, position, consumables, equipables} {}
+
+Enemy::~Enemy() {}
 
 /**
  * Signature: void dropAllItems()

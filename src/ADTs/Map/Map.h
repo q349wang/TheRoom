@@ -1,15 +1,16 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-#include "Tile.h"
-#include "Enemy.h"
-#include "Player.h"
-#include "Item.h"
-
 #include <vector>
 #include <memory>
 #include <unordered_map>
 #include <string>
+#include <utility>
+
+class Player;
+class Enemy;
+class Item;
+class Tile;
 
 /**
  * Class: Map
@@ -18,24 +19,24 @@
  *       corner tile will always be considered (0, 0) - with general 
  *       format as (x, y)
  */
-class Map {
- private:
-  // Structure to maintain coordinate data witihin the map 
-  class coord {
+class Map
+{
+private:
+  // Structure to maintain coordinate data witihin the map
+  class coord
+  {
     // Maintain position has hashable string and individual coordinates
     std::string position;
     int x_, y_;
 
     // Coordinate data constructor for pairs of integers
-    coord(std::pair<int, int> xy) : x_{xy.first}, y_{xy.second}, 
-          position{std::to_string(xy.first) + "$" + std::to_string(xy.second)} {}
+    coord(std::pair<int, int> xy);
 
     // Coordinate data constructor for individual coordinate data
-    coord(int x, int y) : x_{x}, y_{y}, position{std::to_string(x) + "$" + std::to_string(y)} {}
+    coord(int x, int y);
 
     // Coordinate data constructor for string based coordinate data
-    coord(string xy) : position{xy}, x_{stoi(xy.substr(0, xy.find("$")))}, 
-                       y_{stoi(xy.substr((xy.find("$") + 1), std::string::npos))} {}
+    coord(std::string xy);
 
     // Declare Map as a friend class to allow for use of private member functions
     friend class Map;
@@ -59,13 +60,12 @@ class Map {
   // Maintain a collection of all enemies on the map
   std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>> enemies_;
 
- protected:
- public:
-   
+protected:
+public:
   // Map constructor which requires the current player and
   // the map layout as a two-dimensional vector
-  Map(std::shared_ptr<Player> player, std::vector<std::vector<char>> map, 
-      std::pair<int, int> start = {0,0},    
+  Map(std::shared_ptr<Player> player, std::vector<std::vector<char>> map,
+      std::pair<int, int> start = {0, 0},
       std::unordered_map<std::string, std::vector<std::shared_ptr<Item>>> items = {},
       std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>> enemies = {});
 
@@ -76,10 +76,10 @@ class Map {
   Map(Map &&other);
 
   // Map copy assignment operator
-  Map& operator=(Map &other);
+  Map &operator=(const Map &other) = delete;
 
   // Map move assignment operator
-  Map& operator=(Map &&other);
+  Map &operator=(Map &&other);
 
   // Default destructor to cleanup all allocated data
   ~Map();
@@ -99,10 +99,13 @@ class Map {
 
   // Provides a const reference to a specified tile
   // Note: Coordinates are assumed to exist, otherwise will throw exception
-  const Tile& tile(int x, int y);
+  const Tile &tile(int x, int y) const;
+
+  // Calls tile(int x, int y) with a pair of ints
+  const Tile &tile(const std::pair<int, int>& coord) const;
 
   // Provides const reference to the current map
-  const std::vector<std::vector<std::shared_ptr<Tile>>>& getMap();
+  const std::vector<std::vector<std::shared_ptr<Tile>>> &getMap();
 
   // Moves all enemies currently on the map
   void moveEnemies();

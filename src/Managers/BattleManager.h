@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
+#include <memory>
 
 #include "../HelperClasses/Subject.h"
 
@@ -10,24 +12,26 @@ class Command;
 class Enemy;
 class Player;
 
-class BattleManager : public Subject {
-    std::vector<Enemy*>* eList;
-    Player* player;
+class BattleManager : public Subject
+{
+	std::vector<std::shared_ptr<Enemy>>* eList;
+	std::shared_ptr<Player> player;
 
-    bool battleEnded;
-    std::string msg;
-    int eLeft;
-    public:
-    BattleManager(Player *);
-    ~BattleManager();
+	bool battleEnded;
+	int eLeft;
 
-    void runEnemyTurn();
-    bool runPlayerTurn(const Command&);
-    void startBattle(std::vector<Enemy*>*);
-    void runBattle();
-    void endBattle();
+public:
+	BattleManager(std::shared_ptr<Player>);
+	~BattleManager();
+	// No copying BattleManager
+    BattleManager(const BattleManager&) = delete;
 
-    bool isBattleEnded();
-    std::string getMsg();
+	void runEnemyTurn();
+	bool runPlayerTurn(const Command &);
+	void startBattle(std::vector<std::shared_ptr<Enemy>> *);
+	void runBattle();
+
+	bool isBattleEnded() const;
+	std::string getMsg() const;
 };
 #endif

@@ -1,14 +1,11 @@
-#include "Tile.h"
-#include "Item.h"
-#include "Enemy.h"
-#include "Tile.h"
 #include "WallTile.h"
-#include "SpaceTile.h"
 
 #include <memory>
 #include <exception>
 
 using namespace std;
+
+WallTile::WallTile() {}
 
 /**
  * Signature: ~WallTile()

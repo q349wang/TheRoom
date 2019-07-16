@@ -1,6 +1,4 @@
 #include "Tile.h"
-#include "Item.h"
-#include "Enemy.h"
 
 #include <memory>
 #include <exception>
@@ -37,7 +35,7 @@ bool Tile::available() const {
  * Signature: const vector<shared_ptr<Item>>& getItems()
  * Purpose: Provides a const reference to the items on the current tile
  */
-const vector<shared_ptr<Item>>& Tile::getItems() {
+const vector<shared_ptr<Item>>& Tile::getItems() const {
     return items_;
 }
 
@@ -45,7 +43,7 @@ const vector<shared_ptr<Item>>& Tile::getItems() {
  * Signature: const vector<shared_ptr<Enemy>>& getEnemies()
  * Purpose: Provides a const reference to the enemies on the current tile
  */
-const vector<shared_ptr<Enemy>>& Tile::getEnemies() {
+const vector<shared_ptr<Enemy>>& Tile::getEnemies() const {
     return enemies_;
 }
 
@@ -58,3 +56,6 @@ vector<shared_ptr<Item>> Tile::pickupItems() {
     items_.clear();
     return items;
 }
+
+Tile::~Tile() {}
+Tile::Tile() {}

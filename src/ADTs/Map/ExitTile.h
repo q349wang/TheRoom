@@ -1,8 +1,6 @@
 #ifndef EXITTILE_H_
 #define EXITTILE_H_
 
-#include "Item.h"
-#include "Enemy.h"
 #include "Tile.h"
 
 #include <memory>
@@ -29,4 +27,4 @@ class ExitTile : public Tile {
     int getColour() override;
 };
 
-#endif;
+#endif

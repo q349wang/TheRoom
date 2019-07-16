@@ -1,8 +1,6 @@
 #ifndef WALLTILE_H_
 #define WALLTILE_H_
 
-#include "Item.h"
-#include "Enemy.h"
 #include "Tile.h"
 
 #include <memory>
