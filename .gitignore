@@ -35,3 +35,4 @@
 *.json
 
 .vscode
+.vscode/*
