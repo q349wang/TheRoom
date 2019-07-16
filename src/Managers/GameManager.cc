@@ -23,8 +23,8 @@ void GameManager::startGame(){
     mapManager();
     map = MapManager->setCustomMap(inputMap());
     player = make_shared<Player>();
-    battleManager{Player};
-    travelManager{Map,Player};
+    battleManager{player};
+    travelManager{map,player};
 }
 
 void GameManager::startTravel(){
