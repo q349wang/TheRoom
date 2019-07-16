@@ -16,10 +16,12 @@
 class Mage : public Player {
  private:
  protected:
-    int teleport_amount_;
+    // Defines the maximum teleport distance for a mage player
+    static const int TELEPORT_DISTANCE = 5;
+    
  public:
     // Constructor which requires health, energy, armour, and attack information
-    Mage(int teleport, double health, double energy, double armour, double attack, 
+    Mage(double health, double energy, double armour, double attack, 
          std::pair<int,int> position,
          std::vector<std::shared_ptr<Consumable>> consumables = {}, 
          std::vector<std::shared_ptr<Equipable>> equipables = {});

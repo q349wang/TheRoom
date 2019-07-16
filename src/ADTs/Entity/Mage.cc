@@ -13,11 +13,10 @@ using namespace std;
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial mage's health, energy, and position
  */
-Mage::Mage(int teleport, double health, double energy, double attack, double armour, pair<int, int> position,
+Mage::Mage(double health, double energy, double attack, double armour, pair<int, int> position,
            vector<shared_ptr<Consumable>> consumables,
            vector<shared_ptr<Equipable>> equipables) : 
-           Player{health, energy, attack, armour, position, "Mage", consumables, equipables},
-           teleport_amount_{teleport} {}
+           Player{health, energy, attack, armour, position, "Mage", consumables, equipables} {}
 
 /**
  * Signature: ~Entity()
@@ -32,9 +31,9 @@ Mage::~Mage() {}
  */
 bool Mage::useSpecial(pair<int, int> location)
 {
-    if ((((abs(location.first - position_.first) <= teleport_amount_) &&
+    if ((((abs(location.first - position_.first) <= TELEPORT_DISTANCE) &&
           ((location.second - position_.second) == 0)) ||
-         ((abs(location.second - position_.second) <= teleport_amount_) &&
+         ((abs(location.second - position_.second) <= TELEPORT_DISTANCE) &&
           ((location.first - position_.first) == 0))) &&
         (current_map_->tile(location.first, location.second).available()) &&
         (this->specialReady()))
@@ -55,7 +54,7 @@ vector<pair<int, int>> Mage::specialMoves()
 {
     vector<pair<int, int>> special_moves = {};
 
-    for (int teleport = 1; teleport <= teleport_amount_; teleport++)
+    for (int teleport = 1; teleport <= TELEPORT_DISTANCE; teleport++)
     {
 
         // Determine if a teleport in the right direction is possible
