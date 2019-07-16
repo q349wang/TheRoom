@@ -115,7 +115,6 @@ void XWindowManager::drawFillCirc(int x, int y, int width, int height, int colou
 {
 	XSetForeground(d, gc, colours[colour]);
 	XFillArc(d, w, gc, x, y, width, height, 0, 360 * 64);
-	XFlush(d);
 }
 
 // Draws outline of a circle
@@ -123,14 +122,12 @@ void XWindowManager::drawCirc(int x, int y, int width, int height, int colour)
 {
 	XSetForeground(d, gc, colours[colour]);
 	XDrawArc(d, w, gc, x, y, width, height, 0, 360 * 64);
-	XFlush(d);
 }
 
 // Draws a string of text
 void XWindowManager::drawString(int x, int y, string msg)
 {
 	XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
-	XFlush(d);
 }
 
 // Draws a map tile
@@ -207,6 +204,8 @@ void XWindowManager::redrawMap()
 		drawMapStruct(mp->getPlayer(), mp->getMap());
 		drawEntityOnMap(mp->getPlayer());
 	}
+
+	XFlush(d);
 }
 
 // Redraws correct scene based on current game state
