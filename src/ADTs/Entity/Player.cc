@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 #include <utility>
-#include <iostream>
 
 
 using namespace std;
@@ -110,10 +109,7 @@ bool Player::checkMove(char direction) {
 bool Player::makeMove(char direction) {
     pair<int, int> updated_position = position_;
     
-    switch(direction) {
         case 'E':
-            updated_position.first++;
-            break;
 
         case 'W':
             updated_position.first--;
