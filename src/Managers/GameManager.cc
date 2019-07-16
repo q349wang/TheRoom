@@ -1,8 +1,36 @@
 #include "GameManager.h"
+#include "TravelManager.h"
 
 using namespace std;
 
-GameManager::GameManager(): BattleManager{_battleManager}, TravelManager{_travelManager}, MapManager{_mapManager}, Map{_map} {};
+    GameManager(std::shared_ptr<MapManager> mapManager,std::shared_ptr<TravelManager> travelManager,
+    std::shared_ptr<BattleManager> battleManager,std::shared_ptr<Map> map,std::shared_ptr<Player> player):
+    MapManager{mapManager}, TravelManager{travelManager}, BattleManager{battleManager}, Map{map}, Player{player};
+
+void GameManager::reset(){
+    Player = nullptr;
+    TravelManager = nullptr;
+    MapManager = nullptr;
+    Map = MapManager->setCustomMap(inputMap());
+}
+void GameManager::startGame(){
+    Map = MapManager->setCustomMap(inputMap());
+}
+
+void GameManager::startTravel(){
+    TravelManager->runTravel();
+}
+
+void GameManager::startBattle(){
+    BattleManager->runBattle();
+}
+
+// isDead or on exit tile.
+
+void GameManager::endGame(){
+    
+}
+
 
 std::vector<std::vector<char>> GameManager::inputMap(){
     vector<vector<char>> toReturn;
