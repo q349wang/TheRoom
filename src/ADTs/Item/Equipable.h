@@ -11,13 +11,20 @@
  * used with useItem
  */
 
-class Equipable : public Item {
+class Equipable : public Item
+{
     std::map<std::string, StatMod> passive;
+    int durability;
 
-   public:
+public:
     std::map<std::string, StatMod> getPassive() const;
-    Equipable(std::string, std::shared_ptr<ItemDescription>, std::map<std::string, StatMod> );
+    Equipable(std::string name,
+              std::shared_ptr<ItemDescription> desc,
+              std::map<std::string, StatMod> passive, 
+              int durability = -1);
     ~Equipable();
+    
+    void afterUse() override;
 };
 
 #endif
