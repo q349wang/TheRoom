@@ -91,7 +91,7 @@ class Entity {
   void useEnergy(double);
  
   // Applies stat mod to a player
-  void applyStat(std::string, StatMod, std::shared_ptr<Entity>);
+  void applyStat(std::string, StatMod);
 
   // Determine if an entity is dead or out of energy
   bool isDead();

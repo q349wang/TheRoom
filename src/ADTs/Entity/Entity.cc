@@ -166,31 +166,31 @@ string Entity::getName() {
  * Signature: void applyStat(string, StatMod)
  * Purpose: Apply the specified stat mod
  */
-void Entity::applyStat(string stat, StatMod mod, shared_ptr<Entity> entity) {
+void Entity::applyStat(string stat, StatMod mod) {
     if(stat == "Ranger" || stat == "Mage" || stat == "Warrior") {
-        if(stat == entity->getName()) {
-            entity->armour_ = (entity->armour_ + mod.getAdder()) * mod.getMultiplier();
-            entity->health_ = (entity->health_ + mod.getAdder()) * mod.getMultiplier();
-            entity->energy_ = (entity->energy_ + mod.getAdder()) * mod.getMultiplier();
-            entity->attackStrength_ = (entity->attackStrength_ + mod.getAdder()) * mod.getMultiplier();
+        if(stat == getName()) {
+            armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
+            health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
+            energy_ = (energy_ + mod.getAdder()) * mod.getMultiplier();
+            attackStrength_ = (attackStrength_ + mod.getAdder()) * mod.getMultiplier();
         }
     }
 
     else {
         if(stat == "Health") {
-            entity->health_ = (entity->health_ + mod.getAdder()) * mod.getMultiplier();
+            health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
         }
         else if(stat == "Attack") {
-            entity->attackStrength_ = (entity->attackStrength_ + mod.getAdder()) * mod.getMultiplier();
+            attackStrength_ = (attackStrength_ + mod.getAdder()) * mod.getMultiplier();
         }
         else if(stat == "Damage") {
-            entity->health_ = (entity->health_ - mod.getAdder()) * mod.getMultiplier();
+            health_ = (health_ - mod.getAdder()) * mod.getMultiplier();
         }
         else if(stat == "Energy") {
-            entity->energy_ = (entity->energy_ + mod.getAdder()) * mod.getMultiplier();
+            energy_ = (energy_ + mod.getAdder()) * mod.getMultiplier();
         }   
         else if(stat == "Armor") {
-            entity->armour_ = (entity->armour_ + mod.getAdder()) * mod.getMultiplier();
+            armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
         }
     }
 }

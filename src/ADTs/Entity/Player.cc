@@ -133,7 +133,7 @@ void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name) {
         if(consume_name == (*existing)->getName()) {
             map<string, StatMod> consume_mods = (*existing)->useItem();
             for(auto it = consume_mods.begin(); it != consume_mods.end(); ++it) {
-                applyStat((*it).first, (*it).second, entity);
+                entity->applyStat((*it).first, (*it).second);
             }
 
             consumables.erase(existing);
@@ -153,7 +153,7 @@ void Player::equipEquipable(shared_ptr<Entity> entity, string equip_name) {
         if(equip_name == (*existing)->getName()) {
             map<string, StatMod> equip_mods = (*existing)->useItem();
             for(auto it = equip_mods.begin(); it != equip_mods.end(); ++it) {
-                applyStat((*it).first, (*it).second, entity);
+                entity->applyStat((*it).first, (*it).second);
             }
 
             break;
@@ -197,7 +197,7 @@ void Player::reverseStat(string stat, StatMod mod) {
 
         else {
             if(stat == "Health") {
-                health_ = ((health_)mod.getMultiplier()) - mod.getAdder();
+                health_ = ((health_)/mod.getMultiplier()) - mod.getAdder();
             }
             else if(stat == "Attack") {
                 attackStrength_ = ((attackStrength_)/mod.getMultiplier()) - mod.getAdder();
