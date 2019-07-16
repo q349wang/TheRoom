@@ -32,7 +32,7 @@ class Player: public Entity {
  public:
     // Constructor which requires health, energy, armour, and attack information
     Player(double health, double energy, double attack, double armour,
-           std::pair<int,int> position, std::string name,
+            std::string name,std::pair<int,int> position,
            std::vector<std::shared_ptr<Consumable>> consumables = {}, 
            std::vector<std::shared_ptr<Equipable>> equipables = {});
 

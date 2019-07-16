@@ -14,7 +14,7 @@ class ExitTile : public Tile {
  private:
  protected:
      // Tile colour to be used for 
-    static const int TILE_COLOUR = 1; 
+    static const int TILE_COLOUR = GameColours::Green; 
 
  public:
    // Default constructor

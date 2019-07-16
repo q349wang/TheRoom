@@ -3,7 +3,7 @@
 
 #include "../Item/Item.h"
 #include "../Entity/Enemy.h"
-
+#include "../../HelperClasses/GameConstants.h"
 #include <memory>
 
 /**

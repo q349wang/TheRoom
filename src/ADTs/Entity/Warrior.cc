@@ -16,7 +16,7 @@ using namespace std;
 Warrior::Warrior(double health, double energy, double attack, double armour, pair<int, int> position,
                  vector<shared_ptr<Consumable>> consumables, 
                  vector<shared_ptr<Equipable>> equipables) :
-                 Player{health, energy, attack, armour, position, "Warrior", consumables, equipables} {}
+                 Player{health, energy, attack, armour,  "Warrior",position, consumables, equipables} {}
 
 /**
  * Signature: ~Entity()

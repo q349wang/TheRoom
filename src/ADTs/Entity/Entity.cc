@@ -13,12 +13,12 @@ using namespace std;
  * Purpose: Constructor which requires intial entity's health, energy, and position
  */
 Entity::Entity(double health, double energy, double attack, double armour, 
-               pair<int, int> position, string name,
+               string name, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables,
                vector<shared_ptr<Equipable>> equipables) :
                health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
-               position_{position}, consumables_{consumables_}, 
-               equipables_{equipables}, name_{name} {}
+                name_{name}, position_{position}, consumables_{consumables_}, 
+               equipables_{equipables} {}
 
 /**
  * Signature: ~Entity()

@@ -16,7 +16,7 @@ using namespace std;
 Flying::Flying(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables,
                vector<shared_ptr<Equipable>> equipables) : 
-               Enemy{health, energy, attack, armour, position, "Flying", consumables, equipables} {}
+               Enemy{health, energy, attack, armour, "Flying", position, consumables, equipables} {}
 
 /**
  * Signature: ~Entity()

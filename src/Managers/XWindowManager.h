@@ -31,6 +31,8 @@ class XWindowManager : public Observer
     static const int mapTileSize = 20;
     static const int namePlateBorderColour = GameColours::Black;
     static const int namePlateColour = GameColours::White;
+
+    static const int entityDiameter = 15;
     static const std::string font;
 
 public:
@@ -41,12 +43,18 @@ public:
 
     void drawFillRect(int x, int y, int w, int h, int col);
     void drawRect(int x, int y, int w, int h, int col);
+
+    void drawFillCirc(int x, int y, int w, int h, int col);
+    void drawCirc(int x, int y, int w, int h, int col);
+
     void drawString(int x, int y, std::string msg);
 
     void drawMapTile(int x, int y, int content);
     void drawMapStruct(const std::vector<std::vector<std::shared_ptr<Tile>>>&);
     void drawEntityInfo(int x, int y, const std::shared_ptr<Entity>&);
     void drawAbilityCD(const std::shared_ptr<Player>&);
+
+    void drawPlayerOnMap(const std::shared_ptr<Player>&);
 
     void redrawMap();
     void redrawBattle();

@@ -14,10 +14,10 @@ using namespace std;
  * Purpose: Constructor which requires intial player's health, energy, and position
  */
 Player::Player(double health, double energy, double attack, double armour, 
-               pair<int, int> position, string name,
+               string name, pair<int, int> position, 
                vector<shared_ptr<Consumable>> consumables, 
                vector<shared_ptr<Equipable>> equipables) :
-               Entity{health, energy, attack, armour, position, name, consumables, equipables} {}
+               Entity{health, energy, attack, armour, name, position, consumables, equipables} {}
 
 /**
  * Signature: ~Entity()

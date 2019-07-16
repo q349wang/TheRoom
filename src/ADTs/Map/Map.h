@@ -105,7 +105,10 @@ public:
   const Tile& tile(const std::pair<int, int>& coord) const;
 
   // Provides const reference to the current map
-  const std::vector<std::vector<std::shared_ptr<Tile>>> &getMap();
+  const std::vector<std::vector<std::shared_ptr<Tile>>> &getMap() const;
+
+  // Provides const reference to player
+  const std::shared_ptr<Player> &getPlayer() const;
 
   // Moves all enemies currently on the map
   void moveEnemies();

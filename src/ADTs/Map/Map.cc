@@ -58,7 +58,7 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
         column.clear();
     }
 }
-
+Map::~Map() {}
 /**
     * Signature: void insertItem(shared_ptr<Item>, pair<int, int>) : void
     * Purpose: Inserts provided item at specified location on the map
@@ -137,9 +137,18 @@ const Tile &Map::tile(const pair<int, int>& coord) const
      * Signature: const vector<vector<shared_ptr<Tile>>>& getMap()
      * Purpose: Provides a const reference to the current map
      */
-const vector<vector<shared_ptr<Tile>>> &Map::getMap()
+const vector<vector<shared_ptr<Tile>>> &Map::getMap() const
 {
     return map_;
+}
+
+/**
+     * Signature: const shared_ptr<Player> &getPlayer()
+     * Purpose: Provides a const reference to the current player
+     */
+const shared_ptr<Player> &Map::getPlayer() const
+{
+    return player_;
 }
 
 /**

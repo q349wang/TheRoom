@@ -8,16 +8,30 @@ using namespace std;
 int main()
 {
 
-    shared_ptr<Player> p = make_shared<Ranger>(100, 100, 10, pair<int, int>{0, 0});
+    shared_ptr<Player> p = make_shared<Ranger>(100, 100, 100, 10, pair<int, int>{0, 0});
     vector<vector<char>> v = {
         {'W', 'W', 'W', 'W', 'W', 'W'},
         {'W', 'S', 'S', 'S', 'S', 'W'},
         {'W', 'S', 'S', 'W', 'S', 'W'},
         {'W', 'E', 'S', 'W', 'S', 'W'},
-        {'W', 'W', 'W', 'W', 'W', 'W'}};
+        {'W', 'W', 'W', 'W', 'W', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'E', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'},
+        {'W', 'E', 'S', 'W', 'S', 'W'}};
     shared_ptr<Map> m = make_shared<Map>(p, v);
-        XWindowManager win(m);
+    XWindowManager win(m);
+    while (true)
+    {
         win.redrawMap();
 
         sleep(1000);
+    }
 }

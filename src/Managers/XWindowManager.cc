@@ -106,6 +106,22 @@ void XWindowManager::drawRect(int x, int y, int width, int height, int colour)
 	XFlush(d);
 }
 
+// Fills in circle
+void XWindowManager::drawFillCirc(int x, int y, int width, int height, int colour)
+{
+	XSetForeground(d, gc, colours[colour]);
+	XFillArc(d, w, gc, x, y, width, height, 0, 360*64);
+	XFlush(d);
+}
+
+// Draws outline of a circle
+void XWindowManager::drawCirc(int x, int y, int width, int height, int colour)
+{
+	XSetForeground(d, gc, colours[colour]);
+	XDrawArc(d, w, gc, x, y, width, height, 0, 360*64);
+	XFlush(d);
+}
+
 // Draws a string of text
 void XWindowManager::drawString(int x, int y, string msg)
 {
@@ -116,8 +132,8 @@ void XWindowManager::drawString(int x, int y, string msg)
 // Draws a map tile
 void XWindowManager::drawMapTile(int x, int y, int col)
 {
-	drawRect(x, y, mapTileSize, mapTileSize, col);
 	drawFillRect(x, y, mapTileSize, mapTileSize, col);
+	drawRect(x, y, mapTileSize, mapTileSize, mapBorderColour);
 	XSetForeground(d, gc, colours[fontCol]);
 }
 
@@ -179,6 +195,7 @@ void XWindowManager::redrawMap()
 	if (auto mp = gameMap.lock())
 	{
 		drawMapStruct(mp->getMap());
+		drawPlayerOnMap(mp->getPlayer());
 	}
 }
 
@@ -187,4 +204,14 @@ void XWindowManager::notify()
 {
 
 	return;
+}
+
+void XWindowManager::drawPlayerOnMap(const shared_ptr<Player>& p) {
+	pair<int, int> coords = p->getPosition();
+	drawCirc(coords.first* mapTileSize, 
+	coords.second* mapTileSize,
+	entityDiameter, entityDiameter, GameColours::Black);
+	drawFillCirc(coords.first* mapTileSize, 
+	coords.second* mapTileSize,
+	entityDiameter, entityDiameter, GameColours::Black);
 }

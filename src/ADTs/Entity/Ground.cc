@@ -17,7 +17,7 @@ Ground::Ground(double health, double energy, double attack, double armour,
                pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables,
                vector<shared_ptr<Equipable>> equipables) : 
-               Enemy{health, energy, attack, armour, position, "Ground", consumables, equipables} {}
+               Enemy{health, energy, attack, armour, "Ground", position, consumables, equipables} {}
 
 /**
  * Signature: ~Entity()
