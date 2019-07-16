@@ -127,6 +127,13 @@ void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &enti
 	drawRect(x, y, mapTileSize, mapTileSize, col);
 	drawFillRect(x, y, mapTileSize, mapTileSize, col);
 	XSetForeground(d, gc, colours[fontCol]);
+	drawString(x, y, entity->getName());
+	string health = "H: " + entity->getHealth();
+	drawString(x, y, health);
+	string energy = "E: " + entity->getEnergy();
+	drawString(x, y, energy);
+	string armor = "A: " + entity->getArmor();
+	drawString(x, y, armor);
 }
 
 // Draws info box regarding ability cooldown
