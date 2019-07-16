@@ -57,7 +57,7 @@ using namespace std;
     */
     void Map::insertItem(shared_ptr<Item> item, pair<int, int> coordinates) {
         coord location = coord{coordinates};
-        ((map_.at(location.x_)).at(location.y_))->insertItem(item);
+        ((map_.at(location.y_)).at(location.x_))->insertItem(item);
         
         if(items_.find(location.position) == items_.end()) {
             items_.emplace(location.position, vector<shared_ptr<Item>>{item});
@@ -74,7 +74,7 @@ using namespace std;
      */
     void Map::insertEnemy(shared_ptr<Enemy> enemy, pair<int, int> coordinates) {
         coord location = coord{coordinates};
-        ((map_.at(location.x_)).at(location.y_))->insertEnemy(enemy);
+        ((map_.at(location.y_)).at(location.x_))->insertEnemy(enemy);
         
         if(enemies_.find(location.position) == enemies_.end()) {
             enemies_.emplace(location.position, vector<shared_ptr<Enemy>>{enemy});
@@ -105,7 +105,7 @@ using namespace std;
      * Purpose: Provides a const reference to a specified tile
      */
     const Tile& Map::tile(int x, int y) {
-        return *((map_.at(x)).at(y));
+        return *((map_.at(y)).at(x));
     }
 
     /**
