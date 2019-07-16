@@ -5,7 +5,15 @@
 #include <X11/Xutil.h>
 
 #include "../HelperClasses/Observer.h"
+#include "../HelperClasses/GameConstants.h"
 #include <string>
+#include <vector>
+#include <memory>
+
+class Tile;
+class Entity;
+class Player;
+class Map;
 
 class XWindowManager : public Observer
 {
@@ -15,36 +23,31 @@ class XWindowManager : public Observer
     Window w;
     int s;
     GC gc;
-
+    std::weak_ptr<Map> gameMap;
     unsigned long colours[10];
 
-    const static int fontCol = 1;
-    const static int mazeCol = 2;
-    const static int mazeTileSize = 20;
-    const static std::string font;
+    static const int fontCol = GameColours::White;
+    static const int mapBorderColour = GameColours::White;
+    static const int mapTileSize = 20;
+    static const std::string font;
 
 public:
-    XWindowManager(int width = 500, int height = 500);
+    XWindowManager(std::shared_ptr<Map> gameMap, int width = 500, int height = 500);
     ~XWindowManager();
     XWindowManager(const XWindowManager &) = delete;
     XWindowManager &operator=(const XWindowManager &) = delete;
-
-    enum
-    {
-        White = 0,
-        Black,
-        Red,
-        Green,
-        Blue
-    };
 
     void drawFillRect(int x, int y, int w, int h, int col);
     void drawRect(int x, int y, int w, int h, int col);
     void drawString(int x, int y, std::string msg);
 
-    void drawMazeTile(int x, int y, int content);
-    void drawEntityInfo(int x, int y /* Add entity info */);
+    void drawMapTile(int x, int y, int content);
+    void drawMapStruct(const std::vector<std::vector<std::shared_ptr<Tile>>>&);
+    void drawEntityInfo(int x, int y, const std::shared_ptr<Entity>&);
+    void drawAbilityCD(const std::shared_ptr<Player>&);
 
+    void redrawMap();
+    void redrawBattle();
     void notify() override;
 };
 

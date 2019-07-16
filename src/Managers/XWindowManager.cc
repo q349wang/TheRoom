@@ -1,5 +1,9 @@
 #include "XWindowManager.h"
 #include "../HelperClasses/GameException.h"
+#include "../ADTs/Entity/Entity.h"
+#include "../ADTs/Entity/Player.h"
+#include "../ADTs/Map/Tile.h"
+#include "../ADTs/Map/Map.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -15,7 +19,7 @@ XWindowManager::~XWindowManager()
 
 const string XWindowManager::font = "-*-clean-*-*-*-*-*-*-100-100-*-*-*-*";
 
-XWindowManager::XWindowManager(int width, int height)
+XWindowManager::XWindowManager(shared_ptr<Map> map, int width, int height) : gameMap{map}
 {
 	d = XOpenDisplay(NULL);
 	if (d == NULL)
@@ -45,9 +49,10 @@ XWindowManager::XWindowManager(int width, int height)
 	{
 		cerr << "Could not find " << font << ". Using default font" << endl;
 	}
-	else {
+	else
+	{
 
-	XSetFont(d, gc, font_info->fid);
+		XSetFont(d, gc, font_info->fid);
 	}
 
 	// Set up colours.
@@ -68,7 +73,7 @@ XWindowManager::XWindowManager(int width, int height)
 		colours[i] = xcolour.pixel;
 	}
 
-	XSetForeground(d, gc, colours[Black]);
+	XSetForeground(d, gc, colours[GameColours::Black]);
 
 	// Make window non-resizeable.
 	XSizeHints hints;
@@ -84,6 +89,8 @@ XWindowManager::XWindowManager(int width, int height)
 	// wait 1 second for setup
 	sleep(1);
 }
+
+// Fills in rectangle
 void XWindowManager::drawFillRect(int x, int y, int width, int height, int colour)
 {
 	XSetForeground(d, gc, colours[colour]);
@@ -91,6 +98,7 @@ void XWindowManager::drawFillRect(int x, int y, int width, int height, int colou
 	XFlush(d);
 }
 
+// Draws outline of a rectangle
 void XWindowManager::drawRect(int x, int y, int width, int height, int colour)
 {
 	XSetForeground(d, gc, colours[colour]);
@@ -98,25 +106,75 @@ void XWindowManager::drawRect(int x, int y, int width, int height, int colour)
 	XFlush(d);
 }
 
+// Draws a string of text
 void XWindowManager::drawString(int x, int y, string msg)
 {
 	XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
 	XFlush(d);
 }
 
-void XWindowManager::drawMazeTile(int x, int y, int content)
+// Draws a map tile
+void XWindowManager::drawMapTile(int x, int y, int col)
 {
-	drawRect(x, y, mazeTileSize, mazeTileSize, mazeCol);
-	drawFillRect(x, y, mazeTileSize, mazeTileSize, mazeCol);
-	XSetForeground(d, gc, colours[fontCol]);
-	drawString(x, y + 10, to_string(content)); // Fix this
-}
-void XWindowManager::drawEntityInfo(int x, int y /* Add entity info */)
-{
+	drawRect(x, y, mapTileSize, mapTileSize, col);
+	drawFillRect(x, y, mapTileSize, mapTileSize, col);
 	XSetForeground(d, gc, colours[fontCol]);
 }
 
+// Draws a nameplate displaying entity info
+void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &entity)
+{
+	drawRect(x, y, mapTileSize, mapTileSize, col);
+	drawFillRect(x, y, mapTileSize, mapTileSize, col);
+	XSetForeground(d, gc, colours[fontCol]);
+}
+
+// Draws info box regarding ability cooldown
+void XWindowManager::drawAbilityCD(const shared_ptr<Player> &p)
+{
+	bool abilityReady = p->getCooldown() == 0;
+	drawRect(x, y, mapTileSize, mapTileSize, col);
+	drawFillRect(x, y, mapTileSize, mapTileSize, col);
+	string cd = "Ability: " + abilityReady
+					? "READY!"
+					: p->getCooldown() + " turns until ready...";
+	XSetForeground(d, gc, colours[fontCol]);
+	drawString(x, y, cd);
+}
+
+// Redraws battle scene
+void XWindowManager::redrawBattle()
+{
+	XClearWindow(d, w);
+	if (auto mp = gameMap.lock())
+	{
+	}
+}
+
+// Draws all the map tiles
+void XWindowManager::drawMapStruct(const vector<vector<shared_ptr<Tile>>> &mapArr)
+{
+	for (int row = 0; row < mapArr.size(); row++)
+	{
+		for (int col = 0; col < mapArr[row].size(); col++)
+		{
+			drawMapTile(col * mapTileSize, row * mapTileSize, mapArr[row][col]->getColour());
+		}
+	}
+}
+
+// Redraws map scene
+void XWindowManager::redrawMap()
+{
+	XClearWindow(d, w);
+	if (auto mp = gameMap.lock())
+	{
+	}
+}
+
+// Redraws correct scene based on current game state
 void XWindowManager::notify()
 {
+
 	return;
 }

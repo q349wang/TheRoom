@@ -3,6 +3,8 @@
 
 class Subject;
 
+// Observer of Travel and Battle managers which display
+// messages to stdout
 class MsgDisplayManager : public Observer {
 
 	Subject * _sub;
@@ -11,5 +13,5 @@ class MsgDisplayManager : public Observer {
 	MsgDisplayManager(Subject *, std::ostream &);
 	~MsgDisplayManager();
 
-	void notify();
+	void notify() override;
 };
