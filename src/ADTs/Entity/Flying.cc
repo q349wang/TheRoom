@@ -15,9 +15,15 @@ using namespace std;
  */
 Flying::Flying(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables,
-               vector<shared_ptr<Equipable>> equipables) : Enemy{health, energy, attack, armour, position, consumables, equipables} {}
+               vector<shared_ptr<Equipable>> equipables) : 
+               Enemy{health, energy, attack, armour, position, "Flying", consumables, equipables} {}
 
+/**
+ * Signature: ~Entity()
+ * Purpose: Defualt Destructor
+ */
 Flying::~Flying() {}
+
 /**
  * Signature: bool makeMove(char)
  * Purpose: Makes a move in a specified direction (indicated using 'N', 'E', 'S', 'W')
@@ -303,13 +309,4 @@ bool Flying::checkMove(char direction)
         // Return false if any other input is detected
         return false;
     }
-}
-
-/**
- * Signature: string getName()
- * Purpose: Provides the name of the flying enemy
- */
-string Flying::getName()
-{
-    return "flying";
 }

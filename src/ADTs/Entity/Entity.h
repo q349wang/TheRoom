@@ -28,6 +28,7 @@ class Entity {
   double attackStrength_;
   double armour_;
 
+  // Maintain entity name information
   std::string name_;
 
   // Maintain entity's current position
@@ -37,9 +38,6 @@ class Entity {
   // equipables, and equiped items
   std::vector<std::shared_ptr<Consumable>> consumables_;
   std::vector<std::shared_ptr<Equipable>> equipables_;
-
-  // Maintain all equiped items and relevant information
-  std::vector<std::shared_ptr<Equipable>> equipabled_;
 
   // Maintain entity base health and energy amount
   // Note: Entity with health lower than this amount
@@ -54,7 +52,7 @@ class Entity {
  public:
   // Constructor which requires health, energy, armour and attack information
   Entity(double health, double energy, double attack, double armour,
-         std::pair<int,int> position,
+         std::pair<int,int> position, string name,
          std::vector<std::shared_ptr<Consumable>> consumables = {}, 
          std::vector<std::shared_ptr<Equipable>> equipables = {});
 
@@ -100,7 +98,7 @@ class Entity {
   bool isOutOfEnergy();
 
   // Provides entity's name
-  virtual std::string getName() const = 0;
+  std::string getName();
 };
 
 #endif

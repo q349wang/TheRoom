@@ -15,10 +15,16 @@ using namespace std;
  */
 Mage::Mage(int teleport, double health, double energy, double attack, double armour, pair<int, int> position,
            vector<shared_ptr<Consumable>> consumables,
-           vector<shared_ptr<Equipable>> equipables)
-    : Player{health, energy, attack, armour, position, consumables, equipables},
-      teleport_amount_{teleport} {}
+           vector<shared_ptr<Equipable>> equipables) : 
+           Player{health, energy, attack, armour, position, "Mage", consumables, equipables},
+           teleport_amount_{teleport} {}
+
+/**
+ * Signature: ~Entity()
+ * Purpose: Defualt Destructor
+ */
 Mage::~Mage() {}
+
 /**
  * Signature: bool useSpecial(pair<int, int>)
  * Purpose: Utilizes special move to specified location if possible
@@ -82,13 +88,4 @@ vector<pair<int, int>> Mage::specialMoves()
     }
 
     return special_moves;
-}
-
-/**
- * Signature: string getName()
- * Purpose: Provides name of mage
- */
-string Mage::getName()
-{
-    return "mage";
 }

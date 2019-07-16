@@ -33,9 +33,6 @@ class Warrior : public Player {
 
     // Provides a collection of coordinates that can be moved to under a special move
     std::vector<std::pair<int, int>> specialMoves() override;
-
-    // Get ranger name of warrio
-    std::string getName() override;
 };
 
 #endif

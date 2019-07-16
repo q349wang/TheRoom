@@ -16,7 +16,12 @@ using namespace std;
 Warrior::Warrior(double health, double energy, double attack, double armour, pair<int, int> position,
                  vector<shared_ptr<Consumable>> consumables, 
                  vector<shared_ptr<Equipable>> equipables) :
-                 Player{health, energy, attack, armour, position, consumables, equipables} {}
+                 Player{health, energy, attack, armour, position, "Warrior", consumables, equipables} {}
+
+/**
+ * Signature: ~Entity()
+ * Purpose: Defualt Destructor
+ */
 Warrior::~Warrior() {}
 
 /**
@@ -108,12 +113,4 @@ vector<pair<int, int>> Warrior::specialMoves() {
     }
     
     return special_moves;
-}
-
-/**
- * Signature: string getName()
- * Purpose: Provides name of warrior
- */
-string Warrior::getName() {
-    return "warrior";
 }

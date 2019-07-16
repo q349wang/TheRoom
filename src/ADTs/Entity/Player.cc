@@ -13,11 +13,18 @@ using namespace std;
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial player's health, energy, and position
  */
-Player::Player(double health, double energy, double attack, double armour, pair<int, int> position,
+Player::Player(double health, double energy, double attack, double armour, 
+               pair<int, int> position, string name,
                vector<shared_ptr<Consumable>> consumables, 
                vector<shared_ptr<Equipable>> equipables) :
-               Entity{health, energy, attack, armour, position, consumables, equipables} {}
+               Entity{health, energy, attack, armour, position, name, consumables, equipables} {}
+
+/**
+ * Signature: ~Entity()
+ * Purpose: Defualt Destructor
+ */
 Player::~Player() {}
+
 /**
  * Signature: void decreaseCooldown()
  * Purpose: Decreases the cooldown after every specified turn
