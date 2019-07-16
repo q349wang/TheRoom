@@ -53,7 +53,7 @@ vector<pair<int, int>> Warrior::specialMoves() {
     // Determine the first wall or non-existent tile from the 
     // current position in the right direction
     while(current_map_->tile((position_.first + right), position_.second).available()) {
-        if((position_.first + right) < (current_map_->numColumns() - 1)) {
+        if((position_.first + right) < (current_map_->numColumns(position_.second) - 1)) {
             right++;
         }
         else {
@@ -77,7 +77,7 @@ vector<pair<int, int>> Warrior::specialMoves() {
     // Determine the first wall or non-existent tile from the 
     // current position in the up direction
     while(current_map_->tile(position_.first, (position_.second + up)).available()) {
-        if((position_.second + up) < (current_map_->numRows(position_.first) - 1)) {
+        if((position_.second + up) < (current_map_->numRows() - 1)) {
             up++;
         }
         else {

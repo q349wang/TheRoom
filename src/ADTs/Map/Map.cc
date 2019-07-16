@@ -99,21 +99,21 @@ void Map::insertEnemy(shared_ptr<Enemy> enemy, pair<int, int> coordinates)
 }
 
 /**
-     * Signature: int numColumns()
-     * Purpose: Provides the number of columns within the map
+     * Signature: int numRows()
+     * Purpose: Provides the number of rows within the map
      */
-int Map::numColumns()
+int Map::numRows()
 {
     return map_.size();
 }
 
 /**
-     * Signature: int numRows(int)
-     * Purpose: Provides the number of rows at a specified column 
+     * Signature: int numColumns(int)
+     * Purpose: Provides the number of columns at a specified row 
      */
-int Map::numRows(int column)
+int Map::numColumns(int row)
 {
-    return map_[column].size();
+    return (map_.at(row)).size();
 }
 
 /**

@@ -82,13 +82,12 @@ bool Ground::checkMove(char direction)
         return false;
     }
 
-    if ((updated_position.first >= 0) && (updated_position.first < current_map_->numColumns()))
-    {
-        if ((updated_position.second >= 0) && (updated_position.second < current_map_->numRows(updated_position.first)))
-        {
-            if (current_map_->tile(updated_position.first, updated_position.second).available())
-            {
-                return true;
+    if(updated_position.second >= 0  && updated_position.second < current_map_->numRows()) {
+
+        if(updated_position.first >= 0 && updated_position.first < current_map_->numColumns(updated_position.second)) {    
+            
+            if(current_map_->tile(updated_position.first, updated_position.second).available()) {
+                    return true;
             }
         }
     }

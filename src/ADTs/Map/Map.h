@@ -90,12 +90,12 @@ public:
   // Insert specified enemy at specified location
   void insertEnemy(std::shared_ptr<Enemy> enemy, std::pair<int, int> coordinates);
 
-  // Determines the number of columns within map
-  int numColumns();
+  // Determines the number of rows within map
+  int numRows();
 
-  // Determines the number of rows for a specified column
-  // Note: Column is assumed to exist, otherwise will throw exception
-  int numRows(int columns);
+  // Determines the number of columns for a specified row
+  // Note: Row is assumed to exist, otherwise will throw exception
+  int numColumns(int row);
 
   // Provides a const reference to a specified tile
   // Note: Coordinates are assumed to exist, otherwise will throw exception

@@ -32,9 +32,9 @@ Mage::~Mage() {}
 bool Mage::useSpecial(pair<int, int> location)
 {
     if ((((abs(location.first - position_.first) <= TELEPORT_DISTANCE) &&
-          ((location.second - position_.second) == 0)) ||
-         ((abs(location.second - position_.second) <= TELEPORT_DISTANCE) &&
-          ((location.first - position_.first) == 0))) &&
+        ((location.second - position_.second) == 0)) ||
+        ((abs(location.second - position_.second) <= TELEPORT_DISTANCE) &&
+        ((location.first - position_.first) == 0))) &&
         (current_map_->tile(location.first, location.second).available()) &&
         (this->specialReady()))
     {
@@ -58,7 +58,7 @@ vector<pair<int, int>> Mage::specialMoves()
     {
 
         // Determine if a teleport in the right direction is possible
-        if (((position_.first + teleport) < current_map_->numColumns()) &&
+        if (((position_.first + teleport) < current_map_->numColumns(position_.second)) &&
             (current_map_->tile((position_.first + teleport), position_.second).available()))
         {
             special_moves.emplace_back((position_.first + teleport), position_.second);
@@ -72,7 +72,7 @@ vector<pair<int, int>> Mage::specialMoves()
         }
 
         // Determine if a teleport in the up direction is possible
-        if (((position_.second + teleport) < current_map_->numRows(position_.first)) &&
+        if (((position_.second + teleport) < current_map_->numRows()) &&
             (current_map_->tile(position_.first, (position_.second + teleport)).available()))
         {
             special_moves.emplace_back(position_.first, (position_.second + teleport));
