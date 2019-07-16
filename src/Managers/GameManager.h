@@ -7,27 +7,24 @@
 #include <fstream>
 #include "BattleManager.h"
 #include "TravelManager.h"
-
-class Command;
-class Enemy;
-class Player;
-
+#include "../ADTs/Entity/Player.h"
+#include "../ADTs/Map/Map.h"
 
 class GameManager {
-    std::shared_ptr<MapManager> MapManager;
-    std::shared_ptr<TravelManager> TravelManager;
-    std::shared_ptr<BattleManager> BattleManager;
-    std::shared_ptr<Map> Map;
-    std::shared_ptr<Player> Player;
+    std::shared_ptr<MapManager> mapManager;
+    std::shared_ptr<TravelManager> travelManager;
+    std::shared_ptr<BattleManager> battleManager;
+    std::shared_ptr<Map> map;
+    std::shared_ptr<Player> player;
     
     public:
-    GameManager(std::shared_ptr<MapManager>,std::shared_ptr<TravelManager>,std::shared_ptr<BattleManager>,std::shared_ptr<Map>
-    ,std::shared_ptr<Player>);
+    GameManager();
     void reset();
     void startGame();
     void startTravel();
     void startBattle();
     void endGame();
+    void playGame();
     std::vector<std::vector<char>> inputMap();
 };
 #endif
