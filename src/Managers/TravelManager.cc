@@ -13,7 +13,9 @@
 using namespace std;
 
 TravelManager::TravelManager(shared_ptr<Map> map, shared_ptr<Player> player)
-    : map{map}, player{player} {}
+    : Subject{}, map{map}, player{player} {}
+
+TravelManager::~TravelManager() {}
 
 void TravelManager::makeMove(const Command &cmd)
 {

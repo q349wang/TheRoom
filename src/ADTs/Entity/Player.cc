@@ -17,7 +17,7 @@ Player::Player(double health, double energy, double attack, double armour, pair<
                vector<shared_ptr<Consumable>> consumables, 
                vector<shared_ptr<Equipable>> equipables) :
                Entity{health, energy, attack, armour, position, consumables, equipables} {}
-
+Player::~Player() {}
 /**
  * Signature: void decreaseCooldown()
  * Purpose: Decreases the cooldown after every specified turn

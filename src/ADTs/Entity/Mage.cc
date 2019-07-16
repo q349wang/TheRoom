@@ -18,7 +18,7 @@ Mage::Mage(int teleport, double health, double energy, double attack, double arm
            vector<shared_ptr<Equipable>> equipables)
     : Player{health, energy, attack, armour, position, consumables, equipables},
       teleport_amount_{teleport} {}
-
+Mage::~Mage() {}
 /**
  * Signature: bool useSpecial(pair<int, int>)
  * Purpose: Utilizes special move to specified location if possible

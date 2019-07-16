@@ -17,7 +17,7 @@ Warrior::Warrior(double health, double energy, double attack, double armour, pai
                  vector<shared_ptr<Consumable>> consumables, 
                  vector<shared_ptr<Equipable>> equipables) :
                  Player{health, energy, attack, armour, position, consumables, equipables} {}
-
+Warrior::~Warrior() {}
 
 /**
  * Signature: bool useSpecial(pair<int, int>)

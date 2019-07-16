@@ -17,7 +17,7 @@ Ranger::Ranger(double health, double energy, double attack, double armour, pair<
                vector<shared_ptr<Consumable>> consumables, 
                vector<shared_ptr<Equipable>> equipables) :
                Player{health, energy, attack, armour, position, consumables, equipables} {}
-
+Ranger::~Ranger() {}
 /**
  * Signature: bool useSpecial(pair<int, int>)
  * Purpose: Utilizes special move to specified location if possible
