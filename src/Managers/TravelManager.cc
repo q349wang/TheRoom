@@ -24,12 +24,12 @@ void TravelManager::makeMove(const Command &cmd)
         vector<string> args = cmd.getArgs();
         switch (cmd.getCommand())
         {
-        case 'T':
+        case 'A':
         {
             if (args.size() != 2)
             {
                 setMessageAndNotify("Invalid Command");
-                return;
+                break;
             }
             pair<int, int> coords;
             try
@@ -46,13 +46,13 @@ void TravelManager::makeMove(const Command &cmd)
             if (!pp->specialReady())
             {
                 setMessageAndNotify("Special on cooldown!");
-                return;
+                break;
             }
 
             if (!pp->useSpecial(coords))
             {
                 setMessageAndNotify("Invalid location for special move");
-                return;
+                break;
             }
         }
         case 'M':
@@ -60,14 +60,29 @@ void TravelManager::makeMove(const Command &cmd)
             if (args.size() != 1 || !pp->checkMove(args[0].at(0)))
             {
                 setMessageAndNotify("Invalid Command");
-                return;
+                break;
             }
 
             pp->makeMove(args[0].at(0));
+            if(auto mp = map.lock()) {
+                mp->moveEnemies();
+            }
+            break;
         }
         case 'P':
         {
-            // TO DO
+            pp->pickUpItems();
+            break;
+        }
+        case 'D':
+        {
+            if (args.size() != 1)
+            {
+                setMessageAndNotify("Invalid Command");
+                break;
+            }
+            pp->dropItem(args[0]);
+            break;
         }
         case 'L':
         {
@@ -81,14 +96,14 @@ void TravelManager::makeMove(const Command &cmd)
                 desc << pots->getName() << endl;
             }
             setMessageAndNotify(desc.str());
-            return;
+            break;
         }
         case 'U':
         {
             if (args.size() != 1)
             {
                 setMessageAndNotify("Invalid Command");
-                return;
+                break;
             }
             shared_ptr<Item> item = nullptr;
             string name = args[0];
@@ -97,6 +112,7 @@ void TravelManager::makeMove(const Command &cmd)
                 if (equip != nullptr && equip->getName() == name)
                 {
                     item = equip;
+                    pp->equipEquipable(pp, item->getName());
                     break;
                 }
             }
@@ -107,6 +123,7 @@ void TravelManager::makeMove(const Command &cmd)
                     if (pots != nullptr && pots->getName() == name)
                     {
                         item = pots;
+                        pp->consumeConsumable(pp, item->getName());
                         break;
                     }
                 }
@@ -114,10 +131,9 @@ void TravelManager::makeMove(const Command &cmd)
             if (item == nullptr)
             {
                 setMessageAndNotify("Invalid Command");
-                return;
+                break;
             }
-            //TODO
-            //player->useItem(player, item);
+            break;
         }
         }
     }
@@ -163,6 +179,7 @@ void TravelManager::runTravel()
                 {
                     break;
                 }
+                case 'D':
                 case 'L':
                 case 'U':
                 {
