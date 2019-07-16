@@ -86,7 +86,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
         shared_ptr<Entity> target = player;
         if (name != "me")
         {
-            int tarIndex = 0;
+            unsigned int tarIndex = 0;
             try
             {
                 tarIndex = stoi(args[0]);
@@ -114,6 +114,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             if (equip != nullptr && equip->getName() == name)
             {
                 item = equip;
+                player->equipEquipable(target, item->getName());
                 break;
             }
         }
@@ -124,6 +125,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                 if (pots != nullptr && pots->getName() == name)
                 {
                     item = pots;
+                    player->consumeConsumable(target, item->getName());
                     break;
                 }
             }
@@ -133,8 +135,6 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             invalidCmd = true;
             break;
         }
-        // TODO
-        //player->useItem(target, item);
         setMessageAndNotify("Player used item " + item->getName() + " on " +
                             target->getName() + " .");
         if (target->getHealth() == 0)
@@ -164,7 +164,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             break;
         }
         shared_ptr<Enemy> target = nullptr;
-        int tarIndex = 0;
+        unsigned int tarIndex = 0;
         try
         {
             tarIndex = stoi(args[0]);
