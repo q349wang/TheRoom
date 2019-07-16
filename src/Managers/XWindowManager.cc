@@ -19,7 +19,10 @@ XWindowManager::~XWindowManager()
 
 const string XWindowManager::font = "-*-clean-*-*-*-*-*-*-100-100-*-*-*-*";
 
-XWindowManager::XWindowManager(shared_ptr<Map> map, int width, int height) : gameMap{map}
+XWindowManager::XWindowManager(shared_ptr<Map> map, int width, int height)
+	: gameMap{map},
+	  width{width},
+	  height{height}
 {
 	d = XOpenDisplay(NULL);
 	if (d == NULL)
@@ -59,10 +62,11 @@ XWindowManager::XWindowManager(shared_ptr<Map> map, int width, int height) : gam
 	XColor xcolour;
 	Colormap cmap;
 
-	const size_t numColours = 7;
-	char color_vals[numColours][15] = {
-		"white", "black", "red", "orangered"
-		"green", "blue", "darkgreen", "purple"};
+	const size_t numColours = 9;
+	char color_vals[numColours][10] = {
+		"white", "black", "red", "orangered",
+		"green", "blue", "darkgreen", "purple",
+		"yellow"};
 
 	cmap = DefaultColormap(d, DefaultScreen(d));
 
@@ -110,7 +114,7 @@ void XWindowManager::drawRect(int x, int y, int width, int height, int colour)
 void XWindowManager::drawFillCirc(int x, int y, int width, int height, int colour)
 {
 	XSetForeground(d, gc, colours[colour]);
-	XFillArc(d, w, gc, x, y, width, height, 0, 360*64);
+	XFillArc(d, w, gc, x, y, width, height, 0, 360 * 64);
 	XFlush(d);
 }
 
@@ -118,7 +122,7 @@ void XWindowManager::drawFillCirc(int x, int y, int width, int height, int colou
 void XWindowManager::drawCirc(int x, int y, int width, int height, int colour)
 {
 	XSetForeground(d, gc, colours[colour]);
-	XDrawArc(d, w, gc, x, y, width, height, 0, 360*64);
+	XDrawArc(d, w, gc, x, y, width, height, 0, 360 * 64);
 	XFlush(d);
 }
 
@@ -177,13 +181,19 @@ void XWindowManager::redrawBattle()
 }
 
 // Draws all the map tiles
-void XWindowManager::drawMapStruct(const vector<vector<shared_ptr<Tile>>> &mapArr)
+void XWindowManager::drawMapStruct(const shared_ptr<Entity> &p,
+								   const vector<vector<shared_ptr<Tile>>> &mapArr)
 {
+	pair<int, int> coords = p->getPosition();
+	int xOffset = coords.first;
+	int yOffset = coords.second;
 	for (unsigned int row = 0; row < mapArr.size(); row++)
 	{
 		for (unsigned int col = 0; col < mapArr[row].size(); col++)
 		{
-			drawMapTile(col * mapTileSize, row * mapTileSize, mapArr[row][col]->getColour());
+			drawMapTile(centerX((col - xOffset) * mapTileSize),
+						centerY((row - yOffset) * mapTileSize),
+						mapArr[row][col]->getColour());
 		}
 	}
 }
@@ -194,8 +204,8 @@ void XWindowManager::redrawMap()
 	XClearWindow(d, w);
 	if (auto mp = gameMap.lock())
 	{
-		drawMapStruct(mp->getMap());
-		drawPlayerOnMap(mp->getPlayer());
+		drawMapStruct(mp->getPlayer(), mp->getMap());
+		drawEntityOnMap(mp->getPlayer());
 	}
 }
 
@@ -206,12 +216,19 @@ void XWindowManager::notify()
 	return;
 }
 
-void XWindowManager::drawPlayerOnMap(const shared_ptr<Player>& p) {
-	pair<int, int> coords = p->getPosition();
-	drawCirc(coords.first* mapTileSize, 
-	coords.second* mapTileSize,
-	entityDiameter, entityDiameter, GameColours::Black);
-	drawFillCirc(coords.first* mapTileSize, 
-	coords.second* mapTileSize,
-	entityDiameter, entityDiameter, GameColours::Black);
+void XWindowManager::drawEntityOnMap(const shared_ptr<Entity> &p)
+{
+	drawFillCirc(centerX(0) + mapTileSize / 2 - entityDiameter / 2,
+				 centerY(0) + mapTileSize / 2 - entityDiameter / 2,
+				 entityDiameter, entityDiameter, p->getColour());
+}
+
+int XWindowManager::centerX(int x)
+{
+	return x + width / 2 - entityDiameter / 2;
+}
+
+int XWindowManager::centerY(int y)
+{
+	return y + height / 2 - entityDiameter / 2;
 }

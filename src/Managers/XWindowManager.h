@@ -24,16 +24,23 @@ class XWindowManager : public Observer
     int s;
     GC gc;
     std::weak_ptr<Map> gameMap;
+
+    int width;
+    int height;
+
     unsigned long colours[10];
 
     static const int fontCol = GameColours::Black;
     static const int mapBorderColour = GameColours::White;
-    static const int mapTileSize = 20;
+    static const int mapTileSize = 50;
     static const int namePlateBorderColour = GameColours::Black;
     static const int namePlateColour = GameColours::White;
 
-    static const int entityDiameter = 15;
+    static const int entityDiameter = 25;
     static const std::string font;
+
+    int centerX(int x);
+    int centerY(int y);
 
 public:
     XWindowManager(std::shared_ptr<Map> gameMap, int width = 500, int height = 500);
@@ -50,11 +57,11 @@ public:
     void drawString(int x, int y, std::string msg);
 
     void drawMapTile(int x, int y, int content);
-    void drawMapStruct(const std::vector<std::vector<std::shared_ptr<Tile>>>&);
-    void drawEntityInfo(int x, int y, const std::shared_ptr<Entity>&);
-    void drawAbilityCD(const std::shared_ptr<Player>&);
+    void drawMapStruct(const std::shared_ptr<Entity> &, const std::vector<std::vector<std::shared_ptr<Tile>>> &);
+    void drawEntityInfo(int x, int y, const std::shared_ptr<Entity> &);
+    void drawAbilityCD(const std::shared_ptr<Player> &);
 
-    void drawPlayerOnMap(const std::shared_ptr<Player>&);
+    void drawEntityOnMap(const std::shared_ptr<Entity> &);
 
     void redrawMap();
     void redrawBattle();

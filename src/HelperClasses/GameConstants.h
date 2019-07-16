@@ -11,6 +11,7 @@ enum GameColours : int
     Blue = 5,
     DarkGreen = 6,
     Purple = 7,
+    Yellow = 8
 };
 
 #endif

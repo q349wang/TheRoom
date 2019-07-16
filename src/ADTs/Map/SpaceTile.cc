@@ -18,6 +18,6 @@ SpaceTile::~SpaceTile(){}
  * Purpose: Provides the color of the specified tile
  */
 int SpaceTile::getColour() {
-    return TILE_COLOUR;
+    return getItems().size() == 0 ? TILE_COLOUR : ITEM_TILE_COLOUR;
 }
 
