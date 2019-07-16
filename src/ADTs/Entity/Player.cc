@@ -129,7 +129,7 @@ bool Player::makeMove(char direction) {
 void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name) {
     vector<shared_ptr<Consumable>> consumables = (entity->currentConsumables());
 
-    for(auto existing = applicable->consumables.begin(); existing != consumables.end(); ++existing) {
+    for(auto existing = consumables.begin(); existing != consumables.end(); ++existing) {
         if(consume_name == (*existing)->getName()) {
             map<string, StatMod> consume_mods = (*existing)->useItem();
             for(auto it = consume_mods.begin(); it != consume_mods.end(); ++it) {

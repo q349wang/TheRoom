@@ -61,8 +61,9 @@ class Player: public Entity {
     void addEquipable(std::shared_ptr<Equipable>) override;
     // Equip item, specified by equipable name
     void equipEquipable(std::shared_ptr<Entity>, std::string);
+    
     // Drop equiped item from the current collection
-    void dropEquipable(std::shared_ptr<Entity>, std::string);
+    void dropEquipable(std::string);
 
     // Reverses the stat mods implications for a player
     void reverseStat(std::string, StatMod);
