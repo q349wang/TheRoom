@@ -194,3 +194,7 @@ void Entity::applyStat(string stat, StatMod mod) {
         }
     }
 }
+
+void Entity::setMap(shared_ptr<Map> map) {
+    current_map_ = map;
+}

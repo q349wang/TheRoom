@@ -16,8 +16,8 @@ using namespace std;
 Mage::Mage(double health, double energy, double attack, double armour, pair<int, int> position,
            vector<shared_ptr<Consumable>> consumables,
            vector<shared_ptr<Equipable>> equipables) : 
-           Player{health, energy, attack, armour, "Mage", position,  consumables, equipables},
-           teleport_amount_{teleport} {}
+           Player{health, energy, attack, armour, "Mage", position,  consumables, equipables}
+           {}
 
 /**
  * Signature: ~Entity()
