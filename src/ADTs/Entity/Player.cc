@@ -135,6 +135,26 @@ void Player::consumeConsumable(string consume_name) {
 }
 
 /**
+ * Signature: void equipEquipable(shared_ptr<Equipable>);
+ * Purpose: Utilizes a specified equipable item
+ */
+void Player::equipEquipable(string equip_name) {
+    for(auto& existing_equip: equipables_) {
+        if(equip_name == existing_equip->getName()) {
+            existing_equip->useItem(equip_name); // TODO implement use item functionality 
+        }
+    }
+}
+
+/**
+ * Signature: void addEquipable(shared_ptr<Equipable>)
+ * Purpose: Equips equipable and activates passive stat mods
+ */
+void Player::addEquipable(shared_ptr<Equipable>) {
+
+}
+
+/**
  * Signature: void pickUpItems()
  * Purpose: Picks up all items stored on its current tile, and empties tile
  */

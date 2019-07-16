@@ -58,6 +58,9 @@ class Player: public Entity {
     // Note: If move is successful, will return true, otherwise false
     bool makeMove(char) override;
 
+    // Equips an equipable and also activates all passive stat mods
+    void addEquipable(std::shared_ptr<Equipable>) override;
+
     // Consume item, specified by the consumable name
     void consumeConsumable(std::string);
 

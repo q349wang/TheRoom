@@ -70,11 +70,8 @@ class Entity {
   std::pair<int,int> getPosition();
   
   // Inserts specfied equipable/consumable to current collection
-  void addEquipable(std::shared_ptr<Equipable>);
+  virtual void addEquipable(std::shared_ptr<Equipable>);
   void addConsumable(std::shared_ptr<Consumable>);
-
-  // Equiping item, specified by the equipable name
-  void equipEquipable(std::string);
 
   // Provides a const reference to equipables/consumables
   const std::vector<std::shared_ptr<Equipable>>& currentEquipables();

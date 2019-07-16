@@ -86,18 +86,6 @@ void Entity::addConsumable(shared_ptr<Consumable> new_consume) {
 }
 
 /**
- * Signature: void equipEquipable(shared_ptr<Equipable>);
- * Purpose: Utilizes a specified equipable item
- */
-void Entity::equipEquipable(string equip_name) {
-    for(auto& existing_equip: equipables_) {
-        if(equip_name == existing_equip->getName()) {
-            existing_equip->useItem(equip_name); // TODO implement use item functionality 
-        }
-    }
-}
-
-/**
  * Signature: const vector<shared_ptr<Equipable>>& currentEquipables()
  * Purpose: Provides a const reference to all the current equipables
  */
