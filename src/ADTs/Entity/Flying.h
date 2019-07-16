@@ -17,6 +17,9 @@
  */
 class Flying : public Enemy {
  private:
+  // Maintain entity name
+  static const std::string ENTITY_NAME;
+
  protected:
  public:
      // Constructor which requires health, energy, armour, and attack information

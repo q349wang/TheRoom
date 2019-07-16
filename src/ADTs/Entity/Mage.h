@@ -19,6 +19,9 @@
  */
 class Mage : public Player {
  private:
+   // Maintain entity name
+  static const std::string ENTITY_NAME;
+  
  protected:
     int teleport_amount_;
  public:

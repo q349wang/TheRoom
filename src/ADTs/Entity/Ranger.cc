@@ -11,6 +11,9 @@
 
 using namespace std;
 
+// Declare enemy name
+const string Ranger::ENTITY_NAME = "Ranger";
+
 /**
  * Signature: Ranger(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)

@@ -33,12 +33,12 @@ using namespace std;
         for(auto row = map.begin; row != map.end(); ++row) {
             for(auto col = row->begin(); col != row->end(); ++col) {
                 // If the tile is marked as 'E' it is assumed to be an exit tile
-                if(col == 'E') {
+                if(*col == 'E') {
                     column.emplace_back(make_shared<ExitTile>(ExitTile{}));
-                    exits_.emplace(coord{(row - map.begin), (col - row->begin())}.position, column.back());
+                    exits_.emplace(coord{(row - map.begin()), (col - row->begin())}.position, column.back());
                 }
                 // If the tile is marked as 'W' it is assumed to be an wall tile   
-                else if (col == 'W') {
+                else if (*col == 'W') {
                     column.emplace_back(make_shared<WallTile>(WallTile{}));
                 } 
                 // Any other input is assumed to be a basic space tile

@@ -19,6 +19,9 @@
  */
 class Ranger : public Player {
  private:
+   // Maintain entity name
+  static const std::string ENTITY_NAME;
+  
  protected:
  public:
     // Constructor which requires health, energy, and attack information

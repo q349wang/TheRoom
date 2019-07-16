@@ -19,6 +19,9 @@
  */
 class Warrior : public Player {
  private:
+   // Maintain entity name
+  static const std::string ENTITY_NAME;
+  
  protected:
  public:
 

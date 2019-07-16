@@ -17,10 +17,16 @@
  */
 class Entity {
  private:
+  // Maintain entity name
+  static const std::string ENTITY_NAME;
+
  protected:
+  // Applies specified modification to the current entity
+  void applyModifications(std::pair<std::string, StatMod>&);
+
   // Maintain a reference to the current map associated with the entity
   std::shared_ptr<Map> current_map_;
-    
+
   // Maintain entity health, energy, armour, and attack information
   double health_;
   double energy_;
@@ -97,7 +103,7 @@ class Entity {
   bool isOutOfEnergy();
 
   // Provides entity's name
-  virtual std::string getName() = 0;
+  std::string getName();
 };
 
 #endif

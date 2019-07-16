@@ -10,6 +10,9 @@
 
 using namespace std;
 
+// Declare enemy name
+const string Flying::ENTITY_NAME = "Flying";
+
 /**
  * Signature: Ranger(double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
@@ -140,13 +143,38 @@ bool Flying::makeMove(char direction) {
             // Return false if any other input is detected
             return false;
     }
-
 } 
 
 /**
- * Signature: string getName()
- * Purpose: Provides the name of the flying enemy
+ * Signature: bool checkMove(char)
+ * Purpose: Determines if a provided move is possible for a flying enemy
+ *          Utilizes 'N', 'E', 'S', 'W' for direction indication
  */
-string Flying::getName() {
-    return "flying";
+bool Flying::checkMove(char direction) {
+    pair<int, int> updated_position = position_;
+
+    // Update the modified position dependent on the input direction
+    switch(direction) {
+        case 'E':
+            updated_position.first++;
+            
+        case 'W':
+            updated_position.first--;
+        case 'N':
+            updated_position.second++;
+        case 'S':
+            updated_position.second--;
+        default:
+            return false;
+    }
+
+    if((updated_position.first >= 0)  && (updated_position.first < current_map_->numColumns())) {
+        if((updated_position.second >= 0) && (updated_position.second < current_map_->numRows(updated_position.first))) {    
+            if(current_map_->tile(updated_position.first, updated_position.second).available()) {
+                    return true;
+            }
+        }
+    }
+
+    return false;
 }

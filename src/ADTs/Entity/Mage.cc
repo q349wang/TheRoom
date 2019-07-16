@@ -11,6 +11,9 @@
 
 using namespace std;
 
+// Declare enemy name
+const string Mage::ENTITY_NAME = "Mage";
+
 /**
  * Signature: Mage(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)

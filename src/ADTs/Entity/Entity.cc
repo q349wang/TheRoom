@@ -1,6 +1,7 @@
 #include "Consumable.h"
 #include "Equipable.h"
 #include "Map.h"
+#include "StatMod.h"
 
 #include <vector>
 #include <memory>
@@ -19,6 +20,15 @@ Entity::Entity(double health, double energy, double attack, double armour, pair<
                health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
                position_{position}, consumables_{consumables_}, 
                equipables_{equipables} {}
+
+/**
+ * Signature: void applyModifications(pair<string, StatMod>)
+ * Purpose: Applies specified modification to the current entity
+ */
+void Entity::applyModifications(pair<string, StatMod>& modification) {
+    //for(auto& class : modification.second.)
+    //modification.second.getAdder()
+}
 
 /**
  * Signature: double getHealth()
@@ -65,6 +75,11 @@ pair<int,int> Entity::getPosition() {
  * Purpose: Adds equipable to current collection
  */
 void Entity::addEquipable(shared_ptr<Equipable> new_equip) {
+    map<string, StatMod> passiveModifications = new_equip->getPassive();
+    for(pair<string, StatMod> passiveModification : passiveModifications) {
+        applyModifications(passiveModification);
+    }
+
     equipables_.emplace_back(new_equip);
 }
 
@@ -155,4 +170,12 @@ bool Entity::isOutOfEnergy() {
  */
 void Entity::updatePosition(pair<int, int> location) {
     position_ = location;
+}
+
+/**
+ * Signature: string getName()
+ * Purpose: Provides the entity's
+ */
+string Entity::getName() {
+    return ENTITY_NAME;
 }

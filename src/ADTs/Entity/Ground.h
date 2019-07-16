@@ -17,6 +17,9 @@
  */
 class Ground : public Enemy {
  private:
+   // Maintain entity name
+  static const std::string ENTITY_NAME;
+
  protected:
  public:
      // Constructor which requires health, energy, armour, and attack information
@@ -33,6 +36,9 @@ class Ground : public Enemy {
 
     // Provides name of the ground enemy
     std::string getName() override;
+
+    // Checks if a provided move is possible for ground enemy
+    bool checkMove(char) override;
 };
 
 #endif
