@@ -34,5 +34,6 @@
 *.pdf
 *.json
 
+*/.vscode
 .vscode
 .vscode/*
