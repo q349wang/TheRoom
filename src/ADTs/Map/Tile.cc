@@ -35,10 +35,26 @@ bool Tile::available() const {
 
 /**
  * Signature: const vector<shared_ptr<Item>>& getItems()
+ * Purpose: Provides a const reference to the items on the current tile
  */
 const vector<shared_ptr<Item>>& Tile::getItems() {
     return items_;
 }
 
-// Provides a const reference to all enemies on a give tile
-const std::vector<std::shared_ptr<Enemy>>& getEnemies();
+/**
+ * Signature: const vector<shared_ptr<Enemy>>& getEnemies()
+ * Purpose: Provides a const reference to the enemies on the current tile
+ */
+const vector<shared_ptr<Enemy>>& Tile::getEnemies() {
+    return enemies_;
+}
+
+/**
+ * Signature: vector<shared_ptr<Item>> pickupItems();
+ * Purpose: Provides all items on the current tile, and empties tile
+ */
+vector<shared_ptr<Item>> Tile::pickupItems() {
+    vector<shared_ptr<Item>> items{items_};
+    items_.clear();
+    return items;
+}

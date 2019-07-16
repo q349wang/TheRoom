@@ -39,6 +39,9 @@ class Tile {
   // Provides a const reference to all enemies on a give tile
   const std::vector<std::shared_ptr<Enemy>>& getEnemies();
 
+  // Provides all items on current tile and clears all items on the tile
+  std::vector<std::shared_ptr<Item>> pickupItems();
+
   // Determines if a specified tile is available to be moved on
   virtual bool available() const;
 
