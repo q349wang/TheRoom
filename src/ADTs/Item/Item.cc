@@ -13,7 +13,7 @@ map<string, StatMod>& Item::getModifiers() {
 
 void Item::afterUse() {}
 
-map<string, StatMod> Item::useItem(string heroType) {
+map<string, StatMod> Item::useItem() {
     map<string, StatMod> itemMods{getModifiers()};
 
     afterUse();

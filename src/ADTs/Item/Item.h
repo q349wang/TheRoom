@@ -21,7 +21,7 @@ class Item {
     //virtual std::map<std::string, StatMod> getItemActive();
     virtual std::string getShortName();
     virtual std::string getName();
-    std::map<std::string, StatMod> useItem(std::string);
+    std::map<std::string, StatMod> useItem();
     Item(std::string, std::shared_ptr<ItemDescription>);
     virtual ~Item() = 0;
 };
