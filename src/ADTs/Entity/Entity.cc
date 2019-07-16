@@ -89,7 +89,7 @@ void Entity::addConsumable(shared_ptr<Consumable> new_consume) {
  * Signature: const vector<shared_ptr<Equipable>>& currentEquipables()
  * Purpose: Provides a const reference to all the current equipables
  */
-const vector<shared_ptr<Equipable>>& Entity::currentEquipables() {
+vector<shared_ptr<Equipable>>& Entity::currentEquipables() {
     return equipables_;
 }
 
@@ -97,7 +97,7 @@ const vector<shared_ptr<Equipable>>& Entity::currentEquipables() {
  * Signature: const vector<shared_ptr<Consumable>>& currentConsumable()
  * Purpose: Provides a const reference to all the current consumables
  */
-const vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
+vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
     return consumables_;
 }
 
@@ -160,4 +160,37 @@ void Entity::updatePosition(pair<int, int> location) {
  */
 string Entity::getName() {
     return name_;
+}
+
+/**
+ * Signature: void applyStat(string, StatMod)
+ * Purpose: Apply the specified stat mod
+ */
+void Entity::applyStat(string stat, StatMod mod, shared_ptr<Entity> entity) {
+    if(stat == "Ranger" || stat == "Mage" || stat == "Warrior") {
+        if(stat == entity->getName()) {
+            entity->armour_ = (entity->armour_ + mod.getAdder()) * mod.getMultiplier();
+            entity->health_ = (entity->health_ + mod.getAdder()) * mod.getMultiplier();
+            entity->energy_ = (entity->energy_ + mod.getAdder()) * mod.getMultiplier();
+            entity->attackStrength_ = (entity->attackStrength_ + mod.getAdder()) * mod.getMultiplier();
+        }
+    }
+
+    else {
+        if(stat == "Health") {
+            entity->health_ = (entity->health_ + mod.getAdder()) * mod.getMultiplier();
+        }
+        else if(stat == "Attack") {
+            entity->attackStrength_ = (entity->attackStrength_ + mod.getAdder()) * mod.getMultiplier();
+        }
+        else if(stat == "Damage") {
+            entity->health_ = (entity->health_ - mod.getAdder()) * mod.getMultiplier();
+        }
+        else if(stat == "Energy") {
+            entity->energy_ = (entity->energy_ + mod.getAdder()) * mod.getMultiplier();
+        }   
+        else if(stat == "Armor") {
+            entity->armour_ = (entity->armour_ + mod.getAdder()) * mod.getMultiplier();
+        }
+    }
 }

@@ -74,8 +74,8 @@ class Entity {
   void addConsumable(std::shared_ptr<Consumable>);
 
   // Provides a const reference to equipables/consumables
-  const std::vector<std::shared_ptr<Equipable>>& currentEquipables();
-  const std::vector<std::shared_ptr<Consumable>>& currentConsumables();
+  std::vector<std::shared_ptr<Equipable>>& currentEquipables();
+  std::vector<std::shared_ptr<Consumable>>& currentConsumables();
 
   // Perform an attack on a specified enemy
   double attack(std::shared_ptr<Entity>);
@@ -89,6 +89,9 @@ class Entity {
   // Take damage or consume energy by a specified amount
   double takeDamage(double);
   void useEnergy(double);
+ 
+  // Applies stat mod to a player
+  void applyStat(std::string, StatMod, std::shared_ptr<Entity>);
 
   // Determine if an entity is dead or out of energy
   bool isDead();

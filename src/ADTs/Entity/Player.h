@@ -54,15 +54,18 @@ class Player: public Entity {
     // Note: If move is successful, will return true, otherwise false
     bool makeMove(char) override;
 
+    // Consume item, specified by the consumable name
+    void consumeConsumable(std::shared_ptr<Entity>, std::string);
+
     // Equips an equipable and also activates all passive stat mods
     void addEquipable(std::shared_ptr<Equipable>) override;
-    // Consume item, specified by the consumable name
-    void consumeConsumable(std::string);
     // Equip item, specified by equipable name
-    void equipEquipable(std::string);
-    
-    // Applies stat mod to a player
-    void applyStat(std::string, StatMod);
+    void equipEquipable(std::shared_ptr<Entity>, std::string);
+    // Drop equiped item from the current collection
+    void dropEquipable(std::shared_ptr<Entity>, std::string);
+
+    // Reverses the stat mods implications for a player
+    void reverseStat(std::string, StatMod);
 
     // Utilize special movement to a specified position
     // Returns true if successful, and false otherwise

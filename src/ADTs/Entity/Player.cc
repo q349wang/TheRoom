@@ -126,13 +126,18 @@ bool Player::makeMove(char direction) {
  * Signature: void consumeConsumable(shared_ptr<Consumable>);
  * Purpose: Utilizes a specified consumable item
  */
-void Player::consumeConsumable(string consume_name) {
-    for(auto& existing_consume: consumables_) {
-        if(consume_name == existing_consume->getName()) {
-            map<string, StatMod> consume_mods = existing_consume->useItem();
+void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name) {
+    vector<shared_ptr<Consumable>> consumables = (entity->currentConsumables());
+
+    for(auto existing = applicable->consumables.begin(); existing != consumables.end(); ++existing) {
+        if(consume_name == (*existing)->getName()) {
+            map<string, StatMod> consume_mods = (*existing)->useItem();
             for(auto it = consume_mods.begin(); it != consume_mods.end(); ++it) {
-                applyStat((*it).first, (*it).second);
+                applyStat((*it).first, (*it).second, entity);
             }
+
+            consumables.erase(existing);
+            break;
         }
     }
 }
@@ -141,47 +146,72 @@ void Player::consumeConsumable(string consume_name) {
  * Signature: void equipEquipable(shared_ptr<Equipable>);
  * Purpose: Utilizes a specified equipable item
  */
-void Player::equipEquipable(string equip_name) {
-    for(auto& existing_equip : equipables_) {
-        if(equip_name == existing_equip->getName()) {
-            map<string, StatMod> equip_mods = existing_equip->useItem();
+void Player::equipEquipable(shared_ptr<Entity> entity, string equip_name) {
+    vector<shared_ptr<Equipable>> equipables = (entity->currentEquipables());
+
+    for(auto existing = equipables.begin(); existing != equipables.end(); ++existing) {
+        if(equip_name == (*existing)->getName()) {
+            map<string, StatMod> equip_mods = (*existing)->useItem();
             for(auto it = equip_mods.begin(); it != equip_mods.end(); ++it) {
-                applyStat((*it).first, (*it).second);
+                applyStat((*it).first, (*it).second, entity);
             }
+
+            break;
         }
     }
 }
 
 /**
- * Signature: void applyStat(string, StatMod)
- * Purpose: Apply the specified stat mod
+ * Signature: void dropEquipable(string)
+ * Purpose: Drops a specified equipable item
  */
-void Player::applyStat(string stat, StatMod mod) {
-    if(stat == "Ranger" || stat == "Mage" || stat == "Warrior") {
-        if(stat == getName()) {
-            armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
-            health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
-            energy_ = (energy_ + mod.getAdder()) * mod.getMultiplier();
-            attackStrength_ = (attackStrength_ + mod.getAdder()) * mod.getMultiplier();
+void Player::dropEquipable(string equip_name) {
+    for(auto existing = equipables_.begin(); existing != equipables_.end(); ++existing) {
+        if(equip_name == (*existing)->getName()) {
+
+            map<string, StatMod> equip_mods = (*existing)->getPassive();
+            for(auto it = equip_mods.begin(); it != equip_mods.end(); ++it) {
+                reverseStat((*it).first, (*it).second);
+            }
+
+            equipables_.erase(existing);
+            break;
         }
     }
+}
 
-    else {
-        if(stat == "Health") {
-            health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
+/**
+ * Signature: void reverseStat(string, StatMod)
+ * Purpose: Reverses the stat mods implications for a player
+ */
+void Player::reverseStat(string stat, StatMod mod) {
+    if(mod.getMultiplier() != 0) {
+        if(stat == "Ranger" || stat == "Mage" || stat == "Warrior") {
+            if(stat == getName()) {
+                armour_ = ((armour_)/mod.getMultiplier()) - mod.getAdder();
+                health_ = ((health_)/mod.getMultiplier()) - mod.getAdder();
+                energy_ = ((energy_)/mod.getMultiplier()) - mod.getAdder();
+                attackStrength_ = ((attackStrength_)/mod.getMultiplier()) - mod.getAdder();
+            }
         }
-        else if(stat == "Attack") {
-            attackStrength_ = (attackStrength_ + mod.getAdder()) * mod.getMultiplier();
-        }
-        else if(stat == "Damage") {
-            health_ = (health_ - mod.getAdder()) * mod.getMultiplier();
-        }
-        else if(stat == "Energy") {
-            energy_ = (energy_ + mod.getAdder()) * mod.getMultiplier();
+
+        else {
+            if(stat == "Health") {
+                health_ = ((health_)mod.getMultiplier()) - mod.getAdder();
+            }
+            else if(stat == "Attack") {
+                attackStrength_ = ((attackStrength_)/mod.getMultiplier()) - mod.getAdder();
+            }
+            else if(stat == "Damage") {
+                health_ = ((health_)/mod.getMultiplier()) + mod.getAdder();
+            }
+            else if(stat == "Energy") {
+                energy_ = ((energy_ )/mod.getMultiplier()) - mod.getAdder();
+            }   
+            else if(stat == "Armor") {
+                armour_ = ((armour_)/mod.getMultiplier()) - mod.getAdder();
+            }
         }   
-        else if(stat == "Armor") {
-            armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
-        }
     }
 }
 
