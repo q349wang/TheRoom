@@ -14,19 +14,20 @@ class Player;
 
 
 class GameManager {
-    BattleManager* BattleManager;
-    TravelManager* TravelManager;
-    MapManager* MapManager;
-    Map* Map;
+    std::shared_ptr<MapManager> MapManager;
+    std::shared_ptr<TravelManager> TravelManager;
+    std::shared_ptr<BattleManager> BattleManager;
+    std::shared_ptr<Map> Map;
+    std::shared_ptr<Player> Player;
     
     public:
-    GameManager(BattleManager *_battleManager, TravelManager *_travelManager, MapManager *_mapManager, Map *_map);
+    GameManager(std::shared_ptr<MapManager>,std::shared_ptr<TravelManager>,std::shared_ptr<BattleManager>,std::shared_ptr<Map>
+    ,std::shared_ptr<Player>);
     void reset();
     void startGame();
     void startTravel();
     void startBattle();
     void endGame();
     std::vector<std::vector<char>> inputMap();
-    void notify();
 };
 #endif
