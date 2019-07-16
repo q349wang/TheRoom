@@ -1,20 +1,30 @@
 #include "GameManager.h"
 #include "TravelManager.h"
+#include <memory>
 
 using namespace std;
 
-    GameManager(std::shared_ptr<MapManager> mapManager,std::shared_ptr<TravelManager> travelManager,
-    std::shared_ptr<BattleManager> battleManager,std::shared_ptr<Map> map,std::shared_ptr<Player> player):
-    MapManager{mapManager}, TravelManager{travelManager}, BattleManager{battleManager}, Map{map}, Player{player};
+GameManager::GameManager(){
+    player = nullptr;
+    travelManager = nullptr;
+    mapManager = nullptr;
+    battleManager = nullptr;
+    map = nullptr;
+}
 
 void GameManager::reset(){
-    Player = nullptr;
-    TravelManager = nullptr;
-    MapManager = nullptr;
-    Map = MapManager->setCustomMap(inputMap());
+    // don't know about this.
+    player = nullptr;
+    travelManager = nullptr;
+    mapManager = nullptr;
+    map = MapManager->setCustomMap(inputMap());
 }
 void GameManager::startGame(){
-    Map = MapManager->setCustomMap(inputMap());
+    mapManager();
+    map = MapManager->setCustomMap(inputMap());
+    player = make_shared<Player>();
+    battleManager{Player};
+    travelManager{Map,Player};
 }
 
 void GameManager::startTravel(){
@@ -25,14 +35,23 @@ void GameManager::startBattle(){
     BattleManager->runBattle();
 }
 
-// isDead or on exit tile.
-
 void GameManager::endGame(){
-    
+    if(Player->isDead()){
+        reset();
+    }
+}
+void GameManager::playGame() {
+    Map = MapManager->setCustomMap(inputMap());
+    while(true){
+        startTravel();
+        startBattle();
+        if(Player->isDead()){
+            reset();
+        }
+    }
 }
 
-
-std::vector<std::vector<char>> GameManager::inputMap(){
+vector<vector<char>> GameManager::inputMap(){
     vector<vector<char>> toReturn;
     int yCoordinate = 0;
     string filename;
@@ -44,8 +63,8 @@ std::vector<std::vector<char>> GameManager::inputMap(){
     while(input){
         toReturn.resize(yCoordinate+1);
         getline(input,mapInput);
-        std::istringstream tokenStream(mapInput);
-        while(std::getline(tokenStream,token,' ')){
+        istringstream tokenStream(mapInput);
+        while(getline(tokenStream,token,' ')){
             toReturn[yCoordinate].emplace_back(token.at(0));
         }
         yCoordinate++;
