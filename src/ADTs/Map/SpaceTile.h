@@ -15,12 +15,18 @@
 class SpaceTile : public Tile {
  private:
  protected:
- public:
-   // Default constructor
-   SpaceTile();
+    // Tile colour to be used for 
+    static const int TILE_COLOUR = 1; 
 
-   // Default destructor
-   ~SpaceTile();
+ public:
+    // Default constructor
+    SpaceTile();
+
+    // Default destructor
+    ~SpaceTile() override;
+
+    // Provides the colour of the current tile
+    int getColour() override;
 };
 
 #endif

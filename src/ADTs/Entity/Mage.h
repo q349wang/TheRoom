@@ -22,8 +22,8 @@ class Mage : public Player {
  protected:
     int teleport_amount_;
  public:
-    // Constructor which requires health, energy, and attack information
-    Mage(int teleport, double health, double energy, double attack, 
+    // Constructor which requires health, energy, armour, and attack information
+    Mage(int teleport, double health, double energy, double armour, double attack, 
          std::pair<int,int> position,
          std::vector<std::shared_ptr<Consumable>> consumables = {}, 
          std::vector<std::shared_ptr<Equipable>> equipables = {});
@@ -37,6 +37,9 @@ class Mage : public Player {
 
     // Provides a collection of coordinates that can be moved to under a special move
     std::vector<std::pair<int, int>> specialMoves() override;
+
+    // Get ranger name of mage
+    std::string getName() override;
 };
 
 #endif

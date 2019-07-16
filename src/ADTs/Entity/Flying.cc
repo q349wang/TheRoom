@@ -15,10 +15,10 @@ using namespace std;
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial flying enemy's health, energy, and position
  */
-Flying::Flying(double health, double energy, double attack, pair<int, int> position,
+Flying::Flying(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables = {}, 
                vector<shared_ptr<Equipable>> equipables = {}) :
-               Enemy{health, energy, attack, position, consumables, equipables} {}
+               Enemy{health, energy, attack, armour, position, consumables, equipables} {}
 
 /**
  * Signature: bool makeMove(char)
@@ -142,3 +142,11 @@ bool Flying::makeMove(char direction) {
     }
 
 } 
+
+/**
+ * Signature: string getName()
+ * Purpose: Provides the name of the flying enemy
+ */
+string Flying::getName() {
+    return "flying";
+}

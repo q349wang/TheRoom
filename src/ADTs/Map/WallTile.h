@@ -15,12 +15,15 @@
 class WallTile : public Tile {
  private:
  protected:
+    // Tile colour to be used for 
+    static const int TILE_COLOUR = 2; 
+
  public:
    // Default constructor
    WallTile();
 
    // Default destructor
-   ~WallTile();
+   ~WallTile() override;
 
    // Override to inform client that they are inserting an item
    // On an unavailable tile
@@ -32,6 +35,9 @@ class WallTile : public Tile {
 
    // Determines if a specified tile is available to be moved on
    bool available() const override;
+
+    // Provides the colour of the current tile
+    int getColour() override;
 };
 
 #endif

@@ -12,14 +12,14 @@
 using namespace std;
 
 /**
- * Signature: Mage(double, double, double, pair<int, int>, 
+ * Signature: Mage(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial mage's health, energy, and position
  */
-Mage::Mage(int teleport, double health, double energy, double attack, pair<int, int> position,
+Mage::Mage(int teleport, double health, double energy, double attack, double armour, pair<int, int> position,
            vector<shared_ptr<Consumable>> consumables = {}, 
            vector<shared_ptr<Equipable>> equipables = {}) : teleport_amount_{teleport},
-           Player{health, energy, attack, position, consumables, equipables} {}
+           Player{health, energy, attack, armour, position, consumables, equipables} {}
 
 /**
  * Signature: bool useSpecial(pair<int, int>)
@@ -76,4 +76,12 @@ vector<pair<int, int>> Mage::specialMoves() {
     }
 
     return special_moves;
+}
+
+/**
+ * Signature: string getName()
+ * Purpose: Provides name of mage
+ */
+string Mage::getName() {
+    return "mage";
 }

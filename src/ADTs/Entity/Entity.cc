@@ -9,14 +9,14 @@
 using namespace std;
 
 /**
- * Signature: Entity(double, double, double, pair<int, int>, 
+ * Signature: Entity(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial entity's health, energy, and position
  */
-Entity::Entity(double health, double energy, double attack, pair<int, int> position,
+Entity::Entity(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables = {}, 
                vector<shared_ptr<Equipable>> equipables = {}) :
-               health_{health}, energy_{energy}, attackStrength_{attack},
+               health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
                position_{position}, consumables_{consumables_}, 
                equipables_{equipables} {}
 
@@ -83,7 +83,7 @@ void Entity::addConsumable(shared_ptr<Consumable> new_consume) {
 void Entity::equipEquipable(string equip_name) {
     for(auto& existing_equip: equipables_) {
         if(equip_name == existing_equip->getName()) {
-            existing_equip->useItem(); // TODO implement use item functionality 
+            existing_equip->useItem(equip_name); // TODO implement use item functionality 
         }
     }
 }
@@ -119,7 +119,7 @@ double Entity::attack(shared_ptr<Entity> enemy) {
  *          Additionally returns actual damage taken, skewed by armour
  */
 double Entity::takeDamage(double damage) {
-    double weighted_damage = (100/(100+armour_))*damage;
+    double weighted_damage = (double) (100.0/(100.0 + armour_)) * damage;
     health_ =  health_ - weighted_damage;
     return weighted_damage;
 }

@@ -11,14 +11,14 @@
 using namespace std;
 
 /**
- * Signature: Player(double, double, double, pair<int, int>, 
+ * Signature: Player(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial player's health, energy, and position
  */
-Player::Player(double health, double energy, double attack, pair<int, int> position,
+Player::Player(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables = {}, 
                vector<shared_ptr<Equipable>> equipables = {}) :
-               Entity{health, energy, attack, position, consumables, equipables} {}
+               Entity{health, energy, attack, armour, position, consumables, equipables} {}
 
 /**
  * Signature: void decreaseCooldown()
@@ -47,6 +47,14 @@ bool Player::specialReady() {
 }
 
 /**
+ * Signature: int getCooldown()
+ * Purpose: Provides the current special movement cooldown
+ */
+int Player::getCooldown() {
+    return cooldown_;
+}
+
+/**
  * Signature: bool checkMove(char)
  * Purpose: Determines if a provided move is possible for a player
  *          Utilizes 'N', 'E', 'S', 'W' for direction indication
@@ -69,13 +77,13 @@ bool Player::checkMove(char direction) {
     }
 
     if(updated_position.first >= 0  && updated_position.first < current_map_->numColumns()) {
-        if(updated_position.second >= 0 && updated_position.second < current_map_->numRows(updated_position)) {    
+        if(updated_position.second >= 0 && updated_position.second < current_map_->numRows(updated_position.first)) {    
             if(current_map_->tile(updated_position.first, updated_position.second).available()) {
                     return true;
             }
         }
     }
-    
+
     return false;
 }
 
@@ -101,7 +109,7 @@ bool Player::makeMove(char direction) {
             return false;
     }
 
-    if(checkMove(updated_position)) {
+    if(checkMove(direction)) {
         updatePosition(updated_position);
         return true;
     }
@@ -116,7 +124,7 @@ bool Player::makeMove(char direction) {
 void Player::consumeConsumable(string consume_name) {
     for(auto& existing_consume: consumables_) {
         if(consume_name == existing_consume->getName()) {
-            existing_consume->useItem(); // TODO implement use item functionality 
+            existing_consume->useItem(consume_name); // TODO implement use item functionality 
         }
     }
 }

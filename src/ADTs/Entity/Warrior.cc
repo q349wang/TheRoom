@@ -12,14 +12,14 @@
 using namespace std;
 
 /**
- * Signature: Warrior(double, double, double, pair<int, int>, 
+ * Signature: Warrior(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial warrior's health, energy, and position
  */
-Warrior::Warrior(double health, double energy, double attack, pair<int, int> position,
+Warrior::Warrior(double health, double energy, double attack, double armour, pair<int, int> position,
                  vector<shared_ptr<Consumable>> consumables = {}, 
                  vector<shared_ptr<Equipable>> equipables = {}) :
-                 Player{health, energy, attack, position, consumables, equipables} {}
+                 Player{health, energy, attack, armour, position, consumables, equipables} {}
 
 
 /**
@@ -111,4 +111,12 @@ vector<pair<int, int>> Warrior::specialMoves() {
     }
     
     return special_moves;
+}
+
+/**
+ * Signature: string getName()
+ * Purpose: Provides name of warrior
+ */
+string Warrior::getName() {
+    return "warrior";
 }

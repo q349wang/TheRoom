@@ -11,14 +11,14 @@
 using namespace std;
 
 /**
- * Signature: Ground(double, double, double, pair<int, int>, 
+ * Signature: Ground(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial ground enemy's health, energy, and position
  */
-Ground::Ground(double health, double energy, double attack, pair<int, int> position,
+Ground::Ground(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables = {}, 
                vector<shared_ptr<Equipable>> equipables = {}) :
-               Enemy{health, energy, attack, position, consumables, equipables} {}
+               Enemy{health, energy, attack, armour, position, consumables, equipables} {}
 
 /**
  * Signature: bool makeMove(char)
@@ -42,10 +42,18 @@ bool Ground::makeMove(char direction) {
             return false;
     }
 
-    if(checkMove(updated_position)) {
+    if(checkMove(direction)) {
         updatePosition(updated_position);
         return true;
     }
 
     return false;
+}
+
+/**
+ * Signature: string getName()
+ * Purpose: Provides the name of the ground enemy
+ */
+string Ground::getName() {
+    return "ground";
 }

@@ -19,11 +19,11 @@ class Enemy : public Entity {
  private:
  protected:
  public:
-    // Constructor which requires health, energy, and attack information
-    Enemy(double health, double energy, double attack, 
-           std::pair<int,int> position,
-           std::vector<std::shared_ptr<Consumable>> consumables = {}, 
-           std::vector<std::shared_ptr<Equipable>> equipables = {});
+    // Constructor which requires health, energy, armour, and attack information
+    Enemy(double health, double energy, double attack, double armour,
+          std::pair<int,int> position,
+          std::vector<std::shared_ptr<Consumable>> consumables = {}, 
+          std::vector<std::shared_ptr<Equipable>> equipables = {});
 
     // Pure virtual destructor to ensure Player is an ABC
     virtual ~Enemy() = 0;
@@ -33,6 +33,9 @@ class Enemy : public Entity {
 
     // Drops all enemy items onto current tile
     void dropAllItems();
+
+    // Provides name of the enemy
+    virtual std::string getName() = 0;
 };
 
 #endif

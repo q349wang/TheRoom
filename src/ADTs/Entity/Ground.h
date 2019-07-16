@@ -19,8 +19,8 @@ class Ground : public Enemy {
  private:
  protected:
  public:
-     // Constructor which requires health, energy, and attack information
-    Ground(double health, double energy, double attack, 
+     // Constructor which requires health, energy, armour, and attack information
+    Ground(double health, double energy, double attack, double armour, 
            std::pair<int,int> position,
            std::vector<std::shared_ptr<Consumable>> consumables = {}, 
            std::vector<std::shared_ptr<Equipable>> equipables = {});
@@ -30,6 +30,9 @@ class Ground : public Enemy {
 
     // Make a move in a specified direction (indicated using 'N', 'E', 'S', 'W')
     bool makeMove(char) override;
+
+    // Provides name of the ground enemy
+    std::string getName() override;
 };
 
 #endif

@@ -30,8 +30,8 @@ class Player: public Entity {
     std::vector<std::shared_ptr<Consumable>> consumed_;
  
  public:
-    // Constructor which requires health, energy, and attack information
-    Player(double health, double energy, double attack, 
+    // Constructor which requires health, energy, armour, and attack information
+    Player(double health, double energy, double attack, double armour,
            std::pair<int,int> position,
            std::vector<std::shared_ptr<Consumable>> consumables = {}, 
            std::vector<std::shared_ptr<Equipable>> equipables = {});
@@ -43,6 +43,9 @@ class Player: public Entity {
 
     // Reset cooldown after utilizing the special movement
     void resetCooldown();
+
+    // Provides the current cooldown on the special movement
+    int getCooldown();
     
     // Determines if special movement is ready to be used
     bool specialReady();
@@ -66,6 +69,9 @@ class Player: public Entity {
 
     // Picks up all items from current tile and empties tile as well
     void pickUpItems();
+
+    // Provides the player's name
+    virtual std::string getName() = 0;    
 };
 
 #endif

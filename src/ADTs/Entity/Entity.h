@@ -49,8 +49,8 @@ class Entity {
   void updatePosition(std::pair<int, int>);
    
  public:
-  // Constructor which requires health, energy, and attack information
-  Entity(double health, double energy, double attack, 
+  // Constructor which requires health, energy, armour and attack information
+  Entity(double health, double energy, double attack, double armour,
          std::pair<int,int> position,
          std::vector<std::shared_ptr<Consumable>> consumables = {}, 
          std::vector<std::shared_ptr<Equipable>> equipables = {});
@@ -95,6 +95,9 @@ class Entity {
   // Determine if an entity is dead or out of energy
   bool isDead();
   bool isOutOfEnergy();
+
+  // Provides entity's name
+  virtual std::string getName() = 0;
 };
 
 #endif

@@ -1,5 +1,9 @@
 #include "Map.h"
 #include "Tile.h"
+#include "ExitTile.h"
+#include "SpaceTile.h"
+#include "WallTile.h"
+
 #include "Enemy.h"
 #include "Player.h"
 #include "Item.h"
@@ -8,6 +12,7 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -116,5 +121,42 @@ using namespace std;
      * Purpose: Moves all enemies currently on the map towards the player
      */
     void Map::moveEnemies() {
-        
+        for (pair<string, vector<shared_ptr<Enemy>>> tile : enemies_) {
+            coord position = coord{tile.first};
+            vector<pair<int, char>> movement = {};
+            
+            int x_difference = current_.x_ - position.x_;
+            int y_difference = current_.y_ - position.y_;
+
+            if(x_difference >= 0) {
+                movement.emplace_back(abs(x_difference - 1), 'E');
+                movement.emplace_back((x_difference + 1), 'W');
+            }
+            else {
+                movement.emplace_back((abs(x_difference) - 1), 'W');
+                movement.emplace_back((abs(x_difference) + 1), 'E');
+            }
+
+            if(y_difference >= 0) {
+                movement.emplace_back(abs(y_difference - 1), 'S');
+                movement.emplace_back((y_difference + 1), 'N');
+            } 
+            else {
+                movement.emplace_back((abs(y_difference) - 1), 'N');
+                movement.emplace_back((abs(y_difference) + 1), 'S');
+            }
+
+            // Sort the movement directions
+            sort(movement.begin(), movement.end());
+
+            // Iterate through all enemies on the current tile, and all possible directions
+            // In order of increasing distance, and make the move towards the closest location
+            for(auto it = tile.second.begin(); it != tile.second.end(); ++it) {
+                for(auto direction = movement.begin(); direction != movement.end(); ++direction) {
+                    if((*it)->makeMove((*direction).second)) {
+                        break;
+                    }
+                }
+            }
+        }
     }

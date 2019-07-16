@@ -32,3 +32,13 @@ void Tile::insertEnemy(shared_ptr<Enemy> enemy) {
 bool Tile::available() const {
     return true;
 }
+
+/**
+ * Signature: const vector<shared_ptr<Item>>& getItems()
+ */
+const vector<shared_ptr<Item>>& Tile::getItems() {
+    return items_;
+}
+
+// Provides a const reference to all enemies on a give tile
+const std::vector<std::shared_ptr<Enemy>>& getEnemies();

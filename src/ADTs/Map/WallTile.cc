@@ -2,12 +2,19 @@
 #include "Item.h"
 #include "Enemy.h"
 #include "Tile.h"
+#include "WallTile.h"
 #include "SpaceTile.h"
 
 #include <memory>
 #include <exception>
 
 using namespace std;
+
+/**
+ * Signature: ~WallTile()
+ * Purpose: Default destructor
+ */
+WallTile::~WallTile(){}
 
 /**
  * Signature: void insertItem(shared_ptr<Item>)
@@ -33,4 +40,12 @@ void WallTile::insertEnemy(shared_ptr<Enemy> enemy) {
  */
 bool WallTile::available() const {
     return false;
+}
+
+/**
+ * Signature: int getColour()
+ * Purpose: Provides the color of the specified tile
+ */
+int WallTile::getColour() {
+    return TILE_COLOUR;
 }

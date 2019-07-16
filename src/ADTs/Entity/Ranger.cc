@@ -12,14 +12,14 @@
 using namespace std;
 
 /**
- * Signature: Ranger(double, double, double, pair<int, int>, 
+ * Signature: Ranger(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial ranger's health, energy, and position
  */
-Ranger::Ranger(double health, double energy, double attack, pair<int, int> position,
+Ranger::Ranger(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables = {}, 
                vector<shared_ptr<Equipable>> equipables = {}) :
-               Player{health, energy, attack, position, consumables, equipables} {}
+               Player{health, energy, attack, armour, position, consumables, equipables} {}
 
 /**
  * Signature: bool useSpecial(pair<int, int>)
@@ -123,5 +123,12 @@ vector<pair<int, int>> Ranger::specialMoves() {
     }
     
     return special_moves;
+}
 
+/**
+ * Signature: string getName()
+ * Purpose: Provides name of ranger
+ */
+string Ranger::getName() {
+    return "ranger";
 }

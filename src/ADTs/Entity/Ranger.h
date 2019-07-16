@@ -22,7 +22,7 @@ class Ranger : public Player {
  protected:
  public:
     // Constructor which requires health, energy, and attack information
-    Ranger(double health, double energy, double attack, 
+    Ranger(double health, double energy, double attack, double armour, 
            std::pair<int,int> position,
            std::vector<std::shared_ptr<Consumable>> consumables = {}, 
            std::vector<std::shared_ptr<Equipable>> equipables = {});
@@ -36,6 +36,9 @@ class Ranger : public Player {
 
     // Provides a collection of coordinates that can be moved to under a special move
     std::vector<std::pair<int, int>> specialMoves() override;
+
+    // Get ranger name of ranger
+    std::string getName() override;
 };
 
 #endif

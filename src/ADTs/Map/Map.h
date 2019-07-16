@@ -21,21 +21,25 @@
 class Map {
  private:
   // Structure to maintain coordinate data witihin the map 
-   class coord {
-      // Maintain position has hashable string and individual coordinates
-      std::string position;
-      int x_, y_;
+  class coord {
+    // Maintain position has hashable string and individual coordinates
+    std::string position;
+    int x_, y_;
 
-      // Coordinate data constructor for pairs of integers
-      coord(std::pair<int, int> xy): x_{xy.first}, y_{xy.second}, 
-            position{std::to_string(xy.first) + "$" + std::to_string(xy.second)} {}
+    // Coordinate data constructor for pairs of integers
+    coord(std::pair<int, int> xy) : x_{xy.first}, y_{xy.second}, 
+          position{std::to_string(xy.first) + "$" + std::to_string(xy.second)} {}
 
-      // Coordinate data constructor for individual coordinate data
-      coord(int x, int y): x_{x}, y_{y}, position{std::to_string(x) + "$" + std::to_string(y)} {}
+    // Coordinate data constructor for individual coordinate data
+    coord(int x, int y) : x_{x}, y_{y}, position{std::to_string(x) + "$" + std::to_string(y)} {}
 
-      // Declare Map as a friend class to allow for use of private member functions
-      friend class Map;
-   };
+    // Coordinate data constructor for string based coordinate data
+    coord(string xy) : position{xy}, x_{stoi(xy.substr(0, xy.find("$")))}, 
+                       y_{stoi(xy.substr((xy.find("$") + 1), std::string::npos))} {}
+
+    // Declare Map as a friend class to allow for use of private member functions
+    friend class Map;
+  };
 
   // Maintain the position of the player and the start tile
   coord start_, current_;
