@@ -38,12 +38,20 @@ bool Ground::makeMove(char direction)
     {
     case 'E':
         updated_position.first++;
+        break;
+
     case 'W':
         updated_position.first--;
+        break;
+
     case 'N':
-        updated_position.second++;
-    case 'S':
         updated_position.second--;
+        break;
+
+    case 'S':
+        updated_position.second++;
+        break;
+    
     default:
         // Return false if any other input is detected
         return false;
@@ -72,12 +80,20 @@ bool Ground::checkMove(char direction)
     {
     case 'E':
         updated_position.first++;
+        break;
+    
     case 'W':
         updated_position.first--;
+        break;
+    
     case 'N':
-        updated_position.second++;
-    case 'S':
         updated_position.second--;
+        break;
+    
+    case 'S':
+        updated_position.second++;
+        break;
+    
     default:
         return false;
     }
@@ -95,4 +111,10 @@ bool Ground::checkMove(char direction)
     return false;
 }
 
-int Ground::getColour() { return col; }
+/**
+ * Signature: int getColour()
+ * Purpose: Provides the ground enemy colour
+ */
+int Ground::getColour() { 
+    return colour; 
+}

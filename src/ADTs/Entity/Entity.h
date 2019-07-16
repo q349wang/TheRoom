@@ -100,7 +100,7 @@ class Entity {
   // Provides entity's name
   std::string getName();
 
-  // Sets map
+  // Sets the map of a given player
   void setMap(std::shared_ptr<Map>);
 
   // Provides colour of entity displayed

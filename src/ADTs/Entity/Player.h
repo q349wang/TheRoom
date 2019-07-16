@@ -41,15 +41,19 @@ class Player: public Entity {
     
     // Decrease cooldown after every specified turn
     void decreaseCooldown();
+    
     // Reset cooldown after utilizing the special movement
     void resetCooldown();
+
     // Provides the current cooldown on the special movement
     int getCooldown();
     
     // Determines if special movement is ready to be used
     bool specialReady();
+
     // Checks if a provided move is possible for player
     bool checkMove(char) override;
+
     // Make a move in a specified direction (indicated using 'R', 'L', 'U' 'D')
     // Note: If move is successful, will return true, otherwise false
     bool makeMove(char) override;
@@ -59,6 +63,7 @@ class Player: public Entity {
 
     // Equips an equipable and also activates all passive stat mods
     void addEquipable(std::shared_ptr<Equipable>) override;
+
     // Equip item, specified by equipable name
     void equipEquipable(std::shared_ptr<Entity>, std::string);
     
@@ -76,10 +81,10 @@ class Player: public Entity {
     virtual std::vector<std::pair<int, int>> specialMoves() = 0;
 
     // Picks up all items from current tile and empties tile as well
-    void pickUpItems(); 
+    std::vector<Item> pickUpItems(); 
 
     // Maintains the player color
-    int getColor(); // TODO
+    int getColour(); // TODO
 };
 
 #endif

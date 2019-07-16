@@ -13,12 +13,13 @@
  *          including but not limited to health, energy, strength, current position,
  *          consumables, equipables, and special move information;
  */
-class Flying : public Enemy
-{
-private:
-    static const int col = GameColours::OrangeRed;
-protected:
-public:
+class Flying : public Enemy {
+ private:
+    // Defines the mage colour
+    static const int colour = GameColours::OrangeRed;
+
+ protected:
+ public:
     // Constructor which requires health, energy, armour, and attack information
     Flying(double health, double energy, double attack, double armour,
            std::pair<int, int> position,
@@ -34,7 +35,7 @@ public:
     // Check if a specified move is valid for the entity
     bool checkMove(char) override;
 
-    // Gets colour of flying
+    // Gets colour of flying enemy
     int getColour() override;
 };
 

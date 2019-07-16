@@ -79,14 +79,14 @@ vector<pair<int, int>> Ranger::specialMoves() {
     }
 
     // Determine the first wall or non-existent tile from the 
-    // current position in the up direction
-    if((position_.second + up) < (current_map_->numRows())) {
-        while(current_map_->tile(position_.first, (position_.second + up)).available()) {
-            if((position_.second + up) < (current_map_->numRows() - 1)) {
-                up++;
+    // current position in the down direction
+    if((position_.second + down) < (current_map_->numRows())) {
+        while(current_map_->tile(position_.first, (position_.second + down)).available()) {
+            if((position_.second + down) < (current_map_->numRows() - 1)) {
+                down++;
             }
             else {
-                up++;
+                down++;
                 break;
             }
         }
@@ -94,13 +94,13 @@ vector<pair<int, int>> Ranger::specialMoves() {
 
     // Determine the first wall or non-existent tile from the 
     // current position in the up direction
-    if((position_.second - down) >= 0) {
-        while(current_map_->tile(position_.first, (position_.second - down)).available()) {
-            if((position_.second - down) > 0) {
-                down++;
+    if((position_.second - up) >= 0) {
+        while(current_map_->tile(position_.first, (position_.second - up)).available()) {
+            if((position_.second - up) > 0) {
+                up++;
             }
             else {
-                down++;
+                up++;
                 break;
             }
         }
@@ -116,16 +116,22 @@ vector<pair<int, int>> Ranger::specialMoves() {
             (current_map_->tile((position_.first - left), position_.second).available())) {
         special_moves.emplace_back((position_.first - (left - 1)), position_.second);
     }
-    else if(((position_.second + up) < current_map_->numRows()) && 
-            (current_map_->tile(position_.first, (position_.second + up)).available())) {
-        special_moves.emplace_back(position_.first, (position_.second + (up - 1)));
+    else if(((position_.second + down) < current_map_->numRows()) && 
+            (current_map_->tile(position_.first, (position_.second + down)).available())) {
+        special_moves.emplace_back(position_.first, (position_.second + (down - 1)));
     }
-    else if(((position_.second - down) >= 0) && 
-            (current_map_->tile(position_.first, (position_.second - down)).available())) {
-        special_moves.emplace_back(position_.first, (position_.second - (down - 1)));
+    else if(((position_.second - up) >= 0) && 
+            (current_map_->tile(position_.first, (position_.second - up)).available())) {
+        special_moves.emplace_back(position_.first, (position_.second - (up - 1)));
     }
     
     return special_moves;
 }
 
-int Ranger::getColour() { return col; }
+/**
+ * Signature: int getColour()
+ * Purpose: Provides the ranger player colour
+ */
+int Ranger::getColour() { 
+    return colour; 
+}

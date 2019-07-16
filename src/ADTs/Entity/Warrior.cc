@@ -16,7 +16,7 @@ using namespace std;
 Warrior::Warrior(double health, double energy, double attack, double armour, pair<int, int> position,
                  vector<shared_ptr<Consumable>> consumables, 
                  vector<shared_ptr<Equipable>> equipables) :
-                 Player{health, energy, attack, armour,  "Warrior",position, consumables, equipables} {}
+                 Player{health, energy, attack, armour, "Warrior", position, consumables, equipables} {}
 
 /**
  * Signature: ~Entity()
@@ -75,25 +75,25 @@ vector<pair<int, int>> Warrior::specialMoves() {
     }    
 
     // Determine the first wall or non-existent tile from the 
-    // current position in the up direction
-    while(current_map_->tile(position_.first, (position_.second + up)).available()) {
-        if((position_.second + up) < (current_map_->numRows() - 1)) {
-            up++;
+    // current position in the down direction
+    while(current_map_->tile(position_.first, (position_.second + down)).available()) {
+        if((position_.second + down) < (current_map_->numRows() - 1)) {
+            down++;
         }
         else {
-            up++;
+            down++;
             break;
         }
     }
 
     // Determine the first wall or non-existent tile from the 
     // current position in the up direction
-    while(current_map_->tile(position_.first, (position_.second - down)).available()) {
-        if((position_.second - down) > 0) {
-            down++;
+    while(current_map_->tile(position_.first, (position_.second - up)).available()) {
+        if((position_.second - up) > 0) {
+            up++;
         }
         else {
-            down++;
+            up++;
             break;
         }
     }
@@ -106,13 +106,20 @@ vector<pair<int, int>> Warrior::specialMoves() {
         special_moves.emplace_back((position_.first - (left - 1)), position_.second);
     }
     else if(up != 1) {
-        special_moves.emplace_back(position_.first, (position_.second + (up - 1)));
+        special_moves.emplace_back(position_.first, (position_.second - (up - 1)));
     }
     else if(down != 1) {
-        special_moves.emplace_back(position_.first, (position_.second - (down - 1)));
+        special_moves.emplace_back(position_.first, (position_.second + (down - 1)));
     }
     
     return special_moves;
 }
 
-int Warrior::getColour() { return col; }
+/**
+ * Signature: int getColour()
+ * Purpose: Provides the mage player colour
+ */
+int Warrior::getColour() { 
+    return colour; 
+}
+

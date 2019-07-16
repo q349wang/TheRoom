@@ -16,8 +16,7 @@ using namespace std;
 Mage::Mage(double health, double energy, double attack, double armour, pair<int, int> position,
            vector<shared_ptr<Consumable>> consumables,
            vector<shared_ptr<Equipable>> equipables) : 
-           Player{health, energy, attack, armour, "Mage", position,  consumables, equipables}
-           {}
+           Player{health, energy, attack, armour, "Mage", position,  consumables, equipables} {}
 
 /**
  * Signature: ~Entity()
@@ -90,4 +89,10 @@ vector<pair<int, int>> Mage::specialMoves()
     return special_moves;
 }
 
-int Mage::getColour() { return col; }
+/**
+ * Signature: int getColour()
+ * Purpose: Provides the mage player colour
+ */
+int Mage::getColour() { 
+    return colour; 
+}

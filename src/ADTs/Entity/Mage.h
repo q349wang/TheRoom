@@ -15,7 +15,9 @@
  */
 class Mage : public Player {
  private:
- static const int col = GameColours::Blue;
+   // Defines the mage colour
+   static const int colour = GameColours::Blue;
+
  protected:
     // Defines the maximum teleport distance for a mage player
     static const int TELEPORT_DISTANCE = 5;
@@ -36,7 +38,8 @@ class Mage : public Player {
 
     // Provides a collection of coordinates that can be moved to under a special move
     std::vector<std::pair<int, int>> specialMoves() override;
-   // Get colour
+   
+   // Get colour of the player
    int getColour() override;
 };
 

@@ -195,6 +195,10 @@ void Entity::applyStat(string stat, StatMod mod) {
     }
 }
 
+/**
+ * Signature: void setMap(shared_ptr<Map>)
+ * Purpose: Sets the map of an entity
+ */
 void Entity::setMap(shared_ptr<Map> map) {
     current_map_ = map;
 }

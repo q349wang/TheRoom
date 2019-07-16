@@ -74,23 +74,25 @@ bool Player::checkMove(char direction) {
         case 'E':
             updated_position.first++;
             break;
+
         case 'W':
             updated_position.first--;
             break;
+
         case 'N':
-            updated_position.second++;
-            break;
-        case 'S':
             updated_position.second--;
             break;
+
+        case 'S':
+            updated_position.second++;
+            break;
+
         default:
             return false;
     }
-    cout << "x " << updated_position.first << " y " << updated_position.second << endl;
-    if(updated_position.second >= 0  && updated_position.second < current_map_->numRows()) {
 
+    if(updated_position.second >= 0  && updated_position.second < current_map_->numRows()) {
         if(updated_position.first >= 0 && updated_position.first < current_map_->numColumns(updated_position.second)) {    
-            
             if(current_map_->tile(updated_position.first, updated_position.second).available()) {
                     return true;
             }
@@ -107,27 +109,29 @@ bool Player::checkMove(char direction) {
  */
 bool Player::makeMove(char direction) {
     pair<int, int> updated_position = position_;
-    cout << direction << endl;
+    
     switch(direction) {
         case 'E':
             updated_position.first++;
             break;
+
         case 'W':
             updated_position.first--;
             break;
+
         case 'N':
-            updated_position.second++;
-            break;
-        case 'S':
             updated_position.second--;
             break;
+
+        case 'S':
+            updated_position.second++;
+            break;
+
         default:
             // Return false if any other input is detected!
-            cout << "yyet" << endl;
             return false;
     }
-    cout << checkMove(direction) << endl;
-
+    
     if(checkMove(direction)) {
         updatePosition(updated_position);
         return true;
@@ -246,6 +250,6 @@ void Player::addEquipable(shared_ptr<Equipable> equip) {
  * Signature: void pickUpItems()
  * Purpose: Picks up all items stored on its current tile, and empties tile
  */
-void Player::pickUpItems() {
+vector<Item> Player::pickUpItems() {
     // TODO
 }
