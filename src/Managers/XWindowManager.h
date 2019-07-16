@@ -26,9 +26,11 @@ class XWindowManager : public Observer
     std::weak_ptr<Map> gameMap;
     unsigned long colours[10];
 
-    static const int fontCol = GameColours::White;
+    static const int fontCol = GameColours::Black;
     static const int mapBorderColour = GameColours::White;
     static const int mapTileSize = 20;
+    static const int namePlateBorderColour = GameColours::Black;
+    static const int namePlateColour = GameColours::White;
     static const std::string font;
 
 public:

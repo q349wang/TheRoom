@@ -124,29 +124,31 @@ void XWindowManager::drawMapTile(int x, int y, int col)
 // Draws a nameplate displaying entity info
 void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &entity)
 {
-	drawRect(x, y, mapTileSize, mapTileSize, col);
-	drawFillRect(x, y, mapTileSize, mapTileSize, col);
+	drawRect(x, y, mapTileSize, mapTileSize, namePlateBorderColour);
+	drawFillRect(x, y, mapTileSize, mapTileSize, namePlateColour);
 	XSetForeground(d, gc, colours[fontCol]);
 	drawString(x, y, entity->getName());
-	string health = "H: " + entity->getHealth();
+	string health = "H: " + to_string(entity->getHealth());
 	drawString(x, y, health);
-	string energy = "E: " + entity->getEnergy();
+	string energy = "E: " + to_string(entity->getEnergy());
 	drawString(x, y, energy);
-	string armor = "A: " + entity->getArmor();
+	string armor = "A: " + to_string(entity->getArmour());
 	drawString(x, y, armor);
 }
 
 // Draws info box regarding ability cooldown
 void XWindowManager::drawAbilityCD(const shared_ptr<Player> &p)
 {
+	int cdX = 10;
+	int cdY = 10;
 	bool abilityReady = p->getCooldown() == 0;
-	drawRect(x, y, mapTileSize, mapTileSize, col);
-	drawFillRect(x, y, mapTileSize, mapTileSize, col);
+	drawRect(cdX, cdY, mapTileSize, mapTileSize, namePlateBorderColour);
+	drawFillRect(cdY, cdX, mapTileSize, mapTileSize, namePlateColour);
 	string cd = "Ability: " + abilityReady
 					? "READY!"
 					: p->getCooldown() + " turns until ready...";
 	XSetForeground(d, gc, colours[fontCol]);
-	drawString(x, y, cd);
+	drawString(cdX, cdY, cd);
 }
 
 // Redraws battle scene
@@ -161,9 +163,9 @@ void XWindowManager::redrawBattle()
 // Draws all the map tiles
 void XWindowManager::drawMapStruct(const vector<vector<shared_ptr<Tile>>> &mapArr)
 {
-	for (int row = 0; row < mapArr.size(); row++)
+	for (unsigned int row = 0; row < mapArr.size(); row++)
 	{
-		for (int col = 0; col < mapArr[row].size(); col++)
+		for (unsigned int col = 0; col < mapArr[row].size(); col++)
 		{
 			drawMapTile(col * mapTileSize, row * mapTileSize, mapArr[row][col]->getColour());
 		}
@@ -176,6 +178,7 @@ void XWindowManager::redrawMap()
 	XClearWindow(d, w);
 	if (auto mp = gameMap.lock())
 	{
+		drawMapStruct(mp->getMap());
 	}
 }
 
