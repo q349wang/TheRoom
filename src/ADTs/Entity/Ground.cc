@@ -94,3 +94,5 @@ bool Ground::checkMove(char direction)
 
     return false;
 }
+
+int Ground::getColour() { return col; }

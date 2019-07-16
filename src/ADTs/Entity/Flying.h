@@ -16,6 +16,7 @@
 class Flying : public Enemy
 {
 private:
+    static const int col = GameColours::OrangeRed;
 protected:
 public:
     // Constructor which requires health, energy, armour, and attack information
@@ -32,6 +33,9 @@ public:
 
     // Check if a specified move is valid for the entity
     bool checkMove(char) override;
+
+    // Gets colour of flying
+    int getColour() override;
 };
 
 #endif

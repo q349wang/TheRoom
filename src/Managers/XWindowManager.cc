@@ -59,10 +59,10 @@ XWindowManager::XWindowManager(shared_ptr<Map> map, int width, int height) : gam
 	XColor xcolour;
 	Colormap cmap;
 
-	const size_t numColours = 5;
-	char color_vals[numColours][10] = {
-		"white", "black", "red",
-		"green", "blue"};
+	const size_t numColours = 7;
+	char color_vals[numColours][15] = {
+		"white", "black", "red", "orangered"
+		"green", "blue", "darkgreen", "purple"};
 
 	cmap = DefaultColormap(d, DefaultScreen(d));
 

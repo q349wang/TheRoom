@@ -114,3 +114,5 @@ vector<pair<int, int>> Warrior::specialMoves() {
     
     return special_moves;
 }
+
+int Warrior::getColour() { return col; }

@@ -3,7 +3,7 @@
 
 #include "../Item/Consumable.h"
 #include "../Item/Equipable.h"
-
+#include "../../HelperClasses/GameConstants.h"
 #include <vector>
 #include <memory>
 #include <utility>
@@ -99,6 +99,9 @@ class Entity {
 
   // Provides entity's name
   std::string getName();
+
+  // Provides colour of entity displayed
+  virtual int getColour() = 0;
 };
 
 #endif

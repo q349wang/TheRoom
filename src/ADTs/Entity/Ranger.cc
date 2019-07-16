@@ -127,3 +127,5 @@ vector<pair<int, int>> Ranger::specialMoves() {
     
     return special_moves;
 }
+
+int Ranger::getColour() { return col; }

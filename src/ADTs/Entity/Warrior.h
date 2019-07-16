@@ -15,6 +15,7 @@
  */
 class Warrior : public Player {
  private:
+ static const int col = GameColours::Purple;
  protected:
  public:
 
@@ -33,6 +34,9 @@ class Warrior : public Player {
 
     // Provides a collection of coordinates that can be moved to under a special move
     std::vector<std::pair<int, int>> specialMoves() override;
+
+    // Gets colour
+    int getColour() override;
 };
 
 #endif

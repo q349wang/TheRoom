@@ -89,3 +89,5 @@ vector<pair<int, int>> Mage::specialMoves()
 
     return special_moves;
 }
+
+int Mage::getColour() { return col; }

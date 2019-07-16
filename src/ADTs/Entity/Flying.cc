@@ -308,3 +308,5 @@ bool Flying::checkMove(char direction)
         return false;
     }
 }
+
+int Flying::getColour() { return col; }
