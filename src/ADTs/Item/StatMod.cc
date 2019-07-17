@@ -6,7 +6,7 @@ StatMod::StatMod(double _adder, double _multiplier)
 
 StatMod::StatMod(StatMod first, StatMod second)
     : adder{first.adder + second.adder},
-      multiplier{first.multiplier + second.multiplier} {}
+      multiplier{first.multiplier * second.multiplier} {}
 
 StatMod::~StatMod() {}
 double StatMod::getAdder() const { return adder; }
