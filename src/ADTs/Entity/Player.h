@@ -16,7 +16,7 @@
 class Player: public Entity {
  private:
  protected:
-    // Maintain all equiped items and relevant information
+    // Maintain all equipped items and relevant information
     std::vector<std::shared_ptr<Equipable>> equiped_;
 
     // Maintain all consumed items and relevant information
@@ -26,7 +26,7 @@ class Player: public Entity {
     int cooldown_;
 
     // Maintain the base special cooldown and special ready amounts
-    static const int BASE_SPECIAL_COOLDOWNN = 5;
+    static const int BASE_SPECIAL_COOLDOWN = 5;
     static const int BASE_SPECIAL_READY = 0 ;
  
  public:
@@ -67,7 +67,7 @@ class Player: public Entity {
     // Equip item, specified by equipable name
     void equipEquipable(std::shared_ptr<Entity>, std::string);
     
-    // Drop equiped item from the current collection
+    // Drop equipped item from the current collection
     void dropEquipable(std::string);
 
     // Reverses the stat mods implications for a player

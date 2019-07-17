@@ -13,7 +13,7 @@ using namespace std;
 /**
  * Signature: Player(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
- * Purpose: Constructor which requires intial player's health, energy, and position
+ * Purpose: Constructor which requires initial player's health, energy, and position
  */
 Player::Player(double health, double energy, double attack, double armour, 
                string name, pair<int, int> position, 
@@ -23,7 +23,7 @@ Player::Player(double health, double energy, double attack, double armour,
 
 /**
  * Signature: ~Entity()
- * Purpose: Defualt Destructor
+ * Purpose: Default Destructor
  */
 Player::~Player() {}
 
@@ -42,7 +42,7 @@ void Player::decreaseCooldown() {
  * Purpose: Resets the cooldown of a Player's special movement
  */
 void Player::resetCooldown() {
-    cooldown_ = BASE_SPECIAL_COOLDOWNN;
+    cooldown_ = BASE_SPECIAL_COOLDOWN;
 }
 
 /**

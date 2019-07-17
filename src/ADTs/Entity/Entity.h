@@ -36,7 +36,7 @@ protected:
   std::pair<int, int> position_;
 
   // Maintain a collection of available consumables,
-  // equipables, and equiped items
+  // equipables, and equipped items
   std::vector<std::shared_ptr<Consumable>> consumables_;
   std::vector<std::shared_ptr<Equipable>> equipables_;
 
