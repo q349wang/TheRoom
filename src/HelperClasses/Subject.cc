@@ -26,7 +26,7 @@ void Subject::notifyObservers() {
 string Subject::getMsg() const { return msg.str(); }
 
 void Subject::setMessageAndNotify(string message) {
-    msg.clear();
+    msg.str("");
     msg << message;
     notifyObservers();
 }
