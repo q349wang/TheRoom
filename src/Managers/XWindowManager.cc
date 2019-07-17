@@ -2,6 +2,7 @@
 #include "../HelperClasses/GameException.h"
 #include "../ADTs/Entity/Entity.h"
 #include "../ADTs/Entity/Player.h"
+#include "../ADTs/Entity/Enemy.h"
 #include "../ADTs/Map/Tile.h"
 #include "../ADTs/Map/Map.h"
 #include "GameManager.h"
@@ -143,8 +144,6 @@ void XWindowManager::drawMapTile(int x, int y, int col)
 // Draws a nameplate displaying entity info
 void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &entity, int entityNum)
 {
-	int plateW = 80;
-	int plateH = 60;
 
 	drawFillRect(x - 5, y - 15, plateW, plateH, namePlateColour);
 	drawRect(x - 5, y - 15, plateW, plateH, namePlateBorderColour);
@@ -169,10 +168,6 @@ void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &enti
 // Draws info box regarding ability cooldown
 void XWindowManager::drawAbilityCD(const shared_ptr<Player> &p)
 {
-	int cdX = 15;
-	int cdY = 10;
-	int cdW = 140;
-	int cdH = 13;
 	drawFillRect(cdX, cdY, cdW, cdH, namePlateColour);
 	drawRect(cdX, cdY, cdW, cdH, namePlateBorderColour);
 	string cd = "Ability: ";
@@ -186,6 +181,35 @@ void XWindowManager::drawAbilityCD(const shared_ptr<Player> &p)
 	}
 	XSetForeground(d, gc, colours[fontCol]);
 	drawString(cdX + 5, cdY + 12, cd);
+}
+
+// Draws enemy nameplates
+void XWindowManager::drawEnemyPlates(const vector<shared_ptr<Enemy>> &eList)
+{
+	int rowLen = 5;
+	int colGap = 10;
+	int rowGap = 0;
+	if (eList.size() <= rowLen)
+	{
+		rowGap = (width - (eList.size() * plateW)) / eList.size();
+	}
+	else
+	{
+		rowGap = (width - (rowLen * plateW) % width) / eList.size();
+	}
+	int row = 0;
+	for (int i = 0; i < eList.size(); i++)
+	{
+
+		for (int col = 0; col < rowLen; col++)
+		{
+			if (i >= eList.size())
+				break;
+			drawEntityInfo(rowGap + col * plateW, colGap + row* plateH, eList[i]);
+			i++;
+		}
+		row++;
+	}
 }
 
 // Redraws battle scene
