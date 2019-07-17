@@ -26,3 +26,7 @@ void Equipable::afterUse()
         durability--;
     }
 }
+
+int Equipable::getDurability() const {
+    return durability;
+}

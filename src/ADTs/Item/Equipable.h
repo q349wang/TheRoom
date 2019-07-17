@@ -25,6 +25,7 @@ public:
     ~Equipable();
     
     void afterUse() override;
+    int getDurability() const;
 };
 
 #endif
