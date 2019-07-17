@@ -21,6 +21,7 @@ using namespace std;
      * Signature: Map(shared_ptr<Player>, vector<vector<char>>, pair<int, int>, unordered_map<string, 
      *                shared_ptr<Item>>, unordered_map<string, shared_ptr<Enemy>>)
      * Purpose: Constructs map with a specified player, map layout, start tile, and any pre-existing enemies/items
+     * Note: Additionally pads the map construction with a layer of walls
      */
 Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
          pair<int, int> start,
@@ -29,11 +30,22 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
                                                                      items_{items}, enemies_{enemies}
 {
 
-    vector<shared_ptr<Tile>> column = {};
+    vector<shared_ptr<Tile>> column = {}, first = {}, last = {};
+    
+    for(int f = 0; f < (map[0].size() + 2); f++) {
+        first.emplace_back(make_shared<WallTile>(WallTile{}));
+    }
+
+    for(int l = 0; l < (map[map.size() - 1].size() + 2); l++) {
+        last.emplace_back(make_shared<WallTile>(WallTile{}));
+    }
+
+    map_.emplace_back(first);
 
     // Iterate through the provided map specifications to construct map tiles
     for (auto row = map.begin(); row != map.end(); ++row)
     {
+        column.emplace_back(make_shared<WallTile>(WallTile{}));
         for (auto col = row->begin(); col != row->end(); ++col)
         {
             // If the tile is marked as 'E' it is assumed to be an exit tile
@@ -54,9 +66,12 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
                 column.emplace_back(make_shared<SpaceTile>(SpaceTile{}));
             }
         }
+        column.emplace_back(make_shared<WallTile>(WallTile{}));
         map_.emplace_back(column);
         column.clear();
     }
+
+    map_.emplace_back(last);
 }
 Map::~Map() {}
 /**
