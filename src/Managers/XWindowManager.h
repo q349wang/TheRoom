@@ -37,7 +37,7 @@ class XWindowManager : public Observer
     static const int namePlateBorderColour = GameColours::Black;
     static const int namePlateColour = GameColours::White;
 
-    static const int entityDiameter = 25;
+    static const int entityDiameter = 30;
     static const std::string font;
 
     int centerX(int x);
