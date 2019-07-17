@@ -107,7 +107,7 @@ class Entity {
   virtual int getColour() = 0;
 
   // Drops all items specified by a provided name
-  void dropItem(std::string);
+  bool dropItem(std::string);
 };
 
 #endif

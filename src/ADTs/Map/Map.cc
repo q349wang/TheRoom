@@ -31,13 +31,16 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
 {
 
     vector<shared_ptr<Tile>> column = {}, first = {}, last = {};
+    num_space_ = num_wall_ = num_exit_ = 0;
     
     for(size_t f = 0; f < (map[0].size() + 2); f++) {
         first.emplace_back(make_shared<WallTile>(WallTile{}));
+        num_wall_++;
     }
 
     for(size_t l = 0; l < (map[map.size() - 1].size() + 2); l++) {
         last.emplace_back(make_shared<WallTile>(WallTile{}));
+        num_wall_++;
     }
 
     map_.emplace_back(first);
@@ -46,6 +49,7 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
     for (auto row = map.begin(); row != map.end(); ++row)
     {
         column.emplace_back(make_shared<WallTile>(WallTile{}));
+        num_wall_++;
         for (auto col = row->begin(); col != row->end(); ++col)
         {
             // If the tile is marked as 'E' it is assumed to be an exit tile
@@ -54,21 +58,25 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
                 column.emplace_back(make_shared<ExitTile>(ExitTile{}));
                 coord coordPos = coord(distance(map.begin(), row), distance(row->begin(), col));
                 exits_.emplace(coordPos.position, column.back());
+                num_exit_++;
             }
             // If the tile is marked as 'W' it is assumed to be an wall tile
             else if (*col == 'W')
             {
                 column.emplace_back(make_shared<WallTile>(WallTile{}));
+                num_wall_++;
             }
             // Any other input is assumed to be a basic space tile
             else
             {
                 column.emplace_back(make_shared<SpaceTile>(SpaceTile{}));
+                num_space_++;
             }
         }
         column.emplace_back(make_shared<WallTile>(WallTile{}));
         map_.emplace_back(column);
         column.clear();
+        num_wall_++;
     }
 
     map_.emplace_back(last);
@@ -248,4 +256,28 @@ Map::coord::coord(string xy) : position{xy}, x_{stoi(xy.substr(0, xy.find("$")))
  */
 vector<shared_ptr<Item>> Map::pickUpItems(int x, int y) {
     return ((map_.at(y)).at(x))->pickupItems();
+}
+
+/**
+ * Signature: int getNumWalls()
+ * Purpose: Provides the number of wall tiles in a map
+ */
+int Map::getNumWalls() {
+    return num_wall_;
+}
+
+/**
+ * Signature: int getNumExits()
+ * Purpose: Provides the number of exit tiles in a map
+ */
+int Map::getNumExits() {
+    return num_exit_;
+}
+
+/**
+ * Signature: int getNumSpaces()
+ * Purpose: Provides the number of space tiles in a map
+ */
+int Map::getNumSpaces() {
+    return num_space_;
 }

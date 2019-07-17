@@ -45,6 +45,9 @@ private:
   // Maintain the position of the player and the start tile
   coord start_, current_;
 
+  // Maintain tile distribution information from the construction
+  int num_space_, num_wall_, num_exit_;
+
   // Current map player
   std::shared_ptr<Player> player_;
 
@@ -115,6 +118,15 @@ public:
 
   // Empties specified tile of all items and provides all items
   std::vector<std::shared_ptr<Item>> pickUpItems(int, int);
+
+  // Provides the number of wall tiles
+  int getNumWalls();
+
+  // Provides the number of exit tiles
+  int getNumExits();
+
+  // Provides the number of space tiles
+  int getNumSpaces();
 };
 
 #endif
