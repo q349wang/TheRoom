@@ -161,10 +161,10 @@ void XWindowManager::drawAbilityCD(const shared_ptr<Player> &p)
 	int cdY = 10;
 	int cdW = 140;
 	int cdH = 13;
-	drawFillRect(cdY, cdX, cdW, cdH, namePlateColour);
+	drawFillRect(cdX, cdY, cdW, cdH, namePlateColour);
 	drawRect(cdX, cdY, cdW, cdH, namePlateBorderColour);
 	string cd = "Ability: ";
-	if (p->getCooldown() == 0)
+	if (p->getCooldown() != 0)
 	{
 		cd += " " + to_string(p->getCooldown()) + " turns left";
 	}
