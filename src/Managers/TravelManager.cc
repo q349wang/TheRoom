@@ -71,7 +71,13 @@ void TravelManager::makeMove(const Command &cmd)
         }
         case 'P':
         {
-            pp->pickUpItems();
+            vector<shared_ptr<Item>> pickedUp = pp->pickUpItems();
+            ostringstream msg;
+            msg << "Picked up:\n";
+            for (auto item : pickedUp) {
+                msg << item->getName() << "\n";
+            }
+            setMessageAndNotify(msg.str());
             break;
         }
         case 'D':
@@ -82,6 +88,7 @@ void TravelManager::makeMove(const Command &cmd)
                 break;
             }
             pp->dropItem(args[0]);
+            setMessageAndNotify("Dropped item: " + args[0]);
             break;
         }
         case 'L':
