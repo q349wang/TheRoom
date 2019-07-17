@@ -29,7 +29,7 @@ shared_ptr<BaseDescription> ItemManager::generateBaseItem(int level, int type) c
     {
         string name = stats[rand() % stats.size()];
         double adder = rand() % level + (level / 2);
-        double multi = 1.0 + ((double)(rand() % 10)) / 10;
+        double multi = 1.0;
         StatMod stat{adder, multi};
 
         ItemDescription::combineMods(baseStats, name, stat);
@@ -55,7 +55,7 @@ shared_ptr<ItemDescription> ItemManager::generateDescription(int level, int type
 
             // These can be adjusted
             double adder = rand() % level + (level / 2);
-            double multi = 1.0 + ((double)(rand() % 10)) / 10;
+            double multi = 1.0 + (rand() % level) / 10.0;
             StatMod stat{adder, multi};
             return make_shared<Blessing>(name, stat, generateDescription(level, type, numMods));
         }
@@ -76,7 +76,7 @@ shared_ptr<ItemDescription> ItemManager::generateDescription(int level, int type
 
             // These can be adjusted
             double adder = rand() % level + (level / 2);
-            double multi = 1.0 + ((double)(rand() % 10)) / 10;
+            double multi = 1.0 + (rand() % level) / 20.0;
             StatMod stat{adder, multi};
             return make_shared<Curse>(name, stat, generateDescription(level, type, numMods));
         }
@@ -102,7 +102,7 @@ shared_ptr<Item> ItemManager::createItem(int level) const
         {
             string name = stats[rand() % stats.size()];
             double adder = rand() % level + (level / 2);
-            double multi = 1.0 + ((double)(rand() % 10)) / 10;
+            double multi = 1.0;
             StatMod stat{adder, multi};
 
             ItemDescription::combineMods(passiveStats, name, stat);

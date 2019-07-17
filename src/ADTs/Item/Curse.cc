@@ -11,7 +11,7 @@ map<string, StatMod>& Curse::getModifiers() {
     // If reloading the modifier list, combine the modificatons with the base modifiers
     if (needsReload) {
         // Since curse modifiers are a debuff, need to apply them to the modifier list accordingly
-        combineMods(modMap, name, StatMod{-stat.getAdder(), -stat.getMultiplier()});
+        combineMods(modMap, name, StatMod{-stat.getAdder(), 1.0/stat.getMultiplier()});
     }
     return modMap;
 }
