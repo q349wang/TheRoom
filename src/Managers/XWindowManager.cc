@@ -79,7 +79,8 @@ XWindowManager::XWindowManager(GameManager *manager, shared_ptr<Map> map, int wi
 		colours[i] = xcolour.pixel;
 	}
 
-	XSetForeground(d, gc, colours[GameColours::Black]);
+	// Colour everything black while loading
+	drawFillRect(0, 0, width, height, GameColours::Black);
 
 	// Make window non-resizeable.
 	XSizeHints hints;
@@ -101,7 +102,6 @@ void XWindowManager::drawFillRect(int x, int y, int width, int height, int colou
 {
 	XSetForeground(d, gc, colours[colour]);
 	XFillRectangle(d, w, gc, x, y, width, height);
-	XFlush(d);
 }
 
 // Draws outline of a rectangle
@@ -109,7 +109,6 @@ void XWindowManager::drawRect(int x, int y, int width, int height, int colour)
 {
 	XSetForeground(d, gc, colours[colour]);
 	XDrawRectangle(d, w, gc, x, y, width, height);
-	XFlush(d);
 }
 
 // Fills in circle
@@ -158,25 +157,38 @@ void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &enti
 // Draws info box regarding ability cooldown
 void XWindowManager::drawAbilityCD(const shared_ptr<Player> &p)
 {
-	int cdX = 10;
+	int cdX = 15;
 	int cdY = 10;
-	bool abilityReady = p->getCooldown() == 0;
-	drawRect(cdX, cdY, mapTileSize, mapTileSize, namePlateBorderColour);
-	drawFillRect(cdY, cdX, mapTileSize, mapTileSize, namePlateColour);
-	string cd = "Ability: " + abilityReady
-					? "READY!"
-					: p->getCooldown() + " turns until ready...";
+	int cdW = 140;
+	int cdH = 13;
+	drawFillRect(cdY, cdX, cdW, cdH, namePlateColour);
+	drawRect(cdX, cdY, cdW, cdH, namePlateBorderColour);
+	string cd = "Ability: ";
+	if (p->getCooldown() == 0)
+	{
+		cd += " " + to_string(p->getCooldown()) + " turns left";
+	}
+	else
+	{
+		cd += "READY!";
+	}
 	XSetForeground(d, gc, colours[fontCol]);
-	drawString(cdX, cdY, cd);
+	drawString(cdX + 5, cdY + 12, cd);
 }
 
 // Redraws battle scene
 void XWindowManager::redrawBattle()
 {
-	XClearWindow(d, w);
+
 	if (auto mp = gameMap.lock())
 	{
+		int playerPlateX = width/2;
+		int playerPlateY = height - 20;
+		XClearWindow(d, w);
+
+		
 	}
+	XFlush(d);
 }
 
 // Draws all the map tiles
@@ -200,11 +212,12 @@ void XWindowManager::drawMapStruct(const shared_ptr<Entity> &p,
 // Redraws map scene
 void XWindowManager::redrawMap()
 {
-	XClearWindow(d, w);
 	if (auto mp = gameMap.lock())
 	{
+		XClearWindow(d, w);
 		drawMapStruct(mp->getPlayer(), mp->getMap());
 		drawEntityOnMap(mp->getPlayer());
+		drawAbilityCD(mp->getPlayer());
 	}
 
 	XFlush(d);
