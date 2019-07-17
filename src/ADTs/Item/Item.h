@@ -23,7 +23,7 @@ class Item {
    public:
     virtual std::map<std::string, StatMod> &getModifiers();
     virtual std::string getName() const;
-    std::map<std::string, StatMod> useItem(std::string);
+    std::map<std::string, StatMod> useItem();
     Item(std::string, std::shared_ptr<ItemDescription>);
     virtual ~Item() = 0;
 };
