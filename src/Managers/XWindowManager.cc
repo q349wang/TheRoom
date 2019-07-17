@@ -6,6 +6,7 @@
 #include "../ADTs/Map/Map.h"
 #include "GameManager.h"
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <cstdlib>
 #include <unistd.h>
@@ -140,18 +141,29 @@ void XWindowManager::drawMapTile(int x, int y, int col)
 }
 
 // Draws a nameplate displaying entity info
-void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &entity)
+void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &entity, int entityNum)
 {
-	drawRect(x, y, mapTileSize, mapTileSize, namePlateBorderColour);
-	drawFillRect(x, y, mapTileSize, mapTileSize, namePlateColour);
+	int plateW = 80;
+	int plateH = 60;
+
+	drawFillRect(x - 5, y - 15, plateW, plateH, namePlateColour);
+	drawRect(x - 5, y - 15, plateW, plateH, namePlateBorderColour);
 	XSetForeground(d, gc, colours[fontCol]);
-	drawString(x, y, entity->getName());
-	string health = "H: " + to_string(entity->getHealth());
-	drawString(x, y, health);
-	string energy = "E: " + to_string(entity->getEnergy());
-	drawString(x, y, energy);
-	string armor = "A: " + to_string(entity->getArmour());
-	drawString(x, y, armor);
+	string name = entity->getName() + " " +
+				  (entityNum == -1
+					   ? ""
+					   : to_string(entityNum));
+	drawString(x, y, name);
+	ostringstream info;
+	info << scientific << setprecision(2);
+	info << "H: " << entity->getHealth() << " ";
+	drawString(x, y + 13, info.str());
+	info.str("");
+	info << "E: " << entity->getEnergy() << " ";
+	drawString(x, y + 26, info.str());
+	info.str("");
+	info << "A: " << entity->getArmour() << " ";
+	drawString(x, y + 39, info.str());
 }
 
 // Draws info box regarding ability cooldown
@@ -182,11 +194,11 @@ void XWindowManager::redrawBattle()
 
 	if (auto mp = gameMap.lock())
 	{
-		int playerPlateX = width/2;
-		int playerPlateY = height - 20;
+		int playerPlateX = width / 2 - 40;
+		int playerPlateY = height - 60;
 		XClearWindow(d, w);
 
-		
+		drawEntityInfo(playerPlateX, playerPlateY, mp->getPlayer());
 	}
 	XFlush(d);
 }
