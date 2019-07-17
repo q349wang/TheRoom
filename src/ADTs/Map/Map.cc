@@ -32,11 +32,11 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
 
     vector<shared_ptr<Tile>> column = {}, first = {}, last = {};
     
-    for(int f = 0; f < (map[0].size() + 2); f++) {
+    for(size_t f = 0; f < (map[0].size() + 2); f++) {
         first.emplace_back(make_shared<WallTile>(WallTile{}));
     }
 
-    for(int l = 0; l < (map[map.size() - 1].size() + 2); l++) {
+    for(size_t l = 0; l < (map[map.size() - 1].size() + 2); l++) {
         last.emplace_back(make_shared<WallTile>(WallTile{}));
     }
 
