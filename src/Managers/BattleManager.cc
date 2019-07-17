@@ -147,6 +147,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                 }
             }
             eLeft--;
+            target->dropAllItems();
             setMessageAndNotify(target->getName() + " has died.");
             if (eLeft == 0)
             {
@@ -202,6 +203,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                 }
             }
             eLeft--;
+            target->dropAllItems();
             setMessageAndNotify(target->getName() + " has died.");
             if (eLeft == 0)
             {

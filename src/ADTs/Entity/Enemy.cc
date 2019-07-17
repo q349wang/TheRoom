@@ -23,20 +23,3 @@ Enemy::Enemy(double health, double energy, double attack, double armour,
  * Purpose: Defualt Destructor
  */
 Enemy::~Enemy() {}
-
-/**
- * Signature: void dropAllItems()
- * Purpose: Drops all enemy items onto current tile
- */
-void Enemy::dropAllItems() {
-    for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
-        current_map_->insertItem(*it, position_);
-    }
-
-    for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
-        current_map_->insertItem(*it, position_);
-    }
-
-    consumables_.clear();
-    equipables_.clear();
-}
