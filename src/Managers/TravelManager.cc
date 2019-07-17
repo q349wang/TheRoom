@@ -64,7 +64,9 @@ void TravelManager::makeMove(const Command &cmd)
             }
 
             pp->makeMove(args[0].at(0));
-            if(auto mp = map.lock()) {
+            pp->decreaseCooldown();
+            if (auto mp = map.lock())
+            {
                 mp->moveEnemies();
             }
             break;
@@ -74,7 +76,8 @@ void TravelManager::makeMove(const Command &cmd)
             vector<shared_ptr<Item>> pickedUp = pp->pickUpItems();
             ostringstream msg;
             msg << "Picked up:\n";
-            for (auto item : pickedUp) {
+            for (auto item : pickedUp)
+            {
                 msg << item->getName() << "\n";
             }
             setMessageAndNotify(msg.str());
@@ -87,8 +90,15 @@ void TravelManager::makeMove(const Command &cmd)
                 setMessageAndNotify("Invalid Command");
                 break;
             }
-            pp->dropItem(args[0]);
-            setMessageAndNotify("Dropped item: " + args[0]);
+            bool dropped = pp->dropItem(args[0]);
+            if (dropped)
+            {
+                setMessageAndNotify("Dropped item: " + args[0]);
+            }
+            else
+            {
+                setMessageAndNotify("Could not find item");
+            }
             break;
         }
         case 'L':
