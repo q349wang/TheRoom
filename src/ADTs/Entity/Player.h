@@ -82,9 +82,6 @@ class Player: public Entity {
 
     // Picks up all items from current tile and empties tile as well
     std::vector<Item> pickUpItems(); 
-
-    // Maintains the player color
-    int getColour(); // TODO
 };
 
 #endif
