@@ -34,9 +34,6 @@ public:
 
       // Make a move in a specified direction (indicated using 'R', 'L', 'U', 'D')
       virtual bool makeMove(char) = 0;
-
-      // Drops all enemy items onto current tile
-      void dropAllItems();
 };
 
 #endif

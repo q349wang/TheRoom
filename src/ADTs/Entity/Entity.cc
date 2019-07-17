@@ -224,3 +224,20 @@ bool Entity::dropItem(string name) {
 
     return false;
 }
+
+/**
+ * Signature: void dropAllItems()
+ * Purpose: Drops all items onto current tile
+ */
+void Entity::dropAllItems() {
+    for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
+        current_map_->insertItem(*it, position_);
+    }
+
+    for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
+        current_map_->insertItem(*it, position_);
+    }
+
+    consumables_.clear();
+    equipables_.clear();
+}
