@@ -10,7 +10,7 @@ using namespace std;
 /**
  * Signature: Enemy(double, double, double, double, pair<int, int>, 
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
- * Purpose: Constructor which requires intial enemy's health, energy, and position
+ * Purpose: Constructor which requires initial enemy's health, energy, and position
  */
 Enemy::Enemy(double health, double energy, double attack, double armour, 
              std::string name, pair<int, int> position,
@@ -20,6 +20,6 @@ Enemy::Enemy(double health, double energy, double attack, double armour,
 
 /**
  * Signature: ~Entity()
- * Purpose: Defualt Destructor
+ * Purpose: Default Destructor
  */
 Enemy::~Enemy() {}
