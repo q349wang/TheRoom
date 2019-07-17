@@ -14,6 +14,7 @@ class Tile;
 class Entity;
 class Player;
 class Map;
+class Enemy;
 
 class XWindowManager : public Observer
 {
@@ -36,6 +37,16 @@ class XWindowManager : public Observer
     static const int mapTileSize = 50;
     static const int namePlateBorderColour = GameColours::Black;
     static const int namePlateColour = GameColours::White;
+
+    // Cooldown constants
+    static const int cdX = 15;
+	static const int cdY = 10;
+	static const int cdW = 140;
+	static const int cdH = 13;
+
+    // Nameplate constants
+    static const int plateW = 80;
+	static const int plateH = 60;
 
     static const int entityDiameter = 30;
     static const std::string font;
@@ -63,6 +74,7 @@ public:
     void drawMapTile(int x, int y, int content);
     void drawMapStruct(const std::shared_ptr<Entity> &, const std::vector<std::vector<std::shared_ptr<Tile>>> &);
     void drawEntityInfo(int x, int y, const std::shared_ptr<Entity> & entity, int entityNum = -1);
+    void drawEnemyPlates(const std::vector<std::shared_ptr<Enemy>>&);
     void drawAbilityCD(const std::shared_ptr<Player> &);
 
     void drawEntityOnMap(const std::shared_ptr<Entity> &);
