@@ -112,6 +112,9 @@ public:
 
   // Moves all enemies currently on the map
   void moveEnemies();
+
+  // Empties specified tile of all items and provides all items
+  std::vector<std::shared_ptr<Item>> pickUpItems(int, int);
 };
 
 #endif

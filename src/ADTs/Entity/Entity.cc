@@ -202,3 +202,23 @@ void Entity::applyStat(string stat, StatMod mod) {
 void Entity::setMap(shared_ptr<Map> map) {
     current_map_ = map;
 }
+
+/**
+ * Signature: void dropItems(string)
+ * Purpose: Drops first instance of item specified by provided name
+ */
+void Entity::dropItem(string name) {
+    for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
+        if((*it)->getName() == name) {
+            consumables_.erase(it);
+            break;
+        }
+    }
+
+    for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
+        if((*it)->getName() == name) {
+            equipables_.erase(it);
+            break;
+        }
+    }
+}

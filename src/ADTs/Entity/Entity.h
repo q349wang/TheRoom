@@ -105,6 +105,9 @@ class Entity {
 
   // Provides colour of entity displayed
   virtual int getColour() = 0;
+
+  // Drops all items specified by a provided name
+  void dropItem(std::string);
 };
 
 #endif

@@ -81,7 +81,7 @@ class Player: public Entity {
     virtual std::vector<std::pair<int, int>> specialMoves() = 0;
 
     // Picks up all items from current tile and empties tile as well
-    std::vector<Item> pickUpItems(); 
+    std::vector<std::shared_ptr<Item>> pickUpItems(); 
 };
 
 #endif

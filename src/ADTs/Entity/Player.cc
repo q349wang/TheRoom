@@ -250,6 +250,6 @@ void Player::addEquipable(shared_ptr<Equipable> equip) {
  * Signature: void pickUpItems()
  * Purpose: Picks up all items stored on its current tile, and empties tile
  */
-vector<Item> Player::pickUpItems() {
-    // TODO
+vector<shared_ptr<Item>> Player::pickUpItems() {
+    return current_map_->pickUpItems(position_.first, position_.second);
 }

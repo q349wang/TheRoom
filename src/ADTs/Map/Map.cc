@@ -219,17 +219,33 @@ void Map::moveEnemies()
         }
     }
 }
-// Coordinate data constructor for pairs of integers
-Map::coord::coord(std::pair<int, int> xy) : position{std::to_string(xy.first) +
-                                                     "$" + std::to_string(xy.second)},
-                                            x_{xy.first}, y_{xy.second}
-{
-}
 
-// Coordinate data constructor for individual coordinate data
+/**
+ * Signature coord(pair<int, int>)
+ * Purpose: Constructs coordinate from a pair of integers
+ */
+Map::coord::coord(std::pair<int, int> xy) : position{std::to_string(xy.first) + 
+                                                    "$" + std::to_string(xy.second)},
+                                            x_{xy.first}, y_{xy.second} {}
+
+/**
+ * Signature: corrd(int, int)
+ * Purpose: Constructs coordinate from individual coordinate data
+ */
 Map::coord::coord(int x, int y) : position{std::to_string(x) + "$" + std::to_string(y)},
                                   x_{x}, y_{y} {}
 
-// Coordinate data constructor for string based coordinate data
+/**
+ * Signature: coord(string)
+ * Purpose: Constructs coordinate from a string of the coordinate data
+ */
 Map::coord::coord(string xy) : position{xy}, x_{stoi(xy.substr(0, xy.find("$")))},
                                y_{stoi(xy.substr((xy.find("$") + 1), std::string::npos))} {}
+
+/**
+ * Signature: vector<shared_ptr<Item>> pickupItems(int, int)
+ * Purpose: Empties the specified tile of all tiles and provides all items
+ */
+vector<shared_ptr<Item>> Map::pickUpItems(int x, int y) {
+    return ((map_.at(y)).at(x))->pickupItems();
+}
