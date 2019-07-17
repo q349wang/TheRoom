@@ -62,7 +62,7 @@ public:
 
     void drawMapTile(int x, int y, int content);
     void drawMapStruct(const std::shared_ptr<Entity> &, const std::vector<std::vector<std::shared_ptr<Tile>>> &);
-    void drawEntityInfo(int x, int y, const std::shared_ptr<Entity> &);
+    void drawEntityInfo(int x, int y, const std::shared_ptr<Entity> & entity, int entityNum = -1);
     void drawAbilityCD(const std::shared_ptr<Player> &);
 
     void drawEntityOnMap(const std::shared_ptr<Entity> &);
