@@ -112,15 +112,15 @@ vector<pair<int, int>> Ranger::specialMoves() {
        (current_map_->tile((position_.first + right), position_.second).available())) {
         special_moves.emplace_back((position_.first + right), position_.second);
     }
-    else if(((position_.first - left) >= 0) && 
+    if(((position_.first - left) >= 0) && 
             (current_map_->tile((position_.first - left), position_.second).available())) {
         special_moves.emplace_back((position_.first - left), position_.second);
     }
-    else if(((position_.second + down) < current_map_->numRows()) && 
+    if(((position_.second + down) < current_map_->numRows()) && 
             (current_map_->tile(position_.first, (position_.second + down)).available())) {
         special_moves.emplace_back(position_.first, (position_.second + down));
     }
-    else if(((position_.second - up) >= 0) && 
+    if(((position_.second - up) >= 0) && 
             (current_map_->tile(position_.first, (position_.second - up)).available())) {
         special_moves.emplace_back(position_.first, (position_.second - up));
     }

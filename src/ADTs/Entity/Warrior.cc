@@ -102,13 +102,13 @@ vector<pair<int, int>> Warrior::specialMoves() {
     if(right != 1) {
         special_moves.emplace_back((position_.first + (right - 1)), position_.second);
     }
-    else if(left != 1) {
+    if(left != 1) {
         special_moves.emplace_back((position_.first - (left - 1)), position_.second);
     }
-    else if(up != 1) {
+    if(up != 1) {
         special_moves.emplace_back(position_.first, (position_.second - (up - 1)));
     }
-    else if(down != 1) {
+    if(down != 1) {
         special_moves.emplace_back(position_.first, (position_.second + (down - 1)));
     }
     
