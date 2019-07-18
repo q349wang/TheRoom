@@ -96,6 +96,18 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                      << it->second.getAdder() << " Multiplier: "
                      << it->second.getMultiplier() << endl;
         }
+        if (item->getType() == 1)
+        {
+            itemDesc << "Passive:" << endl;
+            map<string, StatMod> pass = static_pointer_cast<Equipable>(item)->getPassive();
+            for (auto it = pass.begin(); it != pass.end(); ++it)
+            {
+                itemDesc << it->first << ": Adder: "
+                         << it->second.getAdder() << " Multiplier: "
+                         << it->second.getMultiplier() << endl;
+            }
+        }
+
         setMessageAndNotify(itemDesc.str());
         return false;
         break;
@@ -107,18 +119,19 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             invalidCmd = true;
             break;
         }
-        string name = args[0];
+        string name = args[1];
+        cout << name << endl;
         shared_ptr<Entity> target = player;
         if (name != "me")
         {
             unsigned int tarIndex = 0;
             try
             {
-                tarIndex = stoi(args[0]);
+                tarIndex = stoi(args[1]);
             }
             catch (const invalid_argument &e)
             {
-                setMessageAndNotify("Invalid Target");
+                setMessageAndNotify("Invalid Target 1");
                 return false;
             }
             if (tarIndex >= 0 && tarIndex < eList.size())
@@ -127,7 +140,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             }
             else
             {
-                setMessageAndNotify("Invalid Target");
+                setMessageAndNotify("Invalid Target: " + to_string(tarIndex));
                 return false;
             }
         }
@@ -165,7 +178,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                                       item->getName());
         }
         string info = "Player used item " + item->getName() + " on " +
-                            target->getName() + " .";
+                      target->getName() + " .";
         setMessageAndNotify(info);
         if (target->getHealth() <= 0)
         {
@@ -273,7 +286,7 @@ void BattleManager::runBattle()
         {
             char cmd;
             vector<string> args;
-            setMessageAndNotify("Input Command (D, U, A)");
+            setMessageAndNotify("Input Command (D, U, A, L)");
             cin >> cmd;
             switch (cmd)
             {
