@@ -1,6 +1,8 @@
 #include "MapManager.h"
 #include "EnemyManager.h"
-//#include "ItemManager.h"
+#include "ItemManager.h"
+
+#include "../ADTs/Entity/EnemyConf.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -8,10 +10,10 @@
 using namespace std;
 
 /**
- * Signature: MapManager(map<string, EnemyConfig>)
+ * Signature: MapManager(map<string, EnemyConf>)
  * Purpose: Constructs a map manager with specified configurations
  */
-MapManager::MapManager(map<string, EnemyConfig> configuration) : enemy_configuration_{configuration} {} 
+MapManager::MapManager(map<string, EnemyConf> configuration) : enemy_configuration_{configuration} {} 
 
 /**
  * Signature: ~MapManager()
