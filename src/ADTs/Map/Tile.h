@@ -47,6 +47,9 @@ class Tile {
 
   // Provides the colour of the current tile
   virtual int getColour() = 0;
+
+  // Clears a tile of all items and enemies
+  void clearTile();
 };
 
 #endif

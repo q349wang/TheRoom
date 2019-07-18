@@ -6,6 +6,18 @@
 using namespace std;
 
 /**
+ * Signature: Tile()
+ * Purpose: Default constructor
+ */
+Tile::Tile() {}
+
+/**
+ * Signature: ~Tile()
+ * Purpose: Default destructor
+ */
+Tile::~Tile() {}
+
+/**
  * Signature: void insertItem(shared_ptr<Item>)
  * Purpose: Inserts provided item to tile's collection
  *          of items
@@ -57,5 +69,11 @@ vector<shared_ptr<Item>> Tile::pickupItems() {
     return items;
 }
 
-Tile::~Tile() {}
-Tile::Tile() {}
+/**
+ * Signature: void clearTile()
+ * Purpose: Clears a tile of all items and enemies
+ */
+void Tile::clearTile() {
+    items_.clear();
+    enemies_.clear();
+}

@@ -81,7 +81,13 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
 
     map_.emplace_back(last);
 }
+
+/**
+ * Signature: ~Map()
+ * Purpose: Default destructor
+ */
 Map::~Map() {}
+
 /**
     * Signature: void insertItem(shared_ptr<Item>, pair<int, int>) : void
     * Purpose: Inserts provided item at specified location on the map
@@ -315,4 +321,20 @@ pair<int, int> Map::findNextEmpty(pair<int, int> input) {
 bool Map::checkExit(pair<int, int> tile_location) {
     int colour =  ((map_.at(tile_location.second)).at(tile_location.first))->getColour();
     return (colour == GameColours::Green);   
+}
+
+/**
+ * Signature: void clearMap()
+ * Purpose: Clears map of all enemies and items
+ */
+void Map::clearMap() {
+    items_.clear();
+    enemies_.clear();
+    current_ = start_;
+
+    for(auto row = map_.begin(); row != map_.end(); ++row) {
+        for(auto tile = (*row).begin(); tile != (*row).end(); ++tile) {
+            (*tile)->clearTile();
+        }
+    }
 }
