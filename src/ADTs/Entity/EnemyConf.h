@@ -12,6 +12,7 @@ struct EnemyConf
     std::pair<double, double> energy;
     std::pair<double, double> armour;
     std::pair<double, double> attack;
+    EnemyConf();
     EnemyConf(int,
               std::pair<double, double>,
               std::pair<double, double>,

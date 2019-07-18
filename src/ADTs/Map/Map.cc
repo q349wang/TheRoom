@@ -12,6 +12,7 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
+#include <iostream>
 #include <algorithm>
 #include <iterator>
 
@@ -32,13 +33,15 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
 
     vector<shared_ptr<Tile>> column = {}, first = {}, last = {};
     num_space_ = num_wall_ = num_exit_ = 0;
-    
-    for(size_t f = 0; f < (map[0].size() + 2); f++) {
+
+    for (size_t f = 0; f < (map[0].size() + 2); f++)
+    {
         first.emplace_back(make_shared<WallTile>(WallTile{}));
         num_wall_++;
     }
 
-    for(size_t l = 0; l < (map[map.size() - 1].size() + 2); l++) {
+    for (size_t l = 0; l < (map[map.size() - 1].size() + 2); l++)
+    {
         last.emplace_back(make_shared<WallTile>(WallTile{}));
         num_wall_++;
     }
@@ -157,7 +160,7 @@ const Tile &Map::tile(int x, int y) const
      * Signature: const Tile& tile(pair<int, int>)
      * Purpose: Provides a const reference to a specified tile
      */
-const Tile &Map::tile(const pair<int, int>& coord) const
+const Tile &Map::tile(const pair<int, int> &coord) const
 {
     return *((map_.at(coord.second)).at(coord.first));
 }
@@ -188,6 +191,7 @@ void Map::moveEnemies()
 {
     for (pair<string, vector<shared_ptr<Enemy>>> tile : enemies_)
     {
+        cout << "move enemy" << endl;
         coord position = coord{tile.first};
         vector<pair<int, char>> movement = {};
 
@@ -218,15 +222,18 @@ void Map::moveEnemies()
 
         // Sort the movement directions
         sort(movement.begin(), movement.end());
-
+        cout << "sorted" << endl;
         // Iterate through all enemies on the current tile, and all possible directions
         // In order of increasing distance, and make the move towards the closest location
         for (auto it = tile.second.begin(); it != tile.second.end(); ++it)
         {
+            cout << "moving an enemy" << endl;
             for (auto direction = movement.begin(); direction != movement.end(); ++direction)
             {
+                cout << "choosing direction " << direction->second << endl;
                 if ((*it)->makeMove((*direction).second))
                 {
+                    cout << "Made move to " << (*direction).second << endl;
                     break;
                 }
             }
@@ -238,8 +245,8 @@ void Map::moveEnemies()
  * Signature coord(pair<int, int>)
  * Purpose: Constructs coordinate from a pair of integers
  */
-Map::coord::coord(std::pair<int, int> xy) : position{std::to_string(xy.first) + 
-                                                    "$" + std::to_string(xy.second)},
+Map::coord::coord(std::pair<int, int> xy) : position{std::to_string(xy.first) +
+                                                     "$" + std::to_string(xy.second)},
                                             x_{xy.first}, y_{xy.second} {}
 
 /**
@@ -260,7 +267,8 @@ Map::coord::coord(string xy) : position{xy}, x_{stoi(xy.substr(0, xy.find("$")))
  * Signature: vector<shared_ptr<Item>> pickupItems(int, int)
  * Purpose: Empties the specified tile of all tiles and provides all items
  */
-vector<shared_ptr<Item>> Map::pickUpItems(int x, int y) {
+vector<shared_ptr<Item>> Map::pickUpItems(int x, int y)
+{
     return ((map_.at(y)).at(x))->pickupItems();
 }
 
@@ -268,7 +276,8 @@ vector<shared_ptr<Item>> Map::pickUpItems(int x, int y) {
  * Signature: int getNumWalls()
  * Purpose: Provides the number of wall tiles in a map
  */
-int Map::getNumWalls() {
+int Map::getNumWalls()
+{
     return num_wall_;
 }
 
@@ -276,7 +285,8 @@ int Map::getNumWalls() {
  * Signature: int getNumExits()
  * Purpose: Provides the number of exit tiles in a map
  */
-int Map::getNumExits() {
+int Map::getNumExits()
+{
     return num_exit_;
 }
 
@@ -284,7 +294,8 @@ int Map::getNumExits() {
  * Signature: int getNumSpaces()
  * Purpose: Provides the number of space tiles in a map
  */
-int Map::getNumSpaces() {
+int Map::getNumSpaces()
+{
     return num_space_;
 }
 
@@ -292,23 +303,30 @@ int Map::getNumSpaces() {
  * Signature: pair<int, int> findNextEmpty(pair<int, int>)
  * Purpose: Finds the nearest available tile on the map
  */
-pair<int, int> Map::findNextEmpty(pair<int, int> input) {
-    while(true) {
+pair<int, int> Map::findNextEmpty(pair<int, int> input)
+{
+    while (true)
+    {
         // If we are at an available tile, return the position
-        if(((map_.at(input.second)).at(input.first))->available()) {
+        if ((((map_.at(input.second)).at(input.first))->available()) &&
+            !((input.first == current_.x_) && (input.second == current_.y_)))
+        {
             return input;
         }
         // Increase the column index if possible
-        else if(input.first < ((map_.at(input.second)).size() - 1)) {
+        else if (static_cast<size_t>(input.first) < ((map_.at(input.second)).size() - 1))
+        {
             input.first++;
         }
         // Increase the row index and set column to zero otherwise
-        else if(input.second < (map_.size() - 1)) {
+        else if (static_cast<size_t>(input.second) < (map_.size() - 1))
+        {
             input.first = 0;
             input.second++;
         }
         // Go back to the top-left corner if both are exhausted
-        else {
+        else
+        {
             input.first = input.second = 0;
         }
     }
@@ -318,23 +336,32 @@ pair<int, int> Map::findNextEmpty(pair<int, int> input) {
  * Signature: bool checkExit(pair<int, int>)
  * Purpose: Determines if a specified tile is an exit tile
  */
-bool Map::checkExit(pair<int, int> tile_location) {
-    int colour =  ((map_.at(tile_location.second)).at(tile_location.first))->getColour();
-    return (colour == GameColours::Green);   
+bool Map::checkExit(pair<int, int> tile_location)
+{
+    int colour = ((map_.at(tile_location.second)).at(tile_location.first))->getColour();
+    return (colour == GameColours::Green);
 }
 
 /**
  * Signature: void clearMap()
  * Purpose: Clears map of all enemies and items
  */
-void Map::clearMap() {
+void Map::clearMap()
+{
     items_.clear();
     enemies_.clear();
     current_ = start_;
 
-    for(auto row = map_.begin(); row != map_.end(); ++row) {
-        for(auto tile = (*row).begin(); tile != (*row).end(); ++tile) {
+    for (auto row = map_.begin(); row != map_.end(); ++row)
+    {
+        for (auto tile = (*row).begin(); tile != (*row).end(); ++tile)
+        {
             (*tile)->clearTile();
         }
     }
+}
+
+unordered_map<string, vector<shared_ptr<Enemy>>> &Map::getEnemies()
+{
+    return enemies_;
 }

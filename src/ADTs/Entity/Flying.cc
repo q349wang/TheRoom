@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <utility>
+#include <iostream>
 
 using namespace std;
 
@@ -31,11 +32,12 @@ Flying::~Flying() {}
  */
 bool Flying::makeMove(char direction)
 {
+    cout << "flying" <<  endl;
     int right = 1, left = 1, up = 1, down = 1;
 
     switch (direction) {
         case 'E':
-
+            cout << direction <<  endl;
             // Determine the first wall or non-existent tile from the
             // current position in the right direction
             if ((position_.first + right) < current_map_->numColumns(position_.second))
@@ -68,11 +70,11 @@ bool Flying::makeMove(char direction)
             break;
 
         case 'W':
-
+cout << direction <<  endl;
             // Determine the first wall or non-existent tile from the
             // current position in the left direction
             if ((position_.first - left) >= 0) {
-                while (current_map_->tile((position_.first - left), position_.second).available())
+                while (!current_map_->tile((position_.first - left), position_.second).available())
                 {
                     if ((position_.first - left) > 0) {
                         left++;
@@ -83,6 +85,7 @@ bool Flying::makeMove(char direction)
                     }
                 }
             }
+            cout << "updated pos: " << position_.first -left<< " " << position_.second << endl;
 
             // Insert the furthest available tile from the current tile position after an
             // immediate contigous block of wall tiles in the left direction
@@ -100,12 +103,12 @@ bool Flying::makeMove(char direction)
             break;
 
         case 'S':
-
+cout << direction <<  endl;
             // Determine the first wall or non-existent tile from the
             // current position in the down direction
             if ((position_.second + down) < (current_map_->numRows()))
             {
-                while (current_map_->tile(position_.first, (position_.second + down)).available())
+                while (!current_map_->tile(position_.first, (position_.second + down)).available())
                 {
                     if ((position_.second + down) < (current_map_->numRows() - 1))
                     {
@@ -135,11 +138,12 @@ bool Flying::makeMove(char direction)
             break;
 
         case 'N':
+        cout << direction <<  endl;
             // Determine the first wall or non-existent tile from the
             // current position in the up direction
             if ((position_.second - up) >= 0)
             {
-                while (current_map_->tile(position_.first, (position_.second - up)).available())
+                while (!current_map_->tile(position_.first, (position_.second - up)).available())
                 {
                     if ((position_.second - up) > 0)
                     {

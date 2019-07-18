@@ -18,7 +18,7 @@ enum GameState : int
 {
     Travel = 0,
     Battle = 1,
-    None = 2
+    NoState = 2
 };
 
 #endif

@@ -12,28 +12,25 @@
 using namespace std;
 
 BattleManager::BattleManager(shared_ptr<Player> player)
-    : eList{nullptr}, player{player}, battleEnded{false}, eLeft{0} {}
+    : eList{}, player{player}, battleEnded{false}, eLeft{0} {}
 
 BattleManager::~BattleManager() {}
 
 void BattleManager::runEnemyTurn()
 {
-    if (eList != nullptr)
+    for (auto enemy : eList)
     {
-        for (auto enemy : *eList)
+        if (enemy != nullptr)
         {
-            if (enemy != nullptr)
+            double dmg = enemy->attack(player);
+            setMessageAndNotify(enemy->getName() +
+                                " has attacked you for " + to_string(dmg) +
+                                " damage!");
+            if (player->isDead())
             {
-                double dmg = enemy->attack(player);
-                setMessageAndNotify(enemy->getName() +
-                                    " has attacked you for " + to_string(dmg) +
-                                    " damage!");
-                if (player->isDead())
-                {
-                    battleEnded = true;
-                }
-                notifyObservers();
+                battleEnded = true;
             }
+            notifyObservers();
         }
     }
 }
@@ -76,10 +73,11 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
         itemDesc << fixed << setprecision(2);
         itemDesc << item->getName() << endl;
         map<string, StatMod> desc = item->getModifiers();
-        for(auto it = desc.begin(); it != desc.end(); ++it) {
+        for (auto it = desc.begin(); it != desc.end(); ++it)
+        {
             itemDesc << it->first << ": Adder: "
-            << it->second.getAdder() << " Multiplier: "
-            << it->second.getMultiplier() << endl;
+                     << it->second.getAdder() << " Multiplier: "
+                     << it->second.getMultiplier() << endl;
         }
         setMessageAndNotify(itemDesc.str());
         return false;
@@ -106,9 +104,9 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                 setMessageAndNotify("Invalid Target");
                 return false;
             }
-            if (tarIndex >= 0 && tarIndex < eList->size())
+            if (tarIndex >= 0 && tarIndex < eList.size())
             {
-                target = eList->at(tarIndex);
+                target = eList.at(tarIndex);
             }
             else
             {
@@ -149,7 +147,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                             target->getName() + " .");
         if (target->getHealth() == 0)
         {
-            for (auto enemy : *eList)
+            for (auto enemy : eList)
             {
                 if (enemy == target)
                 {
@@ -185,9 +183,9 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             setMessageAndNotify("Invalid Target");
             return false;
         }
-        if (tarIndex >= 0 && tarIndex < eList->size())
+        if (tarIndex >= 0 && tarIndex < eList.size())
         {
-            target = eList->at(tarIndex);
+            target = eList.at(tarIndex);
         }
         else
         {
@@ -205,7 +203,7 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                             " for " + to_string(dmg));
         if (target->getHealth() == 0)
         {
-            for (auto enemy : *eList)
+            for (auto enemy : eList)
             {
                 if (enemy == target)
                 {
@@ -239,11 +237,11 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
     return !invalidCmd;
 }
 
-void BattleManager::startBattle(vector<shared_ptr<Enemy>> *enemies)
+void BattleManager::startBattle(const vector<shared_ptr<Enemy>> &enemies)
 {
     battleEnded = false;
     eList = enemies;
-    eLeft = (eList != nullptr) ? eList->size() : 0;
+    eLeft = eList.size();
     runBattle();
 }
 
@@ -256,6 +254,7 @@ void BattleManager::runBattle()
         {
             char cmd;
             vector<string> args;
+            setMessageAndNotify("Input Command (D, U, A)");
             cin >> cmd;
             switch (cmd)
             {

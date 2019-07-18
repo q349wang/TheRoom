@@ -1,6 +1,8 @@
 #include "EnemyConf.h"
 using namespace std;
 
+EnemyConf::EnemyConf() {}
+
 EnemyConf::EnemyConf(int weight,
                      pair<double, double>  health,
                      pair<double, double>  energy,

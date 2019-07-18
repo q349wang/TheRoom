@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <iostream>
 
 using namespace std;
 
@@ -110,6 +111,7 @@ double Entity::attack(shared_ptr<Entity> enemy) {
     if(!isOutOfEnergy()) {
         return enemy->takeDamage(attackStrength_);
     }
+    return 0.0;
 }
 
 /**
@@ -153,6 +155,7 @@ bool Entity::isOutOfEnergy() {
  * Note: Does not check if move is valid or applicable to current map
  */
 void Entity::updatePosition(pair<int, int> location) {
+    cout << "updating position" << endl;
     position_ = location;
 }
 
