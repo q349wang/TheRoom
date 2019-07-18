@@ -67,6 +67,12 @@ void TravelManager::makeMove(const Command &cmd)
             pp->decreaseCooldown();
             if (auto mp = map.lock())
             {
+                if (mp->checkExit(pp->getPosition()))
+                {
+                    setMessageAndNotify("Found exit. Exiting level");
+                    toExit = true;
+                    break;
+                }
                 mp->moveEnemies();
             }
             break;
@@ -158,6 +164,7 @@ void TravelManager::makeMove(const Command &cmd)
 
 void TravelManager::startTravel()
 {
+    toExit = false;
     toBattle = false;
     runTravel();
 }
@@ -168,7 +175,8 @@ void TravelManager::runTravel()
     {
         if (auto pp = player.lock())
         {
-            while (!((mp->tile(pp->getPosition())).getEnemies().size() == 0))
+            while (!toExit &&
+                   !((mp->tile(pp->getPosition())).getEnemies().size() == 0))
             {
                 char cmd;
                 vector<string> args;
@@ -218,10 +226,15 @@ void TravelManager::runTravel()
 
                 makeMove(fullCmd);
             }
-            setMessageAndNotify("Enemy encountered! Starting battle!");
-            toBattle = true;
+            if (!toExit)
+            {
+                setMessageAndNotify("Enemy encountered! Starting battle!");
+                toBattle = true;
+            }
         }
     }
 }
 
 const weak_ptr<Map> TravelManager::getMap() const { return map; }
+
+bool TravelManager::isExiting() const { return toExit; }

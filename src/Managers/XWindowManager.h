@@ -24,6 +24,7 @@ class XWindowManager : public Observer
     int s;
     GC gc;
     std::weak_ptr<Map> gameMap;
+    GameManager *gameManager;
 
     int width;
     int height;
@@ -43,7 +44,10 @@ class XWindowManager : public Observer
     int centerY(int y);
 
 public:
-    XWindowManager(std::shared_ptr<Map> gameMap, int width = 500, int height = 500);
+    XWindowManager(GameManager *gameManager,
+                   std::shared_ptr<Map> gameMap,
+                   int width = 500,
+                   int height = 500);
     ~XWindowManager();
     XWindowManager(const XWindowManager &) = delete;
     XWindowManager &operator=(const XWindowManager &) = delete;

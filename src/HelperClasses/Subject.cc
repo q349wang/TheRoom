@@ -20,7 +20,7 @@ void Subject::detach(Observer* o) {
 }
 
 void Subject::notifyObservers() {
-	for(auto ob : observers) ob->notify();
+	for(auto ob : observers) ob->notify(getMsg());
 }
 
 string Subject::getMsg() const { return msg.str(); }
