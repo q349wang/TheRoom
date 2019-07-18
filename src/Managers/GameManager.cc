@@ -50,7 +50,7 @@ void GameManager::reset()
 void GameManager::startGame()
 {
     unordered_map<string, vector<shared_ptr<Item>>> items;
-    unordered_map<string, vector<shared_ptr<Enemy>>> enemies;
+    vector<shared_ptr<Enemy>> enemies;
 
     cout << "Choose hero: Warrior = 0, Mage = 1, Ranger = 2" << endl;
     int hero = 0;

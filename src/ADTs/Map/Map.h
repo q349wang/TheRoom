@@ -61,7 +61,7 @@ private:
   std::unordered_map<std::string, std::vector<std::shared_ptr<Item>>> items_;
 
   // Maintain a collection of all enemies on the map
-  std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>> enemies_;
+  std::vector<std::shared_ptr<Enemy>> enemies_;
 
 protected:
 public:
@@ -70,7 +70,7 @@ public:
   Map(std::shared_ptr<Player> player, std::vector<std::vector<char>> map,
       std::pair<int, int> start = {0, 0},
       std::unordered_map<std::string, std::vector<std::shared_ptr<Item>>> items = {},
-      std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>> enemies = {});
+      std::vector<std::shared_ptr<Enemy>> enemies = {});
 
   // Delete Map copy constructor to ensure appropriate behaviour
   Map(Map &other) = delete;
@@ -137,7 +137,7 @@ public:
   // Clears a map of all enemies and items
   void clearMap();
 
-  std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>>& getEnemies();
+  std::vector<std::shared_ptr<Enemy>>& getEnemies();
 };
 
 #endif

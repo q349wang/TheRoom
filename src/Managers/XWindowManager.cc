@@ -249,12 +249,9 @@ void XWindowManager::redrawMap()
 		XClearWindow(d, w);
 		drawMapStruct(mp->getPlayer(), mp->getMap());
 		drawPlayerOnMap(mp->getPlayer());
-		for (auto tile : mp->getEnemies())
+		for (auto enemy : mp->getEnemies())
 		{
-			for (auto enemy : tile.second)
-			{
-				drawEntityOnMap(mp->getPlayer(), enemy);
-			}
+			drawEntityOnMap(mp->getPlayer(), enemy);
 		}
 		drawAbilityCD(mp->getPlayer());
 	}
@@ -293,7 +290,8 @@ void XWindowManager::drawPlayerOnMap(const shared_ptr<Player> &p)
 void XWindowManager::drawEntityOnMap(const shared_ptr<Player> &p,
 									 const shared_ptr<Entity> &e)
 {
-	if (e->getHealth() <= 0) return;
+	if (e->getHealth() <= 0)
+		return;
 	pair<int, int> coords = p->getPosition();
 	int xOffset = coords.first;
 	int yOffset = coords.second;

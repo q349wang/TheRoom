@@ -27,8 +27,8 @@ using namespace std;
 Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
          pair<int, int> start,
          unordered_map<string, vector<shared_ptr<Item>>> items,
-         unordered_map<string, vector<shared_ptr<Enemy>>> enemies) : start_{start}, current_{start}, player_{player},
-                                                                     items_{items}, enemies_{enemies}
+         vector<shared_ptr<Enemy>> enemies) : start_{start}, current_{start}, player_{player},
+                                              items_{items}, enemies_{enemies}
 {
 
     vector<shared_ptr<Tile>> column = {}, first = {}, last = {};
@@ -120,26 +120,7 @@ void Map::insertEnemy(shared_ptr<Enemy> enemy, pair<int, int> coordinates)
     coord location = coord{coordinates};
     ((map_.at(location.y_)).at(location.x_))->insertEnemy(enemy);
 
-    if (enemies_.find(location.position) == enemies_.end())
-    {
-        enemies_.emplace(location.position, vector<shared_ptr<Enemy>>{enemy});
-    }
-    else
-    {
-        bool alreadyExists = false;
-        for (auto it : enemies_[location.position])
-        {
-            if (it == enemy)
-            {
-                alreadyExists = true;
-                break;
-            }
-        }
-        if (!alreadyExists)
-        {
-            enemies_[location.position].emplace_back(enemy);
-        }
-    }
+    enemies_.emplace_back(enemy);
 }
 
 /**
@@ -201,111 +182,118 @@ const shared_ptr<Player> &Map::getPlayer() const
      */
 void Map::moveEnemies()
 {
-    // unordered_map<string, vector<shared_ptr<Enemy>>> updatedMap{};
-    // //unordered_map<string, vector<shared_ptr<Enemy>>> currentEnemies = enemies_;
-    // for (pair<string, vector<shared_ptr<Enemy>>> tiles : enemies_)
-    // {
-    //     coord position = coord{tiles.first};
-    //     vector<char> movement;
+    //unordered_map<string, vector<shared_ptr<Enemy>>> currentEnemies = enemies_;
+    for (shared_ptr<Enemy> enem : enemies_)
+    {
+        // Skip dead enemies
+        if (enem->isDead())
+        {
+            continue;
+        }
 
-    //     int x_difference = current_.x_ - position.x_; // Positive, player right of enemy
-    //     int y_difference = current_.y_ - position.y_; // Positive, player lower than enemy
+        cout << "start for loop 2" << endl;
+        coord position = coord{enem->getPosition()};
+        coord currentPlayer = coord{player_->getPosition()};
+        vector<char> movement;
 
-    //     if(abs(x_difference) >= abs(y_difference)) {
-    //         if(x_difference >= 0) {
-    //             if(y_difference >= 0) {
-    //                 movement = {'E', 'S', 'N', 'W'};
-    //             }
-    //             else {
-    //                 movement = {'E', 'N', 'S', 'W'};
-    //             }
-    //         }
-    //         else {
-    //             if(y_difference >= 0) {
-    //                 movement = {'W', 'S', 'N', 'E'};
-    //             }
-    //             else {
-    //                 movement = {'W', 'N', 'S', 'E'};
-    //             }
-    //         }
-    //     }
-    //     else {
-    //         if(x_difference >= 0) {
-    //             if(y_difference >= 0) {
-    //                 movement = {'S', 'E', 'W', 'N'};
-    //             }
-    //             else {
-    //                 movement = {'N', 'E', 'W', 'S'};
-    //             }
-    //         }
-    //         else {
-    //             if(y_difference >= 0) {
-    //                 movement = {'S', 'W', 'E', 'N'};
-    //             }
-    //             else {
-    //                 movement = {'N', 'W', 'E', 'S'};
-    //             }
-    //         }
-    //     }
+        int x_difference = currentPlayer.x_ - position.x_; // Positive, player right of enemy
+        int y_difference = currentPlayer.y_ - position.y_; // Positive, player lower than enemy
+        if (x_difference == 0 && y_difference == 0) continue;
+        if (abs(x_difference) >= abs(y_difference))
+        {
+            if (x_difference >= 0)
+            {
+                if (y_difference >= 0)
+                {
+                    movement = {'E', 'S'};
+                    cout << " ES" << endl;
+                }
+                else
+                {
+                    movement = {'E', 'N'};
+                    cout << " EN" << endl;
+                }
+            }
+            else
+            {
+                if (y_difference >= 0)
+                {
+                    movement = {'W', 'S'};
+                    cout << " WS" << endl;
+                }
+                else
+                {
+                    movement = {'W', 'N'};
+                    cout << " WN" << endl;
+                }
+            }
+        }
+        else
+        {
+            if (x_difference >= 0)
+            {
+                if (y_difference >= 0)
+                {
+                    movement = {'S', 'E'};
+                    cout << " SE" << endl;
+                }
+                else
+                {
+                    movement = {'N', 'E'};
+                    cout << " NE" << endl;
+                }
+            }
+            else
+            {
+                if (y_difference >= 0)
+                {
+                    movement = {'S', 'W'};
+                    cout << " SW" << endl;
+                }
+                else
+                {
+                    movement = {'N', 'W'};
+                    cout << " NW" << endl;
+                }
+            }
+        }
 
-    //     // Iterate through all enemies on the current tile, and all possible directions
-    //     // In order of increasing distance, and make the move towards the closest location
-    //     for (auto it = tiles.second.begin(); it != tiles.second.end(); ++it)
-    //     {
-    //         // Skip dead enemies
-    //         if ((*it)->isDead()) {
-    //             continue;
-    //         }
-            
-    //         for (auto direction = movement.begin(); direction != movement.end(); ++direction) {
-    //             pair<int, int> oldPos = (*it)->getPosition();
-    //             coord oldCoord{oldPos};
-                
-    //             if ((*it)->makeMove(*direction))
-    //             {
+        // Iterate through all enemies on the current tile, and all possible directions
+        // In order of increasing distance, and make the move towards the closest location
+        for (auto direction = movement.begin(); direction != movement.end(); ++direction)
+        {
+            pair<int, int> oldPos = enem->getPosition();
+            coord oldCoord{oldPos};
 
-    //                 ((map_.at(oldPos.first)).at(oldPos.second))->removeEnemy(*it);
-    //                 coord updatedCoord{(*it)->getPosition()};
-    //                 insertEnemy(*it, (*it)->getPosition());
+            if (enem->makeMove(*direction))
+            {
+                cout << "Moving enem to " << *direction << endl;
+                ((map_.at(oldPos.second)).at(oldPos.first))->removeEnemy(enem);
 
-    //                 if(updatedMap.find(updatedCoord.position) == updatedMap.end()) {
-    //                     updatedMap.emplace(updatedCoord.position, (*it));
-    //                 }
-    //                 else {
-    //                     updatedMap[updatedCoord.position].emplace_back(*it);
-    //                 }
+                coord updatedCoord{enem->getPosition()};
 
-    //                 //pair<int, int> newPos = (*it)->getPosition();
-    //                 // Remove old position
-    //                 //for (auto it2 = enemies_[oldCoord.position].begin(); it2 != enemies_[oldCoord.position].end(); ++it2)
-    //                 //{
-    //                     //if (*it == *it2)
-    //                     //{
-    //                     //    enemies_[oldCoord.position].erase(it2);
-    //                     //   break;
-    //                     //}
-    //                 //}
-    //                 //insertEnemy(*it, newPos);
-    //                 //tile(oldPos).removeEnemy(*it);
-    //                 //cout
-    //                    // << "Made move to " << (*direction).second << endl;
-    //                 break;
-    //             }
+                tile(enem->getPosition()).insertEnemy(enem);
 
-    //             if((*direction) == movement.at(movement.size() - 1)) {
-    //                 if(updatedMap.find(oldCoord.position) == updatedMap.end()) {
-    //                     updatedMap.emplace(oldCoord.position, (*it));
-    //                 }
-    //                 else {
-    //                     updatedMap[oldCoord.position].emplace_back(*it);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 
-    // enemies_.clear();
-    // enemies_ = updatedMap;
+                //pair<int, int> newPos = (*it)->getPosition();
+                // Remove old position
+                //for (auto it2 = enemies_[oldCoord.position].begin(); it2 != enemies_[oldCoord.position].end(); ++it2)
+                //{
+                //if (*it == *it2)
+                //{
+                //    enemies_[oldCoord.position].erase(it2);
+                //   break;
+                //}
+                //}
+                //insertEnemy(*it, newPos);
+                //tile(oldPos).removeEnemy(*it);
+                //cout
+                // << "Made move to " << (*direction).second << endl;
+                break;
+            }
+        }
+    }
+    return;
 }
 
 /**
@@ -372,11 +360,12 @@ int Map::getNumSpaces()
  */
 pair<int, int> Map::findNextEmpty(pair<int, int> input)
 {
+    coord currentPlayer = coord{player_->getPosition()};
     while (true)
     {
         // If we are at an available tile, return the position
         if ((((map_.at(input.second)).at(input.first))->available()) &&
-            !((input.first == current_.x_) && (input.second == current_.y_)))
+            !((input.first == currentPlayer.x_) && (input.second == currentPlayer.y_)))
         {
             return input;
         }
@@ -428,7 +417,7 @@ void Map::clearMap()
     }
 }
 
-unordered_map<string, vector<shared_ptr<Enemy>>> &Map::getEnemies()
+vector<shared_ptr<Enemy>> &Map::getEnemies()
 {
     return enemies_;
 }

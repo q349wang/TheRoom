@@ -153,8 +153,6 @@ void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name) {
             for(auto it = consume_mods.begin(); it != consume_mods.end(); ++it) {
                 entity->applyStat((*it).first, (*it).second);
             }
-
-            (*existing).~shared_ptr();
             consumables.erase(existing);
             break;
         }
@@ -194,8 +192,6 @@ void Player::dropEquipable(string equip_name) {
             for(auto it = equip_mods.begin(); it != equip_mods.end(); ++it) {
                 reverseStat((*it).first, (*it).second);
             }
-
-            (*existing).~shared_ptr();
             equipables_.erase(existing);
             break;
         }
@@ -257,9 +253,3 @@ void Player::addEquipable(shared_ptr<Equipable> equip) {
 vector<shared_ptr<Item>> Player::pickUpItems() {
     return current_map_->pickUpItems(position_.first, position_.second);
 }
-
-// Force the player to a certain position
-void Player::forcePosition(pair<int, int> pos)
-{
-    updatePosition(pos);
-};

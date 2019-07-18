@@ -210,7 +210,6 @@ void Entity::setMap(shared_ptr<Map> map) {
 bool Entity::dropItem(string name) {
     for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
         if((*it)->getName() == name) {
-            (*it).~shared_ptr();
             consumables_.erase(it);
             return true;
         }
@@ -218,7 +217,6 @@ bool Entity::dropItem(string name) {
 
     for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
         if((*it)->getName() == name) {
-            (*it).~shared_ptr();
             equipables_.erase(it);
             return true;
         }
@@ -243,3 +241,10 @@ void Entity::dropAllItems() {
     consumables_.clear();
     equipables_.clear();
 }
+
+
+// Force the entity to a certain position
+void Entity::forcePosition(pair<int, int> pos)
+{
+    updatePosition(pos);
+};

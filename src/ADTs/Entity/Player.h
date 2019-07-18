@@ -23,7 +23,7 @@ class Player: public Entity {
     std::vector<std::shared_ptr<Consumable>> consumed_;
 
     // Maintain player's special movement cooldown turn counter
-    int cooldown_;
+    int cooldown_ = 0;
 
     // Maintain the base special cooldown and special ready amounts
     static const int BASE_SPECIAL_COOLDOWN = 5;
@@ -82,8 +82,6 @@ class Player: public Entity {
 
     // Picks up all items from current tile and empties tile as well
     std::vector<std::shared_ptr<Item>> pickUpItems(); 
-
-    void forcePosition(std::pair<int, int>);
 };
 
 #endif
