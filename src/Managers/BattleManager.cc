@@ -169,13 +169,13 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
         if (itemIndex < player->currentEquipables().size())
         {
             item = player->currentEquipables()[itemIndex];
-            success = player->equipEquipable(target, item->getName());
+            success = player->equipEquipable(target, itemIndex);
         }
         else
         {
             item = player->currentConsumables()[itemIndex - player->currentEquipables().size()];
             success = player->consumeConsumable(target,
-                                                item->getName());
+                                                itemIndex - player->currentEquipables().size());
         }
         if (success)
         {

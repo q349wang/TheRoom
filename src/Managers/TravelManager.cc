@@ -153,19 +153,26 @@ void TravelManager::makeMove(const Command &cmd)
                 break;
             }
             shared_ptr<Item> item;
+            bool success = false;
             if (itemIndex < pp->currentEquipables().size())
             {
                 item = pp->currentEquipables()[itemIndex];
-                pp->equipEquipable(pp, item->getName());
+                success = pp->equipEquipable(pp, itemIndex);
             }
             else
             {
                 item = pp->currentConsumables()[itemIndex - pp->currentEquipables().size()];
-                pp->consumeConsumable(pp,
-                                      item->getName());
+                success = pp->consumeConsumable(pp,
+                                                itemIndex - pp->currentEquipables().size());
             }
-            string info = "Player used item " + item->getName() + " on themselves.";
-            setMessageAndNotify(info);
+            if (success)
+            {
+                string info = "Player used item " + item->getName() + " on themselves.";
+                setMessageAndNotify(info);
+            }
+            else {
+                setMessageAndNotify("Could not use item on self");
+            }
             break;
         }
         }

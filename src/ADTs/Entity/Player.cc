@@ -155,22 +155,18 @@ bool Player::makeMove(char direction)
  * Signature: void consumeConsumable(shared_ptr<Consumable>);
  * Purpose: Utilizes a specified consumable item
  */
-bool Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
+bool Player::consumeConsumable(shared_ptr<Entity> entity, int pot)
 {
-    vector<shared_ptr<Consumable>> consumables = currentConsumables();
-
-    for (auto existing = consumables.begin(); existing != consumables.end(); ++existing)
+    if (static_cast<size_t>(pot) < consumables_.size())
     {
-        if (consume_name == (*existing)->getName())
+        shared_ptr<Consumable> item = consumables_[pot];
+        map<string, StatMod> consume_mods = item->useItem();
+        for (auto it = consume_mods.begin(); it != consume_mods.end(); ++it)
         {
-            map<string, StatMod> consume_mods = (*existing)->useItem();
-            for (auto it = consume_mods.begin(); it != consume_mods.end(); ++it)
-            {
-                entity->applyStat((*it).first, (*it).second);
-            }
-            consumables.erase(existing);
-            return true;
+            entity->applyStat((*it).first, (*it).second);
         }
+        consumables_.erase(consumables_.begin() + pot);
+        return true;
     }
 
     return false;
@@ -180,28 +176,26 @@ bool Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
  * Signature: void equipEquipable(shared_ptr<Equipable>);
  * Purpose: Utilizes a specified equipable item
  */
-bool Player::equipEquipable(shared_ptr<Entity> entity, string equip_name)
+bool Player::equipEquipable(shared_ptr<Entity> entity, int equip)
 {
-    vector<shared_ptr<Equipable>> equipables = currentEquipables();
-    for (auto existing = equipables.begin(); existing != equipables.end(); ++existing)
+    if (static_cast<size_t>(equip) < equipables_.size())
     {
-        if (equip_name == (*existing)->getName())
+        shared_ptr<Equipable> item = equipables_[equip];
+        if (item->getDurability() > 0)
         {
-
-            if ((*existing)->getDurability() > 0)
+            map<string, StatMod> equip_mods = item->useItem();
+            for (auto it = equip_mods.begin(); it != equip_mods.end(); ++it)
             {
-                map<string, StatMod> equip_mods = (*existing)->useItem();
-                for (auto it = equip_mods.begin(); it != equip_mods.end(); ++it)
-                {
-                    entity->applyStat((*it).first, (*it).second);
-                }
+                entity->applyStat((*it).first, (*it).second);
             }
-            if ((*existing)->getDurability() == 0) {
-                equipables.erase(existing);
-            }
-            return true;
         }
+        if (item->getDurability() == 0)
+        {
+            equipables_.erase(equipables_.begin() + equip);
+        }
+        return true;
     }
+
     return false;
 }
 
