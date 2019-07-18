@@ -12,6 +12,9 @@ GameManager::GameManager(){
     map = nullptr;
 }
 
+void GameManager::setStartCoord(pair<int,int>input){
+    startCoord = input;
+}
 void GameManager::reset(){
     // don't know about this.
     player = nullptr;
@@ -20,19 +23,22 @@ void GameManager::reset(){
     map = MapManager->setCustomMap(inputMap());
 }
 void GameManager::startGame(){
-    mapManager();
-    map = MapManager->setCustomMap(inputMap());
+    unordered_map<string, vector<shared_ptr<Item>>> items;
+    unordered_map<string, vector<shared_ptr<Enemy>>> enemies;
+    map = make_shared<Map> (player,inputMap(),startCoord,items,enemies);
     player = make_shared<Player>();
+    mapManager->populateMap(map,0);
+    player->setMap(map);
     battleManager{player};
     travelManager{map,player};
 }
 
 void GameManager::startTravel(){
-    TravelManager->runTravel();
+    travelManager->runTravel();
 }
 
 void GameManager::startBattle(){
-    BattleManager->runBattle();
+    battleManager->runBattle();
 }
 
 void GameManager::endGame(){
@@ -59,7 +65,11 @@ vector<vector<char>> GameManager::inputMap(){
     cin >> filename;
     string mapInput;
     ifstream input;
+    int y;
+    int x;
     input.open(filename);
+    cin >> y >> x;
+    setStartCoord(make_pair(y,x));
     while(input){
         toReturn.resize(yCoordinate+1);
         getline(input,mapInput);
