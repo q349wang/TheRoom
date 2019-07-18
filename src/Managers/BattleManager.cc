@@ -47,12 +47,14 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
         int index = 0;
         for (auto equip : player->currentEquipables())
         {
-            items << index << " - " << equip->getName();
+            items << index << " - " << equip->getName() << endl;
+            index++;
         }
 
         for (auto pots : player->currentConsumables())
         {
-            items << index << " - " << pots->getName();
+            items << index << " - " << pots->getName() << endl;
+            index++;
         }
 
         setMessageAndNotify(items.str());

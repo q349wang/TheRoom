@@ -118,12 +118,14 @@ void TravelManager::makeMove(const Command &cmd)
             int index = 0;
             for (auto equip : pp->currentEquipables())
             {
-                items << index << " - " << equip->getName();
+                items << index << " - " << equip->getName() << endl;
+                index++;
             }
 
             for (auto pots : pp->currentConsumables())
             {
-                items << index << " - " << pots->getName();
+                items << index << " - " << pots->getName() << endl;
+                index++;
             }
 
             setMessageAndNotify(items.str());
