@@ -107,7 +107,9 @@ vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
  *          Additionally returns the attack amount
  */
 double Entity::attack(shared_ptr<Entity> enemy) {
-    return enemy->takeDamage(attackStrength_);
+    if(!isOutOfEnergy()) {
+        return enemy->takeDamage(attackStrength_);
+    }
 }
 
 /**

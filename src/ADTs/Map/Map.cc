@@ -281,3 +281,38 @@ int Map::getNumExits() {
 int Map::getNumSpaces() {
     return num_space_;
 }
+
+/**
+ * Signature: pair<int, int> findNextEmpty(pair<int, int>)
+ * Purpose: Finds the nearest available tile on the map
+ */
+pair<int, int> Map::findNextEmpty(pair<int, int> input) {
+    while(true) {
+        // If we are at an available tile, return the position
+        if(((map_.at(input.second)).at(input.first))->available()) {
+            return input;
+        }
+        // Increase the column index if possible
+        else if(input.first < ((map_.at(input.second)).size() - 1)) {
+            input.first++;
+        }
+        // Increase the row index and set column to zero otherwise
+        else if(input.second < (map_.size() - 1)) {
+            input.first = 0;
+            input.second++;
+        }
+        // Go back to the top-left corner if both are exhausted
+        else {
+            input.first = input.second = 0;
+        }
+    }
+}
+
+/**
+ * Signature: bool checkExit(pair<int, int>)
+ * Purpose: Determines if a specified tile is an exit tile
+ */
+bool Map::checkExit(pair<int, int> tile_location) {
+    int colour =  ((map_.at(tile_location.second)).at(tile_location.first))->getColour();
+    return (colour == GameColours::Green);   
+}

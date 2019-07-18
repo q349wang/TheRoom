@@ -127,6 +127,12 @@ public:
 
   // Provides the number of space tiles
   int getNumSpaces();
+
+  // Checks if a specified tile is an exit tile
+  bool checkExit(std::pair<int, int>);
+
+  // Finds the nearest available empty tile
+  std::pair<int, int> findNextEmpty(std::pair<int, int>);
 };
 
 #endif
