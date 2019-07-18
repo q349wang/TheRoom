@@ -17,8 +17,8 @@ using namespace std;
 MapManager::MapManager(map<string, EnemyConf> configuration)
     : enemy_configuration_{configuration}, item_manager{}, enemy_manager{}
 {
-    item_manager = make_shared<ItemManager>();
-    enemy_manager = make_shared<EnemyManager>(enemy_configuration_);
+    item_manager = make_unique<ItemManager>();
+    enemy_manager = make_unique<EnemyManager>(enemy_configuration_);
 
     // Create seed for psuedorandom number
     srand(time(NULL));
@@ -35,7 +35,7 @@ MapManager::~MapManager() {}
  * Purpose: Populates a map with enemies and items,
  *          all scaled dependent on the current level
  */
-void MapManager::populateMap(shared_ptr<Map>& empty_map, int level)
+void MapManager::populateMap(shared_ptr<Map> &empty_map, int level)
 {
     empty_map->clearMap();
     cout << "cleared" << endl;
@@ -48,7 +48,7 @@ void MapManager::populateMap(shared_ptr<Map>& empty_map, int level)
         cout << "row " << empty_map->numRows() << endl;
         int column_index = rand() % empty_map->numRows();
         cout << "col index" << column_index << endl;
-        cout <<" col " << empty_map->numColumns(column_index) <<  endl;
+        cout << " col " << empty_map->numColumns(column_index) << endl;
         int row_index = rand() % empty_map->numColumns(column_index);
         cout << "row index" << row_index << endl;
         pair<int, int> available_location = empty_map->findNextEmpty(make_pair(row_index, column_index));
@@ -71,14 +71,20 @@ void MapManager::populateMap(shared_ptr<Map>& empty_map, int level)
 
         cout << "Placing Enemy" << endl;
         // Create a scaled enemy and insert in the location
-        shared_ptr<Enemy> new_enemy = enemy_manager->createEnemy(level, available_location);
-        cout << "Set enemy map" << endl;
-        new_enemy->setMap(empty_map);
-        cout << "Actually Placing enemy" << endl;
-        cout << new_enemy->getName() << endl;
-        cout << new_enemy->getColour() << endl;
-        cout << new_enemy->getHealth() << endl;
-        empty_map->insertEnemy(new_enemy, available_location);
-        cout << "Trying to restart" << endl;
+        try
+        {
+            shared_ptr<Enemy> new_enemy = enemy_manager->createEnemy(level, available_location);
+            cout << "Set enemy map" << endl;
+            new_enemy->setMap(empty_map);
+            cout << "Actually Placing enemy" << endl;
+            cout << new_enemy->getName() << endl;
+            cout << new_enemy->getColour() << endl;
+            cout << new_enemy->getHealth() << endl;
+            empty_map->insertEnemy(new_enemy, available_location);
+            cout << "Trying to restart" << endl;
+        }
+        catch (std::bad_alloc &)
+        {
+        }
     }
 }

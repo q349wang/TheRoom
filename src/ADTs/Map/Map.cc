@@ -117,6 +117,7 @@ void Map::insertItem(shared_ptr<Item> item, pair<int, int> coordinates)
      */
 void Map::insertEnemy(shared_ptr<Enemy> enemy, pair<int, int> coordinates)
 {
+    cout << "Inserting enemy" << endl;
     coord location = coord{coordinates};
     ((map_.at(location.y_)).at(location.x_))->insertEnemy(enemy);
 
@@ -126,7 +127,19 @@ void Map::insertEnemy(shared_ptr<Enemy> enemy, pair<int, int> coordinates)
     }
     else
     {
-        enemies_[location.position].emplace_back(enemy);
+        bool alreadyExists = false;
+        for (auto it : enemies_[location.position])
+        {
+            if (it == enemy)
+            {
+                alreadyExists = true;
+                break;
+            }
+        }
+        if (!alreadyExists)
+        {
+            enemies_[location.position].emplace_back(enemy);
+        }
     }
 }
 
@@ -229,7 +242,8 @@ void Map::moveEnemies()
         for (auto it = tiles.second.begin(); it != tiles.second.end(); ++it)
         {
             // Skip dead enemies
-            if ((*it)->getHealth() <= 0) continue;
+            if ((*it)->getHealth() <= 0)
+                continue;
             cout << "moving an enemy" << endl;
             for (auto direction = movement.begin(); direction != movement.end(); ++direction)
             {
@@ -250,7 +264,6 @@ void Map::moveEnemies()
                     }
                     insertEnemy(*it, newPos);
                     tile(oldPos).removeEnemy(*it);
-                    tile(newPos).insertEnemy(*it);
                     cout
                         << "Made move to " << (*direction).second << endl;
                     break;
