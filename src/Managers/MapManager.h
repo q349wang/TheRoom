@@ -7,10 +7,15 @@
 #include <map>
 
 class EnemyConf;
+class ItemManager;
+class EnemyManager;
 
 class MapManager {
  private:
     std::map<std::string, EnemyConf> enemy_configuration_;
+
+    std::shared_ptr<ItemManager> item_manager;
+    std::shared_ptr<EnemyManager> enemy_manager;
  protected:
  public:
     // Constructor which takes enemy configuration information

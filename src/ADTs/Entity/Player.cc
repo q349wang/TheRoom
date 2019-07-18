@@ -40,7 +40,8 @@ void Player::decreaseCooldown()
  * Signature: void resetCooldown()
  * Purpose: Resets the cooldown of a Player's special movement
  */
-void Player::resetCooldown() {
+void Player::resetCooldown()
+{
     cooldown_ = BASE_SPECIAL_COOLDOWN;
 }
 
@@ -69,38 +70,41 @@ int Player::getCooldown()
  */
 bool Player::checkMove(char direction)
 {
-    pair<int, int> updated_position = position_;
-
-    // Update the modified position dependent on the input direction
-    switch (direction)
+    if (auto mp = current_map_.lock())
     {
-    case 'E':
-        updated_position.first++;
-        break;
+        pair<int, int> updated_position = position_;
 
-    case 'W':
-        updated_position.first--;
-        break;
-
-    case 'N':
-        updated_position.second--;
-        break;
-
-    case 'S':
-        updated_position.second++;
-        break;
-
-    default:
-        return false;
-    }
-
-    if (updated_position.second >= 0 && updated_position.second < current_map_->numRows())
-    {
-        if (updated_position.first >= 0 && updated_position.first < current_map_->numColumns(updated_position.second))
+        // Update the modified position dependent on the input direction
+        switch (direction)
         {
-            if (current_map_->tile(updated_position.first, updated_position.second).available())
+        case 'E':
+            updated_position.first++;
+            break;
+
+        case 'W':
+            updated_position.first--;
+            break;
+
+        case 'N':
+            updated_position.second--;
+            break;
+
+        case 'S':
+            updated_position.second++;
+            break;
+
+        default:
+            return false;
+        }
+
+        if (updated_position.second >= 0 && updated_position.second < mp->numRows())
+        {
+            if (updated_position.first >= 0 && updated_position.first < mp->numColumns(updated_position.second))
             {
-                return true;
+                if (mp->tile(updated_position.first, updated_position.second).available())
+                {
+                    return true;
+                }
             }
         }
     }
@@ -153,7 +157,7 @@ bool Player::makeMove(char direction)
  */
 void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
 {
-    vector<shared_ptr<Consumable>> consumables = (entity->currentConsumables());
+    vector<shared_ptr<Consumable>>& consumables = (entity->currentConsumables());
 
     for (auto existing = consumables.begin(); existing != consumables.end(); ++existing)
     {
@@ -177,17 +181,20 @@ void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
  */
 void Player::equipEquipable(shared_ptr<Entity> entity, string equip_name)
 {
-    vector<shared_ptr<Equipable>> equipables = (entity->currentEquipables());
+    vector<shared_ptr<Equipable>>& equipables = (entity->currentEquipables());
 
-    for(auto existing = equipables.begin(); existing != equipables.end(); ++existing) {
-        if(equip_name == (*existing)->getName()) {
-            if(((*existing)->getDurability()) > 0) {
+    for (auto existing = equipables.begin(); existing != equipables.end(); ++existing)
+    {
+        if (equip_name == (*existing)->getName())
+        {
+            if (((*existing)->getDurability()) > 0)
+            {
                 map<string, StatMod> equip_mods = (*existing)->useItem();
-                for(auto it = equip_mods.begin(); it != equip_mods.end(); ++it) {
+                for (auto it = equip_mods.begin(); it != equip_mods.end(); ++it)
+                {
                     entity->applyStat((*it).first, (*it).second);
                 }
             }
-
         }
     }
 }
@@ -279,6 +286,20 @@ void Player::addEquipable(shared_ptr<Equipable> equip)
  * Signature: void pickUpItems()
  * Purpose: Picks up all items stored on its current tile, and empties tile
  */
-vector<shared_ptr<Item>> Player::pickUpItems() {
-    return current_map_->pickUpItems(position_.first, position_.second);
+vector<shared_ptr<Item>> Player::pickUpItems()
+{
+    if (auto mp = current_map_.lock())
+    {
+        vector<shared_ptr<Item>> items = mp->pickUpItems(position_.first, position_.second);
+        for(auto item : items) {
+            if (item->getType() == 0) {
+                consumables_.push_back(static_pointer_cast<Consumable>(item));
+            }
+            else {
+                equipables_.push_back(static_pointer_cast<Equipable>(item));
+            }
+        }
+        return items;
+    }
+    return vector<shared_ptr<Item>>{};
 }

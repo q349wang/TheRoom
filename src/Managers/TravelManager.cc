@@ -110,16 +110,19 @@ void TravelManager::makeMove(const Command &cmd)
         }
         case 'L':
         {
-            stringstream desc;
+            ostringstream items;
+            int index = 0;
             for (auto equip : pp->currentEquipables())
             {
-                desc << equip->getName() << endl;
+                items << index << " - " << equip->getName();
             }
+
             for (auto pots : pp->currentConsumables())
             {
-                desc << pots->getName() << endl;
+                items << index << " - " << pots->getName();
             }
-            setMessageAndNotify(desc.str());
+
+            setMessageAndNotify(items.str());
             break;
         }
         case 'U':
@@ -129,34 +132,35 @@ void TravelManager::makeMove(const Command &cmd)
                 setMessageAndNotify("Invalid Command");
                 break;
             }
-            shared_ptr<Item> item = nullptr;
-            string name = args[0];
-            for (auto equip : pp->currentEquipables())
+            unsigned int itemIndex = 0;
+            try
             {
-                if (equip != nullptr && equip->getName() == name)
-                {
-                    item = equip;
-                    pp->equipEquipable(pp, item->getName());
-                    break;
-                }
+                itemIndex = stoi(args[0]);
             }
-            if (item == nullptr)
+            catch (const invalid_argument &e)
             {
-                for (auto pots : pp->currentConsumables())
-                {
-                    if (pots != nullptr && pots->getName() == name)
-                    {
-                        item = pots;
-                        pp->consumeConsumable(pp, item->getName());
-                        break;
-                    }
-                }
-            }
-            if (item == nullptr)
-            {
-                setMessageAndNotify("Invalid Command");
+                setMessageAndNotify("Invalid Item");
                 break;
             }
+            if (itemIndex >= pp->currentEquipables().size() + pp->currentConsumables().size())
+            {
+                setMessageAndNotify("Invalid Item");
+                break;
+            }
+            shared_ptr<Item> item;
+            if (itemIndex < pp->currentEquipables().size())
+            {
+                item = pp->currentEquipables()[itemIndex];
+                pp->equipEquipable(pp, item->getName());
+            }
+            else
+            {
+                item = pp->currentConsumables()[itemIndex - pp->currentEquipables().size()];
+                pp->consumeConsumable(pp,
+                                      item->getName());
+            }
+            string info = "Player used item " + item->getName() + " on themselves.";
+            setMessageAndNotify(info);
             break;
         }
         }
@@ -217,9 +221,9 @@ void TravelManager::runTravel()
                 case 'U':
                 {
                     setMessageAndNotify("Input Item");
-                    string name;
-                    getline(cin, name);
-                    args.emplace_back(name);
+                    string index;
+                    cin >> index;
+                    args.emplace_back(index);
                     break;
                 }
                 }

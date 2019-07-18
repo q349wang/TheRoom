@@ -13,19 +13,18 @@ using namespace std;
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial entity's health, energy, and position
  */
-Entity::Entity(double health, double energy, double attack, double armour, 
+Entity::Entity(double health, double energy, double attack, double armour,
                string name, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables,
-               vector<shared_ptr<Equipable>> equipables) :
-               health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
-                name_{name}, position_{position}, consumables_{consumables_}, 
-               equipables_{equipables} {}
+               vector<shared_ptr<Equipable>> equipables) : health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
+                                                           name_{name}, position_{position}, consumables_{consumables_},
+                                                           equipables_{equipables} {}
 
 /**
  * Signature: ~Entity()
  * Purpose: Defualt Destructor
  */
-Entity::~Entity(){}
+Entity::~Entity() {}
 
 // Base health and energy
 const double Entity::BASE_HEALTH_ENERGY = 0.0;
@@ -34,7 +33,8 @@ const double Entity::BASE_HEALTH_ENERGY = 0.0;
  * Signature: double getHealth()
  * Purpose: Provides an entity's current health
  */
-double Entity::getHealth() {
+double Entity::getHealth()
+{
     return health_;
 }
 
@@ -42,7 +42,8 @@ double Entity::getHealth() {
  * Signature: double getEnergy()
  * Purpose: Provides an entity's current energy
  */
-double Entity::getEnergy() {
+double Entity::getEnergy()
+{
     return energy_;
 }
 
@@ -50,7 +51,8 @@ double Entity::getEnergy() {
  * Signature: double getAttack()
  * Purpose: Provides an entity's current attack
  */
-double Entity::getAttack() {
+double Entity::getAttack()
+{
     return attackStrength_;
 }
 
@@ -58,7 +60,8 @@ double Entity::getAttack() {
  * Signature dobule getArmour()
  * Purpose: Provides an entity's current armour
  */
-double Entity::getArmour() {
+double Entity::getArmour()
+{
     return armour_;
 }
 
@@ -66,7 +69,8 @@ double Entity::getArmour() {
  * Signature: pair<int, int> getPosition()
  * Purpose: Provides an entity's current position
  */
-pair<int,int> Entity::getPosition() {
+pair<int, int> Entity::getPosition()
+{
     return position_;
 }
 
@@ -74,15 +78,17 @@ pair<int,int> Entity::getPosition() {
  * Signature: void addEquipable(shared_ptr<Equipable>)
  * Purpose: Adds equipable to current collection
  */
-void Entity::addEquipable(shared_ptr<Equipable> new_equip) {
+void Entity::addEquipable(shared_ptr<Equipable> new_equip)
+{
     equipables_.emplace_back(new_equip);
 }
 
 /**
  * Signature: void addConsumable(shared_ptr<Equipable>)
  * Purpose: Adds equipable to current collection
- */    
-void Entity::addConsumable(shared_ptr<Consumable> new_consume) {
+ */
+void Entity::addConsumable(shared_ptr<Consumable> new_consume)
+{
     consumables_.emplace_back(new_consume);
 }
 
@@ -90,7 +96,8 @@ void Entity::addConsumable(shared_ptr<Consumable> new_consume) {
  * Signature: const vector<shared_ptr<Equipable>>& currentEquipables()
  * Purpose: Provides a const reference to all the current equipables
  */
-vector<shared_ptr<Equipable>>& Entity::currentEquipables() {
+vector<shared_ptr<Equipable>> &Entity::currentEquipables()
+{
     return equipables_;
 }
 
@@ -98,7 +105,8 @@ vector<shared_ptr<Equipable>>& Entity::currentEquipables() {
  * Signature: const vector<shared_ptr<Consumable>>& currentConsumable()
  * Purpose: Provides a const reference to all the current consumables
  */
-vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
+vector<shared_ptr<Consumable>> &Entity::currentConsumables()
+{
     return consumables_;
 }
 
@@ -107,8 +115,10 @@ vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
  * Purpose: Performs attack on a specified entity
  *          Additionally returns the attack amount
  */
-double Entity::attack(shared_ptr<Entity> enemy) {
-    if(!isOutOfEnergy()) {
+double Entity::attack(shared_ptr<Entity> enemy)
+{
+    if (!isOutOfEnergy())
+    {
         return enemy->takeDamage(attackStrength_);
     }
     return 0.0;
@@ -119,9 +129,10 @@ double Entity::attack(shared_ptr<Entity> enemy) {
  * Purpose: Reduces the health of the current entity by a specified amount
  *          Additionally returns actual damage taken, skewed by armour
  */
-double Entity::takeDamage(double damage) {
-    double weighted_damage = (double) (100.0/(100.0 + armour_)) * damage;
-    health_ =  health_ - weighted_damage;
+double Entity::takeDamage(double damage)
+{
+    double weighted_damage = (double)(100.0 / (100.0 + armour_)) * damage;
+    health_ = health_ - weighted_damage;
     return weighted_damage;
 }
 
@@ -129,7 +140,8 @@ double Entity::takeDamage(double damage) {
  * Signature: void useEnergy(double energy)
  * Purpose: Reduces the energy of the current entity by a specified amount
  */
-void Entity::useEnergy(double energy) {
+void Entity::useEnergy(double energy)
+{
     energy_ = energy_ - energy;
 }
 
@@ -137,7 +149,8 @@ void Entity::useEnergy(double energy) {
  * Signature: bool isDead()
  * Purpose: Determines if the current entity is considered inactive (dead)
  */
-bool Entity::isDead() {
+bool Entity::isDead()
+{
     return (health_ <= BASE_HEALTH_ENERGY) ? (true) : (false);
 }
 
@@ -145,7 +158,8 @@ bool Entity::isDead() {
  * Signature: bool isOutOfEnergy()
  * Purpose: Determines if the current entity is considered out of energy
  */
-bool Entity::isOutOfEnergy() {
+bool Entity::isOutOfEnergy()
+{
     return (energy_ <= BASE_HEALTH_ENERGY) ? (true) : (false);
 }
 
@@ -154,7 +168,8 @@ bool Entity::isOutOfEnergy() {
  * Purpose: Moves entity to specified location
  * Note: Does not check if move is valid or applicable to current map
  */
-void Entity::updatePosition(pair<int, int> location) {
+void Entity::updatePosition(pair<int, int> location)
+{
     cout << "updating position" << endl;
     position_ = location;
 }
@@ -163,7 +178,8 @@ void Entity::updatePosition(pair<int, int> location) {
  * Signature: string getName()
  * Purpose: Provides an entity's name
  */
-string Entity::getName() {
+string Entity::getName()
+{
     return name_;
 }
 
@@ -171,9 +187,12 @@ string Entity::getName() {
  * Signature: void applyStat(string, StatMod)
  * Purpose: Apply the specified stat mod
  */
-void Entity::applyStat(string stat, StatMod mod) {
-    if(stat == "Ranger" || stat == "Mage" || stat == "Warrior") {
-        if(stat == getName()) {
+void Entity::applyStat(string stat, StatMod mod)
+{
+    if (stat == "Ranger" || stat == "Mage" || stat == "Warrior")
+    {
+        if (stat == getName())
+        {
             armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
             health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
             energy_ = (energy_ + mod.getAdder()) * mod.getMultiplier();
@@ -181,20 +200,26 @@ void Entity::applyStat(string stat, StatMod mod) {
         }
     }
 
-    else {
-        if(stat == "Health") {
+    else
+    {
+        if (stat == "Health")
+        {
             health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
         }
-        else if(stat == "Attack") {
+        else if (stat == "Attack")
+        {
             attackStrength_ = (attackStrength_ + mod.getAdder()) * mod.getMultiplier();
         }
-        else if(stat == "Damage") {
+        else if (stat == "Damage")
+        {
             health_ = (health_ - mod.getAdder()) * mod.getMultiplier();
         }
-        else if(stat == "Energy") {
+        else if (stat == "Energy")
+        {
             energy_ = (energy_ + mod.getAdder()) * mod.getMultiplier();
-        }   
-        else if(stat == "Armor") {
+        }
+        else if (stat == "Armor")
+        {
             armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
         }
     }
@@ -204,7 +229,8 @@ void Entity::applyStat(string stat, StatMod mod) {
  * Signature: void setMap(shared_ptr<Map>)
  * Purpose: Sets the map of an entity
  */
-void Entity::setMap(shared_ptr<Map> map) {
+void Entity::setMap(shared_ptr<Map> map)
+{
     current_map_ = map;
 }
 
@@ -212,16 +238,21 @@ void Entity::setMap(shared_ptr<Map> map) {
  * Signature: bool dropItems(string)
  * Purpose: Drops first instance of item specified by provided name
  */
-bool Entity::dropItem(string name) {
-    for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
-        if((*it)->getName() == name) {
+bool Entity::dropItem(string name)
+{
+    for (auto it = consumables_.begin(); it != consumables_.end(); ++it)
+    {
+        if ((*it)->getName() == name)
+        {
             consumables_.erase(it);
             return true;
         }
     }
 
-    for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
-        if((*it)->getName() == name) {
+    for (auto it = equipables_.begin(); it != equipables_.end(); ++it)
+    {
+        if ((*it)->getName() == name)
+        {
             equipables_.erase(it);
             return true;
         }
@@ -234,15 +265,21 @@ bool Entity::dropItem(string name) {
  * Signature: void dropAllItems()
  * Purpose: Drops all items onto current tile
  */
-void Entity::dropAllItems() {
-    for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
-        current_map_->insertItem(*it, position_);
-    }
+void Entity::dropAllItems()
+{
+    if (auto mp = current_map_.lock())
+    {
+        for (auto it = consumables_.begin(); it != consumables_.end(); ++it)
+        {
+            mp->insertItem(*it, position_);
+        }
 
-    for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
-        current_map_->insertItem(*it, position_);
-    }
+        for (auto it = equipables_.begin(); it != equipables_.end(); ++it)
+        {
+            mp->insertItem(*it, position_);
+        }
 
-    consumables_.clear();
-    equipables_.clear();
+        consumables_.clear();
+        equipables_.clear();
+    }
 }

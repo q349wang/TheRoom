@@ -13,17 +13,14 @@ using namespace std;
  *                   vector<shared_ptr<Consumable>>, vector<shared_ptr<Equipable>>)
  * Purpose: Constructor which requires intial ground enemy's health, energy, and position
  */
-Ground::Ground(double health, double energy, double attack, double armour, 
-               pair<int, int> position,
-               vector<shared_ptr<Consumable>> consumables,
-               vector<shared_ptr<Equipable>> equipables) : 
-               Enemy{health, energy, attack, armour, "Ground", position, consumables, equipables} {}
+Ground::Ground(double health, double energy, double attack, double armour,
+               pair<int, int> position) : Enemy{health, energy, attack, armour, "Ground", position} {}
 
 /**
  * Signature: ~Entity()
  * Purpose: Defualt Destructor
  */
-Ground::~Ground(){}
+Ground::~Ground() {}
 
 /**
  * Signature: bool makeMove(char)
@@ -32,7 +29,7 @@ Ground::~Ground(){}
  */
 bool Ground::makeMove(char direction)
 {
-    cout << "enemy" <<  endl;
+    cout << "enemy" << endl;
     pair<int, int> updated_position = position_;
 
     switch (direction)
@@ -52,7 +49,7 @@ bool Ground::makeMove(char direction)
     case 'S':
         updated_position.second++;
         break;
-    
+
     default:
         // Return false if any other input is detected
         return false;
@@ -74,42 +71,49 @@ bool Ground::makeMove(char direction)
  */
 bool Ground::checkMove(char direction)
 {
-    cout << "checking move" << endl;
-    pair<int, int> updated_position = position_;
-
-    // Update the modified position dependent on the input direction
-    switch (direction)
+    if (auto mp = current_map_.lock())
     {
-    case 'E':
-        updated_position.first++;
-        break;
-    
-    case 'W':
-        updated_position.first--;
-        break;
-    
-    case 'N':
-        updated_position.second--;
-        break;
-    
-    case 'S':
-        updated_position.second++;
-        break;
-    
-    default:
-        return false;
-    }
-cout << "dsada" << endl;
-    if(updated_position.second >= 0  && updated_position.second < current_map_->numRows()) {
-cout << "fuck me" << endl;
-        if(updated_position.first >= 0 && updated_position.first < current_map_->numColumns(updated_position.second)) {    
-            cout << "updated pos: " << updated_position.first << " " << updated_position.second << endl;
-            if(current_map_->tile(updated_position.first, updated_position.second).available()) {
+        cout << "checking move" << endl;
+        pair<int, int> updated_position = position_;
+
+        // Update the modified position dependent on the input direction
+        switch (direction)
+        {
+        case 'E':
+            updated_position.first++;
+            break;
+
+        case 'W':
+            updated_position.first--;
+            break;
+
+        case 'N':
+            updated_position.second--;
+            break;
+
+        case 'S':
+            updated_position.second++;
+            break;
+
+        default:
+            return false;
+        }
+        cout << "dsada" << endl;
+        if (updated_position.second >= 0 && updated_position.second < mp->numRows())
+        {
+            cout << "fuck me" << endl;
+            if (updated_position.first >= 0 && updated_position.first < mp->numColumns(updated_position.second))
+            {
+                cout << "updated pos: " << updated_position.first << " " << updated_position.second << endl;
+                if (mp->tile(updated_position.first, updated_position.second).available())
+                {
                     return true;
+                }
             }
         }
-    }
 
+        return false;
+    }
     return false;
 }
 
@@ -117,6 +121,7 @@ cout << "fuck me" << endl;
  * Signature: int getColour()
  * Purpose: Provides the ground enemy colour
  */
-int Ground::getColour() { 
-    return colour; 
+int Ground::getColour()
+{
+    return colour;
 }

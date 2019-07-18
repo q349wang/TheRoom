@@ -9,3 +9,7 @@ void Consumable::afterUse() { desc = make_shared<BaseDescription>(getName()); }
 Consumable::Consumable(string name, shared_ptr<ItemDescription> active)
     : Item{name, active} {}
 Consumable::~Consumable() {}
+
+int Consumable::getType() const {
+    return 0;
+}

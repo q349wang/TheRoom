@@ -20,17 +20,17 @@ void BattleManager::runEnemyTurn()
 {
     for (auto enemy : eList)
     {
-        if (enemy != nullptr)
+        if (enemy->getHealth() > 0)
         {
             double dmg = enemy->attack(player);
-            setMessageAndNotify(enemy->getName() +
-                                " has attacked you for " + to_string(dmg) +
-                                " damage!");
+            string info = enemy->getName() +
+                          " has attacked you for " + to_string(dmg) +
+                          " damage!";
+            setMessageAndNotify(info);
             if (player->isDead())
             {
                 battleEnded = true;
             }
-            notifyObservers();
         }
     }
 }
@@ -41,6 +41,23 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
     bool invalidCmd = false;
     switch (cmd.getCommand())
     {
+    case 'L':
+    {
+        ostringstream items;
+        int index = 0;
+        for (auto equip : player->currentEquipables())
+        {
+            items << index << " - " << equip->getName();
+        }
+
+        for (auto pots : player->currentConsumables())
+        {
+            items << index << " - " << pots->getName();
+        }
+
+        setMessageAndNotify(items.str());
+        return false;
+    }
     case 'D':
     {
         shared_ptr<Item> item = nullptr;
@@ -114,38 +131,43 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
                 return false;
             }
         }
-
-        shared_ptr<Item> item = nullptr;
-        name = args[1];
-        for (auto equip : player->currentEquipables())
-        {
-            if (equip != nullptr && equip->getName() == name)
-            {
-                item = equip;
-                player->equipEquipable(target, item->getName());
-                break;
-            }
-        }
-        if (item == nullptr)
-        {
-            for (auto pots : player->currentConsumables())
-            {
-                if (pots != nullptr && pots->getName() == name)
-                {
-                    item = pots;
-                    player->consumeConsumable(target, item->getName());
-                    break;
-                }
-            }
-        }
-        if (item == nullptr || target == nullptr)
+        if (target == nullptr)
         {
             invalidCmd = true;
             break;
         }
-        setMessageAndNotify("Player used item " + item->getName() + " on " +
-                            target->getName() + " .");
-        if (target->getHealth() == 0)
+
+        unsigned int itemIndex = 0;
+        try
+        {
+            itemIndex = stoi(args[0]);
+        }
+        catch (const invalid_argument &e)
+        {
+            setMessageAndNotify("Invalid Item");
+            return false;
+        }
+        if (itemIndex >= player->currentEquipables().size() + player->currentConsumables().size())
+        {
+            setMessageAndNotify("Invalid Item");
+            return false;
+        }
+        shared_ptr<Item> item;
+        if (itemIndex < player->currentEquipables().size())
+        {
+            item = player->currentEquipables()[itemIndex];
+            player->equipEquipable(target, item->getName());
+        }
+        else
+        {
+            item = player->currentConsumables()[itemIndex - player->currentEquipables().size()];
+            player->consumeConsumable(target,
+                                      item->getName());
+        }
+        string info = "Player used item " + item->getName() + " on " +
+                            target->getName() + " .";
+        setMessageAndNotify(info);
+        if (target->getHealth() <= 0)
         {
             for (auto enemy : eList)
             {
@@ -199,9 +221,10 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
         }
 
         double dmg = player->attack(target);
-        setMessageAndNotify("Player attacked " + target->getName() +
-                            " for " + to_string(dmg));
-        if (target->getHealth() == 0)
+        string info = "Player attacked " + target->getName() +
+                      " for " + to_string(dmg);
+        setMessageAndNotify(info);
+        if (target->getHealth() <= 0)
         {
             for (auto enemy : eList)
             {
@@ -230,10 +253,6 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
     {
         setMessageAndNotify("Invalid Command");
     }
-    else
-    {
-        notifyObservers();
-    }
     return !invalidCmd;
 }
 
@@ -258,6 +277,11 @@ void BattleManager::runBattle()
             cin >> cmd;
             switch (cmd)
             {
+                //List all items
+            case 'L':
+            {
+                break;
+            }
             // Get details of item
             case 'D':
             {

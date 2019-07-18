@@ -46,6 +46,7 @@ shared_ptr<ItemDescription> ItemManager::generateDescription(int level, int type
     }
     else
     {
+        numMods--;
         int modType = rand() % 10;
 
         // Half the time, modifier is a blessing

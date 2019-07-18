@@ -26,6 +26,7 @@ class Item {
     std::map<std::string, StatMod> useItem();
     Item(std::string, std::shared_ptr<ItemDescription>);
     virtual ~Item() = 0;
+    virtual int getType() const = 0;
 };
 
 #endif
