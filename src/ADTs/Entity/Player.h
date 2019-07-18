@@ -16,12 +16,6 @@
 class Player: public Entity {
  private:
  protected:
-    // Maintain all equiped items and relevant information
-    std::vector<std::shared_ptr<Equipable>> equiped_;
-
-    // Maintain all consumed items and relevant information
-    std::vector<std::shared_ptr<Consumable>> consumed_;
-
     // Maintain player's special movement cooldown turn counter
     int cooldown_;
 

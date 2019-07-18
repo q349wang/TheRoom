@@ -169,12 +169,13 @@ void Player::equipEquipable(shared_ptr<Entity> entity, string equip_name) {
 
     for(auto existing = equipables.begin(); existing != equipables.end(); ++existing) {
         if(equip_name == (*existing)->getName()) {
-            map<string, StatMod> equip_mods = (*existing)->useItem();
-            for(auto it = equip_mods.begin(); it != equip_mods.end(); ++it) {
-                entity->applyStat((*it).first, (*it).second);
+            if(((*existing)->getDurability()) > 0) {
+                map<string, StatMod> equip_mods = (*existing)->useItem();
+                for(auto it = equip_mods.begin(); it != equip_mods.end(); ++it) {
+                    entity->applyStat((*it).first, (*it).second);
+                }
             }
 
-            break;
         }
     }
 }
