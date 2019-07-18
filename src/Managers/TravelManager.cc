@@ -100,10 +100,35 @@ void TravelManager::makeMove(const Command &cmd)
                 setMessageAndNotify("Invalid Command");
                 break;
             }
-            bool dropped = pp->dropItem(args[0]);
+            unsigned int itemIndex = 0;
+            try
+            {
+                itemIndex = stoi(args[0]);
+            }
+            catch (const invalid_argument &e)
+            {
+                setMessageAndNotify("Invalid Item");
+                break;
+            }
+            if (itemIndex >= pp->currentEquipables().size() + pp->currentConsumables().size())
+            {
+                setMessageAndNotify("Invalid Item");
+                break;
+            }
+            shared_ptr<Item> item;
+            if (itemIndex < pp->currentEquipables().size())
+            {
+                item = pp->currentEquipables()[itemIndex];
+            }
+            else
+            {
+                item = pp->currentConsumables()[itemIndex - pp->currentEquipables().size()];
+            }
+            string name = item->getName();
+            bool dropped = pp->dropItem(name);
             if (dropped)
             {
-                setMessageAndNotify("Dropped item: " + args[0]);
+                setMessageAndNotify("Dropped item: " + name);
             }
             else
             {
@@ -170,7 +195,23 @@ void TravelManager::makeMove(const Command &cmd)
                 string info = "Player used item " + item->getName() + " on themselves.";
                 setMessageAndNotify(info);
             }
-            else {
+            else
+            {
+                unsigned int itemIndex = 0;
+                try
+                {
+                    itemIndex = stoi(args[0]);
+                }
+                catch (const invalid_argument &e)
+                {
+                    setMessageAndNotify("Invalid Item");
+                    break;
+                }
+                if (itemIndex >= pp->currentEquipables().size() + pp->currentConsumables().size())
+                {
+                    setMessageAndNotify("Invalid Item");
+                    break;
+                }
                 setMessageAndNotify("Could not use item on self");
             }
             break;

@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "../Map/Map.h"
+#include "../Map/Tile.h"
 
 #include <vector>
 #include <memory>
@@ -210,6 +211,7 @@ void Entity::setMap(shared_ptr<Map> map) {
 bool Entity::dropItem(string name) {
     for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
         if((*it)->getName() == name) {
+            current_map_->tile(getPosition()).insertItem(*it);
             consumables_.erase(it);
             return true;
         }
@@ -217,6 +219,7 @@ bool Entity::dropItem(string name) {
 
     for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
         if((*it)->getName() == name) {
+            current_map_->tile(getPosition()).insertItem(*it);
             equipables_.erase(it);
             return true;
         }
