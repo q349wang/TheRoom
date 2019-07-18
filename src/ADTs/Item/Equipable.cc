@@ -30,3 +30,7 @@ void Equipable::afterUse()
 int Equipable::getDurability() const {
     return durability;
 }
+
+int Equipable::getType() const {
+    return 1;
+}

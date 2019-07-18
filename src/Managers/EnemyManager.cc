@@ -12,37 +12,41 @@ using namespace std;
  * Purpose: Constructs a map manager which will provide scaled enemies
  *          dependent on the congfiguration information initially provided
  */
-EnemyManager::EnemyManager(map<string, EnemyConf> configuration): 
-ground_scaling_{configuration.at("Ground")}, flying_scaling_{configuration.at("Flying")} {}
+EnemyManager::EnemyManager(map<string, EnemyConf> configuration) : ground_scaling_{configuration.at("Ground")}, flying_scaling_{configuration.at("Flying")} {}
 
 /**
  * Signature: ~EnemyManager()
  * Purpose: Default Destructor
  */
-EnemyManager::~EnemyManager(){}
+EnemyManager::~EnemyManager() {}
 
 /**
  * Signature: shared_ptr<Enemy> createEnemy(int, pair<int, int>)
  * Purpose: Constructs and provided an enemy scaled to
  *          the specified level
  */
-shared_ptr<Enemy> EnemyManager::createEnemy(int level, pair<int, int> location) {
+shared_ptr<Enemy> EnemyManager::createEnemy(int level, pair<int, int> location)
+{
     // Create seed for psuedorandom number
     srand(time(NULL));
     int random_selection = rand() % (ground_scaling_.weight + flying_scaling_.weight);
 
-    if(random_selection < ground_scaling_.weight) {
-        return make_shared<Ground>((ground_scaling_.health.first + (ground_scaling_.health.second * level)),
-                                  (ground_scaling_.energy.first + (ground_scaling_.energy.second * level)),
-                                  (ground_scaling_.attack.first + (ground_scaling_.attack.second * level)),
-                                  (ground_scaling_.armour.first + (ground_scaling_.armour.second * level)), 
-                                  location);
+    if (random_selection < ground_scaling_.weight)
+    {
+        shared_ptr<Ground> enemy = make_shared<Ground>((ground_scaling_.health.first + (ground_scaling_.health.second * level)),
+                                                       (ground_scaling_.energy.first + (ground_scaling_.energy.second * level)),
+                                                       (ground_scaling_.attack.first + (ground_scaling_.attack.second * level)),
+                                                       (ground_scaling_.armour.first + (ground_scaling_.armour.second * level)),
+                                                       location);
+        return enemy;
     }
-    else {
-        return make_shared<Flying>((flying_scaling_.health.first + (flying_scaling_.health.second * level)),
-                            (flying_scaling_.energy.first + (flying_scaling_.energy.second * level)),
-                            (flying_scaling_.attack.first + (flying_scaling_.attack.second * level)),
-                            (flying_scaling_.armour.first + (flying_scaling_.armour.second * level)), 
-                            location);
+    else
+    {
+        shared_ptr<Flying> enemy = make_shared<Flying>((flying_scaling_.health.first + (flying_scaling_.health.second * level)),
+                                                       (flying_scaling_.energy.first + (flying_scaling_.energy.second * level)),
+                                                       (flying_scaling_.attack.first + (flying_scaling_.attack.second * level)),
+                                                       (flying_scaling_.armour.first + (flying_scaling_.armour.second * level)),
+                                                       location);
+        return enemy;
     }
 }

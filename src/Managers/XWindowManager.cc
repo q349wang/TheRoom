@@ -188,15 +188,7 @@ void XWindowManager::drawEnemyPlates(const vector<shared_ptr<Enemy>> &eList)
 {
 	size_t rowLen = 5;
 	int colGap = 10;
-	int rowGap = 0;
-	if (eList.size() <= rowLen)
-	{
-		rowGap = (width - (eList.size() * plateW)) / eList.size();
-	}
-	else
-	{
-		rowGap = (width - (rowLen * plateW) % width) / eList.size();
-	}
+	int rowGap = 5;
 	int row = 0;
 	for (size_t i = 0; i < eList.size(); i++)
 	{
@@ -205,7 +197,10 @@ void XWindowManager::drawEnemyPlates(const vector<shared_ptr<Enemy>> &eList)
 		{
 			if (i >= eList.size())
 				break;
-			drawEntityInfo(rowGap + col * plateW, colGap + row * plateH, eList[i]);
+			if (eList[i]->getHealth() > 0)
+			{
+				drawEntityInfo(rowGap + col * plateW, colGap + row * plateH, eList[i], i);
+			}
 			i++;
 		}
 		row++;
@@ -223,6 +218,7 @@ void XWindowManager::redrawBattle()
 		XClearWindow(d, w);
 
 		drawEntityInfo(playerPlateX, playerPlateY, mp->getPlayer());
+		drawEnemyPlates(mp->tile(mp->getPlayer()->getPosition()).getEnemies());
 	}
 	XFlush(d);
 }

@@ -21,7 +21,7 @@ class Entity
 private:
 protected:
   // Maintain a reference to the current map associated with the entity
-  std::shared_ptr<Map> current_map_;
+  std::weak_ptr<Map> current_map_;
 
   // Maintain entity health, energy, armour, and attack information
   double health_;

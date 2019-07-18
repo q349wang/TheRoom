@@ -21,9 +21,7 @@ protected:
 public:
       // Constructor which requires health, energy, armour, and attack information
       Enemy(double health, double energy, double attack, double armour,
-            std::string name, std::pair<int, int> position,
-            std::vector<std::shared_ptr<Consumable>> consumables = {},
-            std::vector<std::shared_ptr<Equipable>> equipables = {});
+            std::string name, std::pair<int, int> position);
 
       // Pure virtual destructor to ensure Player is an ABC
       virtual ~Enemy() = 0;
