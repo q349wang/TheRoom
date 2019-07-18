@@ -81,10 +81,7 @@ void GameManager::startGame()
         cout << endl;
     }
 
-    
-
     gameMap = make_shared<Map>(player, current_map, make_pair(1, 1), items, enemies);
-
 
 
     battleManager = make_shared<BattleManager>(player);
@@ -137,6 +134,7 @@ void GameManager::playGame()
             startBattle();
             if (player->isDead())
             {
+	 	cout << "You Died!" << endl;
                 cout << "Final Score: " << level << endl;
                 break;
             }
