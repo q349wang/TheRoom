@@ -211,9 +211,22 @@ void XWindowManager::redrawMap()
 }
 
 // Redraws correct scene based on current game state
-void XWindowManager::notify()
+void XWindowManager::notify(std::string msg)
 {
-
+	switch (gameManager->getGameState()) {
+		case GameState::Battle:
+		{
+			redrawBattle();
+			break;
+		}
+		case GameState::Travel:
+		{
+			redrawMap();
+			break;
+		}
+		default:
+		break;
+	}
 	return;
 }
 
