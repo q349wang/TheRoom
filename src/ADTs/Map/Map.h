@@ -102,10 +102,10 @@ public:
 
   // Provides a const reference to a specified tile
   // Note: Coordinates are assumed to exist, otherwise will throw exception
-  const Tile& tile(int x, int y) const;
+  Tile& tile(int x, int y) const;
 
   // Calls tile(int x, int y) with a pair of ints
-  const Tile& tile(const std::pair<int, int>& coord) const;
+  Tile& tile(const std::pair<int, int>& coord) const;
 
   // Provides const reference to the current map
   const std::vector<std::vector<std::shared_ptr<Tile>>> &getMap() const;

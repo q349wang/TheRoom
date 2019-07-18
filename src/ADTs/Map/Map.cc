@@ -152,7 +152,7 @@ int Map::numColumns(int row)
      * Signature: const Tile& tile(int, int)
      * Purpose: Provides a const reference to a specified tile
      */
-const Tile &Map::tile(int x, int y) const
+Tile &Map::tile(int x, int y) const
 {
     return *((map_.at(y)).at(x));
 }
@@ -160,7 +160,7 @@ const Tile &Map::tile(int x, int y) const
      * Signature: const Tile& tile(pair<int, int>)
      * Purpose: Provides a const reference to a specified tile
      */
-const Tile &Map::tile(const pair<int, int> &coord) const
+Tile &Map::tile(const pair<int, int> &coord) const
 {
     return *((map_.at(coord.second)).at(coord.first));
 }
@@ -189,10 +189,11 @@ const shared_ptr<Player> &Map::getPlayer() const
      */
 void Map::moveEnemies()
 {
-    for (pair<string, vector<shared_ptr<Enemy>>> tile : enemies_)
+    unordered_map<string, vector<shared_ptr<Enemy>>> currentEnemies = enemies_;
+    for (pair<string, vector<shared_ptr<Enemy>>> tiles : currentEnemies)
     {
         cout << "move enemy" << endl;
-        coord position = coord{tile.first};
+        coord position = coord{tiles.first};
         vector<pair<int, char>> movement = {};
 
         int x_difference = current_.x_ - position.x_;
@@ -225,15 +226,33 @@ void Map::moveEnemies()
         cout << "sorted" << endl;
         // Iterate through all enemies on the current tile, and all possible directions
         // In order of increasing distance, and make the move towards the closest location
-        for (auto it = tile.second.begin(); it != tile.second.end(); ++it)
+        for (auto it = tiles.second.begin(); it != tiles.second.end(); ++it)
         {
+            // Skip dead enemies
+            if ((*it)->getHealth() <= 0) continue;
             cout << "moving an enemy" << endl;
             for (auto direction = movement.begin(); direction != movement.end(); ++direction)
             {
                 cout << "choosing direction " << direction->second << endl;
+                pair<int, int> oldPos = (*it)->getPosition();
+                coord oldCoord{oldPos};
                 if ((*it)->makeMove((*direction).second))
                 {
-                    cout << "Made move to " << (*direction).second << endl;
+                    pair<int, int> newPos = (*it)->getPosition();
+                    // Remove old position
+                    for (auto it2 = enemies_[oldCoord.position].begin(); it2 != enemies_[oldCoord.position].end(); ++it2)
+                    {
+                        if (*it == *it2)
+                        {
+                            enemies_[oldCoord.position].erase(it2);
+                            break;
+                        }
+                    }
+                    insertEnemy(*it, newPos);
+                    tile(oldPos).removeEnemy(*it);
+                    tile(newPos).insertEnemy(*it);
+                    cout
+                        << "Made move to " << (*direction).second << endl;
                     break;
                 }
             }

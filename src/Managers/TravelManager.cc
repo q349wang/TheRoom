@@ -54,6 +54,9 @@ void TravelManager::makeMove(const Command &cmd)
                 setMessageAndNotify("Invalid location for special move");
                 break;
             }
+
+            setMessageAndNotify("Using special move!");
+            pp->resetCooldown();
         }
         case 'M':
         {
@@ -75,6 +78,7 @@ void TravelManager::makeMove(const Command &cmd)
                     break;
                 }
                 mp->moveEnemies();
+                setMessageAndNotify("Moving " + args[0]);
             }
             break;
         }
@@ -180,9 +184,10 @@ void TravelManager::runTravel()
     {
         if (auto pp = player.lock())
         {
-            while (!toExit &&
-                   ((mp->tile(pp->getPosition())).getEnemies().size() == 0))
+            while (!toExit && !onEnemies())
             {
+                cout << "Current enemies on tile: " << (mp->tile(pp->getPosition())).getEnemies().size() << endl;
+                cout << "player pos" << pp->getPosition().first << " " << pp->getPosition().second << endl;
                 char cmd;
                 vector<string> args;
                 setMessageAndNotify("Input Command (M, A, L, P, D, U)");
@@ -201,6 +206,17 @@ void TravelManager::runTravel()
                 // Use ability to move to location
                 case 'A':
                 {
+                    if (auto pp = player.lock())
+                    {
+                        ostringstream moves;
+                        moves << "Possible moves: " << endl;
+                        vector<pair<int, int>> possible = pp->specialMoves();
+                        for (auto move : possible)
+                        {
+                            moves << "(" << move.first << "," << move.second << ")" << endl;
+                        }
+                        setMessageAndNotify(moves.str());
+                    }
                     setMessageAndNotify("Input Location (x,y)");
                     string x, y;
                     cin >> x >> y;
@@ -244,3 +260,19 @@ void TravelManager::runTravel()
 const weak_ptr<Map> TravelManager::getMap() const { return map; }
 
 bool TravelManager::isExiting() const { return toExit; }
+
+bool TravelManager::onEnemies() const
+{
+    if (auto mp = map.lock())
+    {
+        if (auto pp = player.lock())
+        {
+            for (auto enem : (mp->tile(pp->getPosition())).getEnemies())
+            {
+                if (enem->getHealth() > 0)
+                    return true;
+            }
+        }
+    }
+    return false;
+}

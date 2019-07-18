@@ -293,6 +293,7 @@ void XWindowManager::drawPlayerOnMap(const shared_ptr<Player> &p)
 void XWindowManager::drawEntityOnMap(const shared_ptr<Player> &p,
 									 const shared_ptr<Entity> &e)
 {
+	if (e->getHealth() <= 0) return;
 	pair<int, int> coords = p->getPosition();
 	int xOffset = coords.first;
 	int yOffset = coords.second;

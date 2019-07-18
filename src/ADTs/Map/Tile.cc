@@ -22,7 +22,8 @@ Tile::~Tile() {}
  * Purpose: Inserts provided item to tile's collection
  *          of items
  */
-void Tile::insertItem(shared_ptr<Item> item) {
+void Tile::insertItem(shared_ptr<Item> item)
+{
     items_.emplace_back(item);
 }
 
@@ -31,15 +32,29 @@ void Tile::insertItem(shared_ptr<Item> item) {
  * Purpose: Inserts provided enemy to tile's collection
  *          of enemies
  */
-void Tile::insertEnemy(shared_ptr<Enemy> enemy) {
+void Tile::insertEnemy(shared_ptr<Enemy> enemy)
+{
     enemies_.emplace_back(enemy);
+}
+
+void Tile::removeEnemy(shared_ptr<Enemy> enemy)
+{
+    for (auto it = enemies_.begin(); it != enemies_.end(); ++it)
+    {
+        if (*it == enemy)
+        {
+            enemies_.erase(it);
+            break;
+        }
+    }
 }
 
 /**
  * Signature: const bool available()
  * Purpose: Determines if a specified tile is available
  */
-bool Tile::available() const {
+bool Tile::available() const
+{
     return true;
 }
 
@@ -47,7 +62,8 @@ bool Tile::available() const {
  * Signature: const vector<shared_ptr<Item>>& getItems()
  * Purpose: Provides a const reference to the items on the current tile
  */
-const vector<shared_ptr<Item>>& Tile::getItems() const {
+const vector<shared_ptr<Item>> &Tile::getItems() const
+{
     return items_;
 }
 
@@ -55,7 +71,8 @@ const vector<shared_ptr<Item>>& Tile::getItems() const {
  * Signature: const vector<shared_ptr<Enemy>>& getEnemies()
  * Purpose: Provides a const reference to the enemies on the current tile
  */
-const vector<shared_ptr<Enemy>>& Tile::getEnemies() const {
+const vector<shared_ptr<Enemy>> &Tile::getEnemies()
+{
     return enemies_;
 }
 
@@ -63,7 +80,8 @@ const vector<shared_ptr<Enemy>>& Tile::getEnemies() const {
  * Signature: vector<shared_ptr<Item>> pickupItems();
  * Purpose: Provides all items on the current tile, and empties tile
  */
-vector<shared_ptr<Item>> Tile::pickupItems() {
+vector<shared_ptr<Item>> Tile::pickupItems()
+{
     vector<shared_ptr<Item>> items{items_};
     items_.clear();
     return items;
@@ -73,7 +91,8 @@ vector<shared_ptr<Item>> Tile::pickupItems() {
  * Signature: void clearTile()
  * Purpose: Clears a tile of all items and enemies
  */
-void Tile::clearTile() {
+void Tile::clearTile()
+{
     items_.clear();
     enemies_.clear();
 }
