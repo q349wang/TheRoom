@@ -1,10 +1,9 @@
 #ifndef ENEMY_H_
 #define ENEMY_H_
 
-#include <string>
-
 #include "Entity.h"
 
+#include <string>
 #include <memory>
 #include <vector>
 #include <utility>

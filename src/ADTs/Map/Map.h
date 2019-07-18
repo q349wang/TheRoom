@@ -133,6 +133,9 @@ public:
 
   // Finds the nearest available empty tile
   std::pair<int, int> findNextEmpty(std::pair<int, int>);
+
+  // Clears a map of all enemies and items
+  void clearMap();
 };
 
 #endif

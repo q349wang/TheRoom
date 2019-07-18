@@ -7,10 +7,11 @@
 
 class MapManager {
  private:
+    std::map<std::string, EnemyConfig> enemy_configuration_;
  protected:
  public:
-    // Default constructor
-    MapManager();
+    // Constructor which takes enemy configuration information
+    MapManager(std::map<std::string, EnemyConfig>);
 
     //Default destructor
     ~MapManager();
