@@ -22,7 +22,9 @@ class Ground : public Enemy {
  public:
     // Constructor which requires health, energy, armour, and attack information
     Ground(double health, double energy, double attack, double armour,
-           std::pair<int, int> position);
+           std::pair<int, int> position,
+           std::vector<std::shared_ptr<Consumable>> consumables = {},
+           std::vector<std::shared_ptr<Equipable>> equipables = {});
 
     // Defualt destructor
     ~Ground();

@@ -21,7 +21,7 @@ class Entity
 private:
 protected:
   // Maintain a reference to the current map associated with the entity
-  std::weak_ptr<Map> current_map_;
+  std::shared_ptr<Map> current_map_;
 
   // Maintain entity health, energy, armour, and attack information
   double health_;
@@ -49,6 +49,7 @@ protected:
 
   // Makes a specified move, without checking if valid
   void updatePosition(std::pair<int, int>);
+
 public:
   // Constructor which requires health, energy, armour and attack information
   Entity(double health, double energy, double attack, double armour,

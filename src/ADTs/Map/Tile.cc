@@ -43,6 +43,7 @@ void Tile::removeEnemy(shared_ptr<Enemy> enemy)
     {
         if (*it == enemy)
         {
+            (*it).~shared_ptr();
             enemies_.erase(it);
             break;
         }

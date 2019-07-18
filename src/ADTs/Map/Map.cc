@@ -117,7 +117,6 @@ void Map::insertItem(shared_ptr<Item> item, pair<int, int> coordinates)
      */
 void Map::insertEnemy(shared_ptr<Enemy> enemy, pair<int, int> coordinates)
 {
-    cout << "Inserting enemy" << endl;
     coord location = coord{coordinates};
     ((map_.at(location.y_)).at(location.x_))->insertEnemy(enemy);
 
@@ -202,75 +201,111 @@ const shared_ptr<Player> &Map::getPlayer() const
      */
 void Map::moveEnemies()
 {
-    unordered_map<string, vector<shared_ptr<Enemy>>> currentEnemies = enemies_;
-    for (pair<string, vector<shared_ptr<Enemy>>> tiles : currentEnemies)
+    unordered_map<string, vector<shared_ptr<Enemy>>> updatedMap{};
+    //unordered_map<string, vector<shared_ptr<Enemy>>> currentEnemies = enemies_;
+    for (pair<string, vector<shared_ptr<Enemy>>> tiles : enemies_)
     {
-        cout << "move enemy" << endl;
         coord position = coord{tiles.first};
-        vector<pair<int, char>> movement = {};
+        vector<char> movement;
 
-        int x_difference = current_.x_ - position.x_;
-        int y_difference = current_.y_ - position.y_;
+        int x_difference = current_.x_ - position.x_; // Positive, player right of enemy
+        int y_difference = current_.y_ - position.y_; // Positive, player lower than enemy
 
-        if (x_difference >= 0)
-        {
-            movement.emplace_back(abs(x_difference - 1), 'E');
-            movement.emplace_back((x_difference + 1), 'W');
+        if(abs(x_difference) >= abs(y_difference)) {
+            if(x_difference >= 0) {
+                if(y_difference >= 0) {
+                    movement = {'E', 'S', 'N', 'W'};
+                }
+                else {
+                    movement = {'E', 'N', 'S', 'W'};
+                }
+            }
+            else {
+                if(y_difference >= 0) {
+                    movement = {'W', 'S', 'N', 'E'};
+                }
+                else {
+                    movement = {'W', 'N', 'S', 'E'};
+                }
+            }
         }
-        else
-        {
-            movement.emplace_back((abs(x_difference) - 1), 'W');
-            movement.emplace_back((abs(x_difference) + 1), 'E');
+        else {
+            if(x_difference >= 0) {
+                if(y_difference >= 0) {
+                    movement = {'S', 'E', 'W', 'N'};
+                }
+                else {
+                    movement = {'N', 'E', 'W', 'S'};
+                }
+            }
+            else {
+                if(y_difference >= 0) {
+                    movement = {'S', 'W', 'E', 'N'};
+                }
+                else {
+                    movement = {'N', 'W', 'E', 'S'};
+                }
+            }
         }
 
-        if (y_difference >= 0)
-        {
-            movement.emplace_back(abs(y_difference - 1), 'S');
-            movement.emplace_back((y_difference + 1), 'N');
-        }
-        else
-        {
-            movement.emplace_back((abs(y_difference) - 1), 'N');
-            movement.emplace_back((abs(y_difference) + 1), 'S');
-        }
-
-        // Sort the movement directions
-        sort(movement.begin(), movement.end());
-        cout << "sorted" << endl;
         // Iterate through all enemies on the current tile, and all possible directions
         // In order of increasing distance, and make the move towards the closest location
         for (auto it = tiles.second.begin(); it != tiles.second.end(); ++it)
         {
             // Skip dead enemies
-            if ((*it)->getHealth() <= 0)
+            if ((*it)->isDead()) {
                 continue;
-            cout << "moving an enemy" << endl;
-            for (auto direction = movement.begin(); direction != movement.end(); ++direction)
-            {
-                cout << "choosing direction " << direction->second << endl;
+            }
+            
+            for (auto direction = movement.begin(); direction != movement.end(); ++direction) {
                 pair<int, int> oldPos = (*it)->getPosition();
                 coord oldCoord{oldPos};
-                if ((*it)->makeMove((*direction).second))
+                
+                if ((*it)->makeMove(*direction))
                 {
-                    pair<int, int> newPos = (*it)->getPosition();
-                    // Remove old position
-                    for (auto it2 = enemies_[oldCoord.position].begin(); it2 != enemies_[oldCoord.position].end(); ++it2)
-                    {
-                        if (*it == *it2)
-                        {
-                            enemies_[oldCoord.position].erase(it2);
-                            break;
-                        }
+
+                    ((map_.at(oldPos.first)).at(oldPos.second))->removeEnemy(*it);
+                    coord updatedCoord{(*it)->getPosition()};
+                    insertEnemy(*it, (*it)->getPosition());
+
+                    if(updatedMap.find(updatedCoord.position) == updatedMap.end()) {
+                        updatedMap.emplace(updatedCoord.position, (*it));
                     }
-                    insertEnemy(*it, newPos);
-                    tile(oldPos).removeEnemy(*it);
-                    cout
-                        << "Made move to " << (*direction).second << endl;
+                    else {
+                        updatedMap[updatedCoord.position].emplace_back(*it);
+                    }
+
+                    //pair<int, int> newPos = (*it)->getPosition();
+                    // Remove old position
+                    //for (auto it2 = enemies_[oldCoord.position].begin(); it2 != enemies_[oldCoord.position].end(); ++it2)
+                    //{
+                        //if (*it == *it2)
+                        //{
+                        //    enemies_[oldCoord.position].erase(it2);
+                        //   break;
+                        //}
+                    //}
+                    //insertEnemy(*it, newPos);
+                    //tile(oldPos).removeEnemy(*it);
+                    //cout
+                       // << "Made move to " << (*direction).second << endl;
                     break;
+                }
+
+                if((*direction) == movement.at(movement.size() - 1)) {
+                    if(updatedMap.find(oldCoord.position) == updatedMap.end()) {
+                        updatedMap.emplace(oldCoord.position, (*it));
+                    }
+                    else {
+                        updatedMap[oldCoord.position].emplace_back(*it);
+                    }
                 }
             }
         }
     }
+
+    enemies_.clear();
+    enemies_ = updatedMap;
 }
 
 /**

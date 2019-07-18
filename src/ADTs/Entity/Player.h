@@ -32,7 +32,7 @@ class Player: public Entity {
  public:
     // Constructor which requires health, energy, armour, and attack information
     Player(double health, double energy, double attack, double armour,
-            std::string name,std::pair<int,int> position,
+           std::string name, std::pair<int,int> position,
            std::vector<std::shared_ptr<Consumable>> consumables = {}, 
            std::vector<std::shared_ptr<Equipable>> equipables = {});
 
@@ -82,8 +82,6 @@ class Player: public Entity {
 
     // Picks up all items from current tile and empties tile as well
     std::vector<std::shared_ptr<Item>> pickUpItems(); 
-
-    void forcePosition(std::pair<int, int>);
 };
 
 #endif
