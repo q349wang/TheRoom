@@ -175,6 +175,7 @@ void TravelManager::runTravel()
                 cin >> cmd;
                 switch (cmd)
                 {
+                    // Move in a specific direction
                 case 'M':
                 {
                     setMessageAndNotify("Input Direction (N,S,E,W)");
@@ -183,6 +184,7 @@ void TravelManager::runTravel()
                     args.emplace_back(dir);
                     break;
                 }
+                // Use ability to move to location
                 case 'A':
                 {
                     setMessageAndNotify("Input Location (x,y)");
@@ -192,12 +194,16 @@ void TravelManager::runTravel()
                     args.emplace_back(y);
                     break;
                 }
+                // List items that you have
+                case 'L':
+                // Pick up item
                 case 'P':
                 {
                     break;
                 }
+                // Drop item
                 case 'D':
-                case 'L':
+                // Use item on self
                 case 'U':
                 {
                     setMessageAndNotify("Input Item");
