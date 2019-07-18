@@ -201,111 +201,111 @@ const shared_ptr<Player> &Map::getPlayer() const
      */
 void Map::moveEnemies()
 {
-    unordered_map<string, vector<shared_ptr<Enemy>>> updatedMap{};
-    //unordered_map<string, vector<shared_ptr<Enemy>>> currentEnemies = enemies_;
-    for (pair<string, vector<shared_ptr<Enemy>>> tiles : enemies_)
-    {
-        coord position = coord{tiles.first};
-        vector<char> movement;
+    // unordered_map<string, vector<shared_ptr<Enemy>>> updatedMap{};
+    // //unordered_map<string, vector<shared_ptr<Enemy>>> currentEnemies = enemies_;
+    // for (pair<string, vector<shared_ptr<Enemy>>> tiles : enemies_)
+    // {
+    //     coord position = coord{tiles.first};
+    //     vector<char> movement;
 
-        int x_difference = current_.x_ - position.x_; // Positive, player right of enemy
-        int y_difference = current_.y_ - position.y_; // Positive, player lower than enemy
+    //     int x_difference = current_.x_ - position.x_; // Positive, player right of enemy
+    //     int y_difference = current_.y_ - position.y_; // Positive, player lower than enemy
 
-        if(abs(x_difference) >= abs(y_difference)) {
-            if(x_difference >= 0) {
-                if(y_difference >= 0) {
-                    movement = {'E', 'S', 'N', 'W'};
-                }
-                else {
-                    movement = {'E', 'N', 'S', 'W'};
-                }
-            }
-            else {
-                if(y_difference >= 0) {
-                    movement = {'W', 'S', 'N', 'E'};
-                }
-                else {
-                    movement = {'W', 'N', 'S', 'E'};
-                }
-            }
-        }
-        else {
-            if(x_difference >= 0) {
-                if(y_difference >= 0) {
-                    movement = {'S', 'E', 'W', 'N'};
-                }
-                else {
-                    movement = {'N', 'E', 'W', 'S'};
-                }
-            }
-            else {
-                if(y_difference >= 0) {
-                    movement = {'S', 'W', 'E', 'N'};
-                }
-                else {
-                    movement = {'N', 'W', 'E', 'S'};
-                }
-            }
-        }
+    //     if(abs(x_difference) >= abs(y_difference)) {
+    //         if(x_difference >= 0) {
+    //             if(y_difference >= 0) {
+    //                 movement = {'E', 'S', 'N', 'W'};
+    //             }
+    //             else {
+    //                 movement = {'E', 'N', 'S', 'W'};
+    //             }
+    //         }
+    //         else {
+    //             if(y_difference >= 0) {
+    //                 movement = {'W', 'S', 'N', 'E'};
+    //             }
+    //             else {
+    //                 movement = {'W', 'N', 'S', 'E'};
+    //             }
+    //         }
+    //     }
+    //     else {
+    //         if(x_difference >= 0) {
+    //             if(y_difference >= 0) {
+    //                 movement = {'S', 'E', 'W', 'N'};
+    //             }
+    //             else {
+    //                 movement = {'N', 'E', 'W', 'S'};
+    //             }
+    //         }
+    //         else {
+    //             if(y_difference >= 0) {
+    //                 movement = {'S', 'W', 'E', 'N'};
+    //             }
+    //             else {
+    //                 movement = {'N', 'W', 'E', 'S'};
+    //             }
+    //         }
+    //     }
 
-        // Iterate through all enemies on the current tile, and all possible directions
-        // In order of increasing distance, and make the move towards the closest location
-        for (auto it = tiles.second.begin(); it != tiles.second.end(); ++it)
-        {
-            // Skip dead enemies
-            if ((*it)->isDead()) {
-                continue;
-            }
+    //     // Iterate through all enemies on the current tile, and all possible directions
+    //     // In order of increasing distance, and make the move towards the closest location
+    //     for (auto it = tiles.second.begin(); it != tiles.second.end(); ++it)
+    //     {
+    //         // Skip dead enemies
+    //         if ((*it)->isDead()) {
+    //             continue;
+    //         }
             
-            for (auto direction = movement.begin(); direction != movement.end(); ++direction) {
-                pair<int, int> oldPos = (*it)->getPosition();
-                coord oldCoord{oldPos};
+    //         for (auto direction = movement.begin(); direction != movement.end(); ++direction) {
+    //             pair<int, int> oldPos = (*it)->getPosition();
+    //             coord oldCoord{oldPos};
                 
-                if ((*it)->makeMove(*direction))
-                {
+    //             if ((*it)->makeMove(*direction))
+    //             {
 
-                    ((map_.at(oldPos.first)).at(oldPos.second))->removeEnemy(*it);
-                    coord updatedCoord{(*it)->getPosition()};
-                    insertEnemy(*it, (*it)->getPosition());
+    //                 ((map_.at(oldPos.first)).at(oldPos.second))->removeEnemy(*it);
+    //                 coord updatedCoord{(*it)->getPosition()};
+    //                 insertEnemy(*it, (*it)->getPosition());
 
-                    if(updatedMap.find(updatedCoord.position) == updatedMap.end()) {
-                        updatedMap.emplace(updatedCoord.position, (*it));
-                    }
-                    else {
-                        updatedMap[updatedCoord.position].emplace_back(*it);
-                    }
+    //                 if(updatedMap.find(updatedCoord.position) == updatedMap.end()) {
+    //                     updatedMap.emplace(updatedCoord.position, (*it));
+    //                 }
+    //                 else {
+    //                     updatedMap[updatedCoord.position].emplace_back(*it);
+    //                 }
 
-                    //pair<int, int> newPos = (*it)->getPosition();
-                    // Remove old position
-                    //for (auto it2 = enemies_[oldCoord.position].begin(); it2 != enemies_[oldCoord.position].end(); ++it2)
-                    //{
-                        //if (*it == *it2)
-                        //{
-                        //    enemies_[oldCoord.position].erase(it2);
-                        //   break;
-                        //}
-                    //}
-                    //insertEnemy(*it, newPos);
-                    //tile(oldPos).removeEnemy(*it);
-                    //cout
-                       // << "Made move to " << (*direction).second << endl;
-                    break;
-                }
+    //                 //pair<int, int> newPos = (*it)->getPosition();
+    //                 // Remove old position
+    //                 //for (auto it2 = enemies_[oldCoord.position].begin(); it2 != enemies_[oldCoord.position].end(); ++it2)
+    //                 //{
+    //                     //if (*it == *it2)
+    //                     //{
+    //                     //    enemies_[oldCoord.position].erase(it2);
+    //                     //   break;
+    //                     //}
+    //                 //}
+    //                 //insertEnemy(*it, newPos);
+    //                 //tile(oldPos).removeEnemy(*it);
+    //                 //cout
+    //                    // << "Made move to " << (*direction).second << endl;
+    //                 break;
+    //             }
 
-                if((*direction) == movement.at(movement.size() - 1)) {
-                    if(updatedMap.find(oldCoord.position) == updatedMap.end()) {
-                        updatedMap.emplace(oldCoord.position, (*it));
-                    }
-                    else {
-                        updatedMap[oldCoord.position].emplace_back(*it);
-                    }
-                }
-            }
-        }
-    }
+    //             if((*direction) == movement.at(movement.size() - 1)) {
+    //                 if(updatedMap.find(oldCoord.position) == updatedMap.end()) {
+    //                     updatedMap.emplace(oldCoord.position, (*it));
+    //                 }
+    //                 else {
+    //                     updatedMap[oldCoord.position].emplace_back(*it);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
-    enemies_.clear();
-    enemies_ = updatedMap;
+    // enemies_.clear();
+    // enemies_ = updatedMap;
 }
 
 /**
