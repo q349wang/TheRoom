@@ -11,6 +11,7 @@
 #include "../ADTs/Map/Map.h"
 
 class GameManager {
+    pair<int,int> startCoord;
     std::shared_ptr<MapManager> mapManager;
     std::shared_ptr<TravelManager> travelManager;
     std::shared_ptr<BattleManager> battleManager;
@@ -18,6 +19,7 @@ class GameManager {
     std::shared_ptr<Player> player;
     
     public:
+    void setStartCoord(std::pair<int,int>);
     GameManager();
     void reset();
     void startGame();
