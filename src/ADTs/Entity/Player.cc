@@ -257,3 +257,9 @@ void Player::addEquipable(shared_ptr<Equipable> equip) {
 vector<shared_ptr<Item>> Player::pickUpItems() {
     return current_map_->pickUpItems(position_.first, position_.second);
 }
+
+// Force the player to a certain position
+void Player::forcePosition(pair<int, int> pos)
+{
+    updatePosition(pos);
+};
