@@ -24,7 +24,7 @@ shared_ptr<BaseDescription> ItemManager::generateBaseItem(int level, int type) c
                                 : consumeNames[rand() % consumeNames.size()];
     map<string, StatMod> baseStats;
     // Every five levels, max number of base stats increases by 1
-    int numBase = rand() % (level / 5 + 1);
+    int numBase = rand() % (level / 5 + 1) + 1;
     for (int i = 0; i < numBase; i++)
     {
         string name = stats[rand() % stats.size()];
@@ -108,7 +108,8 @@ shared_ptr<Item> ItemManager::createItem(int level) const
 
             ItemDescription::combineMods(passiveStats, name, stat);
         }
-        return make_shared<Equipable>(desc->getName(), desc, passiveStats);
+        int durability = rand() % level + 3;
+        return make_shared<Equipable>(desc->getName(), desc, passiveStats, durability);
     }
     // Create Consumable
     else
