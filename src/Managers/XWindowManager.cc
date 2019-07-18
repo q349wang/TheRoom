@@ -4,6 +4,7 @@
 #include "../ADTs/Entity/Player.h"
 #include "../ADTs/Map/Tile.h"
 #include "../ADTs/Map/Map.h"
+#include "GameManager.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -19,8 +20,9 @@ XWindowManager::~XWindowManager()
 
 const string XWindowManager::font = "-*-clean-*-*-*-*-*-*-100-100-*-*-*-*";
 
-XWindowManager::XWindowManager(shared_ptr<Map> map, int width, int height)
-	: gameMap{map},
+XWindowManager::XWindowManager(GameManager *manager, shared_ptr<Map> map, int width, int height)
+	: gameManager{manager},
+	  gameMap{map},
 	  width{width},
 	  height{height}
 {
