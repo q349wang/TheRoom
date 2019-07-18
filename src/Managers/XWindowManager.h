@@ -69,7 +69,7 @@ public:
 
     void redrawMap();
     void redrawBattle();
-    void notify() override;
+    void notify(std::string) override;
 };
 
 #endif

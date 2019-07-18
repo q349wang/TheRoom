@@ -47,12 +47,14 @@ void GameManager::startGame()
 
 void GameManager::startTravel()
 {
-    travelManager->runTravel();
+    state = GameState::Travel;
+    travelManager->startTravel();
 }
 
 void GameManager::startBattle()
 {
-    battleManager->runBattle();
+    state == GameState::Battle;
+    battleManager->startBattle();
 }
 
 void GameManager::endGame()
