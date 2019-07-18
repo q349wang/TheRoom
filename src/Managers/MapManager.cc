@@ -71,3 +71,9 @@ void MapManager::populateMap(shared_ptr<Map> &empty_map, int level)
         }
     }
 }
+
+void MapManager::addItem(shared_ptr<Map> &gameMap, int level, pair<int, int> location)
+{
+    shared_ptr<Item> new_item = item_manager->createItem(level);
+    gameMap->insertItem(new_item, location);
+}
