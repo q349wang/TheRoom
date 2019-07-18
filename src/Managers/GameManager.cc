@@ -74,7 +74,6 @@ void GameManager::startGame()
 
     gameMap = make_shared<Map>(player, current_map, make_pair(1, 1), items, enemies);
 
-
     battleManager = make_shared<BattleManager>(player);
     travelManager = make_shared<TravelManager>(gameMap, player);
     mapManager = make_shared<MapManager>(inputEnemyConf());
@@ -100,7 +99,16 @@ void GameManager::startTravel()
 void GameManager::startBattle()
 {
     state = GameState::Battle;
+    int numEnem = gameMap->tile(player->getPosition()).getEnemies().size();
     battleManager->startBattle(gameMap->tile(player->getPosition()).getEnemies());
+
+    if (!player->isDead())
+    {
+        for (int i = 0; i < numEnem; i++)
+        {
+            mapManager->addItem(gameMap, level, player->getPosition());
+        }
+    }
 }
 
 void GameManager::endGame()
@@ -125,7 +133,7 @@ void GameManager::playGame()
             startBattle();
             if (player->isDead())
             {
-	 	cout << "You Died!" << endl;
+                cout << "You Died!" << endl;
                 cout << "Final Score: " << level << endl;
                 break;
             }
@@ -155,11 +163,12 @@ vector<vector<char>> GameManager::inputMap()
     }
     input >> y >> x;
     setStartCoord(make_pair(y, x));
-    getline(input,mapInput);
+    getline(input, mapInput);
     while (input)
     {
         getline(input, mapInput);
-        if(mapInput.size()!=0){
+        if (mapInput.size() != 0)
+        {
             toReturn.resize(yCoordinate + 1);
             istringstream tokenStream(mapInput);
             while (getline(tokenStream, token, ' '))

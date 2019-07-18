@@ -30,6 +30,9 @@ class MapManager {
     // Populates a map with enemies & items
     // Scalling with the map level
     void populateMap(std::shared_ptr<Map>&, int);
+
+   // Adds item to map at location
+    void addItem(std::shared_ptr<Map>&, int, std::pair<int, int>);
 };
 
 #endif
