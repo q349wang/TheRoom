@@ -58,6 +58,7 @@ void GameManager::playGame() {
 }
 
 vector<vector<char>> GameManager::inputMap(){
+    // file format: two ints to represent the starting co-ordinates followed by space seperated components of the map itself. 
     vector<vector<char>> toReturn;
     int yCoordinate = 0;
     string filename;
