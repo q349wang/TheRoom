@@ -23,7 +23,7 @@ class Player: public Entity {
     std::vector<std::shared_ptr<Consumable>> consumed_;
 
     // Maintain player's special movement cooldown turn counter
-    int cooldown_;
+    int cooldown_ = 0;
 
     // Maintain the base special cooldown and special ready amounts
     static const int BASE_SPECIAL_COOLDOWN = 5;
@@ -32,7 +32,7 @@ class Player: public Entity {
  public:
     // Constructor which requires health, energy, armour, and attack information
     Player(double health, double energy, double attack, double armour,
-            std::string name,std::pair<int,int> position,
+           std::string name, std::pair<int,int> position,
            std::vector<std::shared_ptr<Consumable>> consumables = {}, 
            std::vector<std::shared_ptr<Equipable>> equipables = {});
 
@@ -59,13 +59,13 @@ class Player: public Entity {
     bool makeMove(char) override;
 
     // Consume item, specified by the consumable name
-    void consumeConsumable(std::shared_ptr<Entity>, std::string);
+    bool consumeConsumable(std::shared_ptr<Entity>, int);
 
     // Equips an equipable and also activates all passive stat mods
     void addEquipable(std::shared_ptr<Equipable>) override;
 
     // Equip item, specified by equipable name
-    void equipEquipable(std::shared_ptr<Entity>, std::string);
+    bool equipEquipable(std::shared_ptr<Entity>, int);
     
     // Drop equipped item from the current collection
     void dropEquipable(std::string);

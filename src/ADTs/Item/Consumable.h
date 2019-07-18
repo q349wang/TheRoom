@@ -11,6 +11,7 @@ class Consumable: public Item {
     public:
         Consumable(std::string, std::shared_ptr<ItemDescription>);
         void afterUse() override;
+        int getType() const override;
         ~Consumable();
 };
 

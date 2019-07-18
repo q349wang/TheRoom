@@ -1,3 +1,8 @@
-// int main() {
-//     return 0;
-// }
+#include "Managers/GameManager.h"
+
+int main()
+{
+    GameManager game;
+    game.startGame();
+    return 0;
+}

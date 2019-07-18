@@ -14,4 +14,11 @@ enum GameColours : int
     Yellow = 8
 };
 
+enum GameState : int
+{
+    Travel = 0,
+    Battle = 1,
+    NoState = 2
+};
+
 #endif

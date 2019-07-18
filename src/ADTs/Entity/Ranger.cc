@@ -67,7 +67,7 @@ vector<pair<int, int>> Ranger::specialMoves() {
     // Determine the first wall or non-existent tile from the 
     // current position in the left direction
     if((position_.first - left) >= 0) {
-        while(current_map_->tile((position_.first - left), position_.second).available()) {
+        while(!(current_map_->tile((position_.first - left), position_.second).available())) {
             if((position_.first - left) > 0) {
                 left++;
             }
@@ -81,7 +81,7 @@ vector<pair<int, int>> Ranger::specialMoves() {
     // Determine the first wall or non-existent tile from the 
     // current position in the down direction
     if((position_.second + down) < (current_map_->numRows())) {
-        while(current_map_->tile(position_.first, (position_.second + down)).available()) {
+        while(!(current_map_->tile(position_.first, (position_.second + down)).available())) {
             if((position_.second + down) < (current_map_->numRows() - 1)) {
                 down++;
             }
@@ -95,7 +95,7 @@ vector<pair<int, int>> Ranger::specialMoves() {
     // Determine the first wall or non-existent tile from the 
     // current position in the up direction
     if((position_.second - up) >= 0) {
-        while(current_map_->tile(position_.first, (position_.second - up)).available()) {
+        while(!(current_map_->tile(position_.first, (position_.second - up)).available())) {
             if((position_.second - up) > 0) {
                 up++;
             }
@@ -112,17 +112,17 @@ vector<pair<int, int>> Ranger::specialMoves() {
        (current_map_->tile((position_.first + right), position_.second).available())) {
         special_moves.emplace_back((position_.first + right), position_.second);
     }
-    else if(((position_.first - left) >= 0) && 
+    if(((position_.first - left) >= 0) && 
             (current_map_->tile((position_.first - left), position_.second).available())) {
-        special_moves.emplace_back((position_.first - (left - 1)), position_.second);
+        special_moves.emplace_back((position_.first - left), position_.second);
     }
-    else if(((position_.second + down) < current_map_->numRows()) && 
+    if(((position_.second + down) < current_map_->numRows()) && 
             (current_map_->tile(position_.first, (position_.second + down)).available())) {
-        special_moves.emplace_back(position_.first, (position_.second + (down - 1)));
+        special_moves.emplace_back(position_.first, (position_.second + down));
     }
-    else if(((position_.second - up) >= 0) && 
+    if(((position_.second - up) >= 0) && 
             (current_map_->tile(position_.first, (position_.second - up)).available())) {
-        special_moves.emplace_back(position_.first, (position_.second - (up - 1)));
+        special_moves.emplace_back(position_.first, (position_.second - up));
     }
     
     return special_moves;

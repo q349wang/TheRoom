@@ -4,13 +4,22 @@
 #include "../ADTs/Map/Map.h"
 
 #include <memory>
+#include <map>
+
+class EnemyConf;
+class ItemManager;
+class EnemyManager;
 
 class MapManager {
  private:
+    std::map<std::string, EnemyConf> enemy_configuration_;
+
+    std::unique_ptr<ItemManager> item_manager;
+    std::unique_ptr<EnemyManager> enemy_manager;
  protected:
  public:
-    // Default constructor
-    MapManager();
+    // Constructor which takes enemy configuration information
+    MapManager(std::map<std::string, EnemyConf>);
 
     //Default destructor
     ~MapManager();
@@ -20,7 +29,7 @@ class MapManager {
 
     // Populates a map with enemies & items
     // Scalling with the map level
-    void populateMap(std::shared_ptr<Map>, int);
+    void populateMap(std::shared_ptr<Map>&, int);
 };
 
 #endif

@@ -2,9 +2,12 @@
 #include "../HelperClasses/GameException.h"
 #include "../ADTs/Entity/Entity.h"
 #include "../ADTs/Entity/Player.h"
+#include "../ADTs/Entity/Enemy.h"
 #include "../ADTs/Map/Tile.h"
 #include "../ADTs/Map/Map.h"
+#include "GameManager.h"
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <cstdlib>
 #include <unistd.h>
@@ -19,8 +22,9 @@ XWindowManager::~XWindowManager()
 
 const string XWindowManager::font = "-*-clean-*-*-*-*-*-*-100-100-*-*-*-*";
 
-XWindowManager::XWindowManager(shared_ptr<Map> map, int width, int height)
-	: gameMap{map},
+XWindowManager::XWindowManager(GameManager *manager, shared_ptr<Map> map, int width, int height)
+	: gameManager{manager},
+	  gameMap{map},
 	  width{width},
 	  height{height}
 {
@@ -77,7 +81,8 @@ XWindowManager::XWindowManager(shared_ptr<Map> map, int width, int height)
 		colours[i] = xcolour.pixel;
 	}
 
-	XSetForeground(d, gc, colours[GameColours::Black]);
+	// Colour everything black while loading
+	drawFillRect(0, 0, width, height, GameColours::Black);
 
 	// Make window non-resizeable.
 	XSizeHints hints;
@@ -99,7 +104,6 @@ void XWindowManager::drawFillRect(int x, int y, int width, int height, int colou
 {
 	XSetForeground(d, gc, colours[colour]);
 	XFillRectangle(d, w, gc, x, y, width, height);
-	XFlush(d);
 }
 
 // Draws outline of a rectangle
@@ -107,7 +111,6 @@ void XWindowManager::drawRect(int x, int y, int width, int height, int colour)
 {
 	XSetForeground(d, gc, colours[colour]);
 	XDrawRectangle(d, w, gc, x, y, width, height);
-	XFlush(d);
 }
 
 // Fills in circle
@@ -139,42 +142,85 @@ void XWindowManager::drawMapTile(int x, int y, int col)
 }
 
 // Draws a nameplate displaying entity info
-void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &entity)
+void XWindowManager::drawEntityInfo(int x, int y, const shared_ptr<Entity> &entity, int entityNum)
 {
-	drawRect(x, y, mapTileSize, mapTileSize, namePlateBorderColour);
-	drawFillRect(x, y, mapTileSize, mapTileSize, namePlateColour);
+
+	drawFillRect(x - 5, y - 15, plateW, plateH, namePlateColour);
+	drawRect(x - 5, y - 15, plateW, plateH, namePlateBorderColour);
 	XSetForeground(d, gc, colours[fontCol]);
-	drawString(x, y, entity->getName());
-	string health = "H: " + to_string(entity->getHealth());
-	drawString(x, y, health);
-	string energy = "E: " + to_string(entity->getEnergy());
-	drawString(x, y, energy);
-	string armor = "A: " + to_string(entity->getArmour());
-	drawString(x, y, armor);
+	string name = entity->getName() + " " +
+				  (entityNum == -1
+					   ? ""
+					   : to_string(entityNum));
+	drawString(x, y, name);
+	ostringstream info;
+	info << scientific << setprecision(2);
+	info << "H: " << entity->getHealth() << " ";
+	drawString(x, y + 13, info.str());
+	info.str("");
+	info << "E: " << entity->getEnergy() << " ";
+	drawString(x, y + 26, info.str());
+	info.str("");
+	info << "A: " << entity->getArmour() << " ";
+	drawString(x, y + 39, info.str());
 }
 
 // Draws info box regarding ability cooldown
 void XWindowManager::drawAbilityCD(const shared_ptr<Player> &p)
 {
-	int cdX = 10;
-	int cdY = 10;
-	bool abilityReady = p->getCooldown() == 0;
-	drawRect(cdX, cdY, mapTileSize, mapTileSize, namePlateBorderColour);
-	drawFillRect(cdY, cdX, mapTileSize, mapTileSize, namePlateColour);
-	string cd = "Ability: " + abilityReady
-					? "READY!"
-					: p->getCooldown() + " turns until ready...";
+	drawFillRect(cdX, cdY, cdW, cdH, namePlateColour);
+	drawRect(cdX, cdY, cdW, cdH, namePlateBorderColour);
+	string cd = "Ability: ";
+	if (p->getCooldown() != 0)
+	{
+		cd += " " + to_string(p->getCooldown()) + " turns left";
+	}
+	else
+	{
+		cd += "READY!";
+	}
 	XSetForeground(d, gc, colours[fontCol]);
-	drawString(cdX, cdY, cd);
+	drawString(cdX + 5, cdY + 12, cd);
+}
+
+// Draws enemy nameplates
+void XWindowManager::drawEnemyPlates(const vector<shared_ptr<Enemy>> &eList)
+{
+	size_t rowLen = 5;
+	int colGap = 10;
+	int rowGap = 5;
+	int row = 0;
+	for (size_t i = 0; i < eList.size(); i++)
+	{
+
+		for (size_t col = 0; col < rowLen; col++)
+		{
+			if (i >= eList.size())
+				break;
+			if (eList[i]->getHealth() > 0)
+			{
+				drawEntityInfo(rowGap + col * plateW, colGap + row * plateH, eList[i], i);
+			}
+			i++;
+		}
+		row++;
+	}
 }
 
 // Redraws battle scene
 void XWindowManager::redrawBattle()
 {
-	XClearWindow(d, w);
+
 	if (auto mp = gameMap.lock())
 	{
+		int playerPlateX = width / 2 - 40;
+		int playerPlateY = height - 60;
+		XClearWindow(d, w);
+
+		drawEntityInfo(playerPlateX, playerPlateY, mp->getPlayer());
+		drawEnemyPlates(mp->tile(mp->getPlayer()->getPosition()).getEnemies());
 	}
+	XFlush(d);
 }
 
 // Draws all the map tiles
@@ -198,28 +244,63 @@ void XWindowManager::drawMapStruct(const shared_ptr<Entity> &p,
 // Redraws map scene
 void XWindowManager::redrawMap()
 {
-	XClearWindow(d, w);
 	if (auto mp = gameMap.lock())
 	{
+		XClearWindow(d, w);
 		drawMapStruct(mp->getPlayer(), mp->getMap());
-		drawEntityOnMap(mp->getPlayer());
+		drawPlayerOnMap(mp->getPlayer());
+		for (auto enemy : mp->getEnemies())
+		{
+			drawEntityOnMap(mp->getPlayer(), enemy);
+		}
+		drawAbilityCD(mp->getPlayer());
 	}
 
 	XFlush(d);
 }
 
 // Redraws correct scene based on current game state
-void XWindowManager::notify()
+void XWindowManager::notify(std::string msg)
 {
-
+	switch (gameManager->getGameState())
+	{
+	case GameState::Battle:
+	{
+		redrawBattle();
+		break;
+	}
+	case GameState::Travel:
+	{
+		redrawMap();
+		break;
+	}
+	default:
+		break;
+	}
 	return;
 }
 
-void XWindowManager::drawEntityOnMap(const shared_ptr<Entity> &p)
+void XWindowManager::drawPlayerOnMap(const shared_ptr<Player> &p)
 {
 	drawFillCirc(centerX(0) + mapTileSize / 2 - entityDiameter / 2,
 				 centerY(0) + mapTileSize / 2 - entityDiameter / 2,
 				 entityDiameter, entityDiameter, p->getColour());
+}
+
+void XWindowManager::drawEntityOnMap(const shared_ptr<Player> &p,
+									 const shared_ptr<Entity> &e)
+{
+	if (e->getHealth() <= 0)
+		return;
+	pair<int, int> coords = p->getPosition();
+	int xOffset = coords.first;
+	int yOffset = coords.second;
+	coords = e->getPosition();
+	int x = coords.first;
+	int y = coords.second;
+	drawFillCirc(centerX((x - xOffset) * mapTileSize) + mapTileSize / 2 - entityDiameter / 2,
+				 centerY((y - yOffset) * mapTileSize) + mapTileSize / 2 - entityDiameter / 2,
+				 entityDiameter, entityDiameter, e->getColour());
 }
 
 int XWindowManager::centerX(int x)

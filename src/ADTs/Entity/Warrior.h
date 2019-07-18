@@ -17,6 +17,7 @@ class Warrior : public Player {
  private:
    // Defines the warrior colour
    static const int colour = GameColours::Purple;
+   
  protected:
  public:
 

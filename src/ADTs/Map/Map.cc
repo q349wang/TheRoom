@@ -12,6 +12,7 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
+#include <iostream>
 #include <algorithm>
 #include <iterator>
 
@@ -26,19 +27,21 @@ using namespace std;
 Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
          pair<int, int> start,
          unordered_map<string, vector<shared_ptr<Item>>> items,
-         unordered_map<string, vector<shared_ptr<Enemy>>> enemies) : start_{start}, current_{start}, player_{player},
-                                                                     items_{items}, enemies_{enemies}
+         vector<shared_ptr<Enemy>> enemies) : start_{start}, current_{start}, player_{player},
+                                              items_{items}, enemies_{enemies}
 {
 
     vector<shared_ptr<Tile>> column = {}, first = {}, last = {};
     num_space_ = num_wall_ = num_exit_ = 0;
-    
-    for(size_t f = 0; f < (map[0].size() + 2); f++) {
+
+    for (size_t f = 0; f < (map[0].size() + 2); f++)
+    {
         first.emplace_back(make_shared<WallTile>(WallTile{}));
         num_wall_++;
     }
 
-    for(size_t l = 0; l < (map[map.size() - 1].size() + 2); l++) {
+    for (size_t l = 0; l < (map[map.size() - 1].size() + 2); l++)
+    {
         last.emplace_back(make_shared<WallTile>(WallTile{}));
         num_wall_++;
     }
@@ -81,7 +84,13 @@ Map::Map(shared_ptr<Player> player, vector<vector<char>> map,
 
     map_.emplace_back(last);
 }
+
+/**
+ * Signature: ~Map()
+ * Purpose: Default destructor
+ */
 Map::~Map() {}
+
 /**
     * Signature: void insertItem(shared_ptr<Item>, pair<int, int>) : void
     * Purpose: Inserts provided item at specified location on the map
@@ -111,14 +120,7 @@ void Map::insertEnemy(shared_ptr<Enemy> enemy, pair<int, int> coordinates)
     coord location = coord{coordinates};
     ((map_.at(location.y_)).at(location.x_))->insertEnemy(enemy);
 
-    if (enemies_.find(location.position) == enemies_.end())
-    {
-        enemies_.emplace(location.position, vector<shared_ptr<Enemy>>{enemy});
-    }
-    else
-    {
-        enemies_[location.position].emplace_back(enemy);
-    }
+    enemies_.emplace_back(enemy);
 }
 
 /**
@@ -143,7 +145,7 @@ int Map::numColumns(int row)
      * Signature: const Tile& tile(int, int)
      * Purpose: Provides a const reference to a specified tile
      */
-const Tile &Map::tile(int x, int y) const
+Tile &Map::tile(int x, int y) const
 {
     return *((map_.at(y)).at(x));
 }
@@ -151,7 +153,7 @@ const Tile &Map::tile(int x, int y) const
      * Signature: const Tile& tile(pair<int, int>)
      * Purpose: Provides a const reference to a specified tile
      */
-const Tile &Map::tile(const pair<int, int>& coord) const
+Tile &Map::tile(const pair<int, int> &coord) const
 {
     return *((map_.at(coord.second)).at(coord.first));
 }
@@ -180,60 +182,116 @@ const shared_ptr<Player> &Map::getPlayer() const
      */
 void Map::moveEnemies()
 {
-    for (pair<string, vector<shared_ptr<Enemy>>> tile : enemies_)
+    //unordered_map<string, vector<shared_ptr<Enemy>>> currentEnemies = enemies_;
+    for (shared_ptr<Enemy> enem : enemies_)
     {
-        coord position = coord{tile.first};
-        vector<pair<int, char>> movement = {};
-
-        int x_difference = current_.x_ - position.x_;
-        int y_difference = current_.y_ - position.y_;
-
-        if (x_difference >= 0)
+        // Skip dead enemies
+        if (enem->isDead())
         {
-            movement.emplace_back(abs(x_difference - 1), 'E');
-            movement.emplace_back((x_difference + 1), 'W');
-        }
-        else
-        {
-            movement.emplace_back((abs(x_difference) - 1), 'W');
-            movement.emplace_back((abs(x_difference) + 1), 'E');
+            continue;
         }
 
-        if (y_difference >= 0)
-        {
-            movement.emplace_back(abs(y_difference - 1), 'S');
-            movement.emplace_back((y_difference + 1), 'N');
-        }
-        else
-        {
-            movement.emplace_back((abs(y_difference) - 1), 'N');
-            movement.emplace_back((abs(y_difference) + 1), 'S');
-        }
+        coord position = coord{enem->getPosition()};
+        coord currentPlayer = coord{player_->getPosition()};
+        vector<char> movement;
 
-        // Sort the movement directions
-        sort(movement.begin(), movement.end());
-
-        // Iterate through all enemies on the current tile, and all possible directions
-        // In order of increasing distance, and make the move towards the closest location
-        for (auto it = tile.second.begin(); it != tile.second.end(); ++it)
+        int x_difference = currentPlayer.x_ - position.x_; // Positive, player right of enemy
+        int y_difference = currentPlayer.y_ - position.y_; // Positive, player lower than enemy
+        if (x_difference == 0 && y_difference == 0) continue;
+        if (abs(x_difference) >= abs(y_difference))
         {
-            for (auto direction = movement.begin(); direction != movement.end(); ++direction)
+            if (x_difference >= 0)
             {
-                if ((*it)->makeMove((*direction).second))
+                if (y_difference >= 0)
                 {
-                    break;
+                    movement = {'E', 'S'};
+                }
+                else
+                {
+                    movement = {'E', 'N'};
+                }
+            }
+            else
+            {
+                if (y_difference >= 0)
+                {
+                    movement = {'W', 'S'};
+                }
+                else
+                {
+                    movement = {'W', 'N'};
                 }
             }
         }
+        else
+        {
+            if (x_difference >= 0)
+            {
+                if (y_difference >= 0)
+                {
+                    movement = {'S', 'E'};
+                }
+                else
+                {
+                    movement = {'N', 'E'};
+                }
+            }
+            else
+            {
+                if (y_difference >= 0)
+                {
+                    movement = {'S', 'W'};
+                }
+                else
+                {
+                    movement = {'N', 'W'};
+                }
+            }
+        }
+
+        // Iterate through all enemies on the current tile, and all possible directions
+        // In order of increasing distance, and make the move towards the closest location
+        for (auto direction = movement.begin(); direction != movement.end(); ++direction)
+        {
+            pair<int, int> oldPos = enem->getPosition();
+            coord oldCoord{oldPos};
+
+            if (enem->makeMove(*direction))
+            {
+                ((map_.at(oldPos.second)).at(oldPos.first))->removeEnemy(enem);
+
+                coord updatedCoord{enem->getPosition()};
+
+                tile(enem->getPosition()).insertEnemy(enem);
+
+
+                //pair<int, int> newPos = (*it)->getPosition();
+                // Remove old position
+                //for (auto it2 = enemies_[oldCoord.position].begin(); it2 != enemies_[oldCoord.position].end(); ++it2)
+                //{
+                //if (*it == *it2)
+                //{
+                //    enemies_[oldCoord.position].erase(it2);
+                //   break;
+                //}
+                //}
+                //insertEnemy(*it, newPos);
+                //tile(oldPos).removeEnemy(*it);
+                //cout
+                // << "Made move to " << (*direction).second << endl;
+                break;
+            }
+        }
     }
+    return;
 }
 
 /**
  * Signature coord(pair<int, int>)
  * Purpose: Constructs coordinate from a pair of integers
  */
-Map::coord::coord(std::pair<int, int> xy) : position{std::to_string(xy.first) + 
-                                                    "$" + std::to_string(xy.second)},
+Map::coord::coord(std::pair<int, int> xy) : position{std::to_string(xy.first) +
+                                                     "$" + std::to_string(xy.second)},
                                             x_{xy.first}, y_{xy.second} {}
 
 /**
@@ -254,7 +312,8 @@ Map::coord::coord(string xy) : position{xy}, x_{stoi(xy.substr(0, xy.find("$")))
  * Signature: vector<shared_ptr<Item>> pickupItems(int, int)
  * Purpose: Empties the specified tile of all tiles and provides all items
  */
-vector<shared_ptr<Item>> Map::pickUpItems(int x, int y) {
+vector<shared_ptr<Item>> Map::pickUpItems(int x, int y)
+{
     return ((map_.at(y)).at(x))->pickupItems();
 }
 
@@ -262,7 +321,8 @@ vector<shared_ptr<Item>> Map::pickUpItems(int x, int y) {
  * Signature: int getNumWalls()
  * Purpose: Provides the number of wall tiles in a map
  */
-int Map::getNumWalls() {
+int Map::getNumWalls()
+{
     return num_wall_;
 }
 
@@ -270,7 +330,8 @@ int Map::getNumWalls() {
  * Signature: int getNumExits()
  * Purpose: Provides the number of exit tiles in a map
  */
-int Map::getNumExits() {
+int Map::getNumExits()
+{
     return num_exit_;
 }
 
@@ -278,6 +339,75 @@ int Map::getNumExits() {
  * Signature: int getNumSpaces()
  * Purpose: Provides the number of space tiles in a map
  */
-int Map::getNumSpaces() {
+int Map::getNumSpaces()
+{
     return num_space_;
+}
+
+/**
+ * Signature: pair<int, int> findNextEmpty(pair<int, int>)
+ * Purpose: Finds the nearest available tile on the map
+ */
+pair<int, int> Map::findNextEmpty(pair<int, int> input)
+{
+    coord currentPlayer = coord{player_->getPosition()};
+    while (true)
+    {
+        // If we are at an available tile, return the position
+        if ((((map_.at(input.second)).at(input.first))->available()) &&
+            !((input.first == currentPlayer.x_) && (input.second == currentPlayer.y_)))
+        {
+            return input;
+        }
+        // Increase the column index if possible
+        else if (static_cast<size_t>(input.first) < ((map_.at(input.second)).size() - 1))
+        {
+            input.first++;
+        }
+        // Increase the row index and set column to zero otherwise
+        else if (static_cast<size_t>(input.second) < (map_.size() - 1))
+        {
+            input.first = 0;
+            input.second++;
+        }
+        // Go back to the top-left corner if both are exhausted
+        else
+        {
+            input.first = input.second = 0;
+        }
+    }
+}
+
+/**
+ * Signature: bool checkExit(pair<int, int>)
+ * Purpose: Determines if a specified tile is an exit tile
+ */
+bool Map::checkExit(pair<int, int> tile_location)
+{
+    int colour = ((map_.at(tile_location.second)).at(tile_location.first))->getColour();
+    return (colour == GameColours::Green);
+}
+
+/**
+ * Signature: void clearMap()
+ * Purpose: Clears map of all enemies and items
+ */
+void Map::clearMap()
+{
+    items_.clear();
+    enemies_.clear();
+    current_ = start_;
+
+    for (auto row = map_.begin(); row != map_.end(); ++row)
+    {
+        for (auto tile = (*row).begin(); tile != (*row).end(); ++tile)
+        {
+            (*tile)->clearTile();
+        }
+    }
+}
+
+vector<shared_ptr<Enemy>> &Map::getEnemies()
+{
+    return enemies_;
 }

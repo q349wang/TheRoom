@@ -57,9 +57,6 @@ public:
          std::vector<std::shared_ptr<Consumable>> consumables = {},
          std::vector<std::shared_ptr<Equipable>> equipables = {});
 
-  // Delete the copy ctor to ensure appropriate use of class
-  Entity(Entity &) = delete;
-
   // Pure virtual destructor to ensure Entity is an ABC
   virtual ~Entity() = 0;
 
@@ -112,6 +109,8 @@ public:
 
   // Drops all enemy items onto current tile
   void dropAllItems();
+
+  void forcePosition(std::pair<int, int>);
 };
 
 #endif

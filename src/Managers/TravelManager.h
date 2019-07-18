@@ -13,6 +13,7 @@ class TravelManager : public Subject {
     std::weak_ptr<Map> map;
     std::weak_ptr<Player> player;
 
+    bool toExit;
     bool toBattle;
     public:
     TravelManager(std::shared_ptr<Map>, std::shared_ptr<Player>);
@@ -25,5 +26,7 @@ class TravelManager : public Subject {
     void runTravel();
 
     const std::weak_ptr<Map> getMap() const;
+    bool onEnemies() const;
+    bool isExiting() const;
 };
 #endif

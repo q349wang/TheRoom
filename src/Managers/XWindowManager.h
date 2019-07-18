@@ -14,6 +14,8 @@ class Tile;
 class Entity;
 class Player;
 class Map;
+class Enemy;
+class GameManager;
 
 class XWindowManager : public Observer
 {
@@ -23,6 +25,7 @@ class XWindowManager : public Observer
     Window w;
     int s;
     GC gc;
+    GameManager *gameManager;
     std::weak_ptr<Map> gameMap;
 
     int width;
@@ -36,14 +39,27 @@ class XWindowManager : public Observer
     static const int namePlateBorderColour = GameColours::Black;
     static const int namePlateColour = GameColours::White;
 
-    static const int entityDiameter = 25;
+    // Cooldown constants
+    static const int cdX = 15;
+    static const int cdY = 10;
+    static const int cdW = 140;
+    static const int cdH = 13;
+
+    // Nameplate constants
+    static const int plateW = 80;
+    static const int plateH = 60;
+
+    static const int entityDiameter = 30;
     static const std::string font;
 
     int centerX(int x);
     int centerY(int y);
 
 public:
-    XWindowManager(std::shared_ptr<Map> gameMap, int width = 500, int height = 500);
+    XWindowManager(GameManager *gameManager,
+                   std::shared_ptr<Map> gameMap,
+                   int width = 500,
+                   int height = 500);
     ~XWindowManager();
     XWindowManager(const XWindowManager &) = delete;
     XWindowManager &operator=(const XWindowManager &) = delete;
@@ -58,14 +74,15 @@ public:
 
     void drawMapTile(int x, int y, int content);
     void drawMapStruct(const std::shared_ptr<Entity> &, const std::vector<std::vector<std::shared_ptr<Tile>>> &);
-    void drawEntityInfo(int x, int y, const std::shared_ptr<Entity> &);
+    void drawEntityInfo(int x, int y, const std::shared_ptr<Entity> &entity, int entityNum = -1);
+    void drawEnemyPlates(const std::vector<std::shared_ptr<Enemy>> &);
     void drawAbilityCD(const std::shared_ptr<Player> &);
 
-    void drawEntityOnMap(const std::shared_ptr<Entity> &);
-
+    void drawEntityOnMap(const std::shared_ptr<Player> &, const std::shared_ptr<Entity> &);
+    void drawPlayerOnMap(const std::shared_ptr<Player> &);
     void redrawMap();
     void redrawBattle();
-    void notify() override;
+    void notify(std::string) override;
 };
 
 #endif

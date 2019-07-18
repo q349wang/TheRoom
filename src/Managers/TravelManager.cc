@@ -54,6 +54,9 @@ void TravelManager::makeMove(const Command &cmd)
                 setMessageAndNotify("Invalid location for special move");
                 break;
             }
+
+            setMessageAndNotify("Using special move!");
+            pp->resetCooldown();
         }
         case 'M':
         {
@@ -67,7 +70,14 @@ void TravelManager::makeMove(const Command &cmd)
             pp->decreaseCooldown();
             if (auto mp = map.lock())
             {
+                if (mp->checkExit(pp->getPosition()))
+                {
+                    setMessageAndNotify("Found exit. Exiting level");
+                    toExit = true;
+                    break;
+                }
                 mp->moveEnemies();
+                setMessageAndNotify("Moving " + args[0]);
             }
             break;
         }
@@ -103,16 +113,21 @@ void TravelManager::makeMove(const Command &cmd)
         }
         case 'L':
         {
-            stringstream desc;
+            ostringstream items;
+            int index = 0;
             for (auto equip : pp->currentEquipables())
             {
-                desc << equip->getName() << endl;
+                items << index << " - " << equip->getName() << endl;
+                index++;
             }
+
             for (auto pots : pp->currentConsumables())
             {
-                desc << pots->getName() << endl;
+                items << index << " - " << pots->getName() << endl;
+                index++;
             }
-            setMessageAndNotify(desc.str());
+
+            setMessageAndNotify(items.str());
             break;
         }
         case 'U':
@@ -122,33 +137,41 @@ void TravelManager::makeMove(const Command &cmd)
                 setMessageAndNotify("Invalid Command");
                 break;
             }
-            shared_ptr<Item> item = nullptr;
-            string name = args[0];
-            for (auto equip : pp->currentEquipables())
+            unsigned int itemIndex = 0;
+            try
             {
-                if (equip != nullptr && equip->getName() == name)
-                {
-                    item = equip;
-                    pp->equipEquipable(pp, item->getName());
-                    break;
-                }
+                itemIndex = stoi(args[0]);
             }
-            if (item == nullptr)
+            catch (const invalid_argument &e)
             {
-                for (auto pots : pp->currentConsumables())
-                {
-                    if (pots != nullptr && pots->getName() == name)
-                    {
-                        item = pots;
-                        pp->consumeConsumable(pp, item->getName());
-                        break;
-                    }
-                }
-            }
-            if (item == nullptr)
-            {
-                setMessageAndNotify("Invalid Command");
+                setMessageAndNotify("Invalid Item");
                 break;
+            }
+            if (itemIndex >= pp->currentEquipables().size() + pp->currentConsumables().size())
+            {
+                setMessageAndNotify("Invalid Item");
+                break;
+            }
+            shared_ptr<Item> item;
+            bool success = false;
+            if (itemIndex < pp->currentEquipables().size())
+            {
+                item = pp->currentEquipables()[itemIndex];
+                success = pp->equipEquipable(pp, itemIndex);
+            }
+            else
+            {
+                item = pp->currentConsumables()[itemIndex - pp->currentEquipables().size()];
+                success = pp->consumeConsumable(pp,
+                                                itemIndex - pp->currentEquipables().size());
+            }
+            if (success)
+            {
+                string info = "Player used item " + item->getName() + " on themselves.";
+                setMessageAndNotify(info);
+            }
+            else {
+                setMessageAndNotify("Could not use item on self");
             }
             break;
         }
@@ -158,6 +181,7 @@ void TravelManager::makeMove(const Command &cmd)
 
 void TravelManager::startTravel()
 {
+    toExit = false;
     toBattle = false;
     runTravel();
 }
@@ -168,10 +192,11 @@ void TravelManager::runTravel()
     {
         if (auto pp = player.lock())
         {
-            while (!((mp->tile(pp->getPosition())).getEnemies().size() == 0))
+            while (!toExit && !onEnemies())
             {
                 char cmd;
                 vector<string> args;
+                setMessageAndNotify("Input Command (M, A, L, P, D, U)");
                 cin >> cmd;
                 switch (cmd)
                 {
@@ -187,6 +212,17 @@ void TravelManager::runTravel()
                 // Use ability to move to location
                 case 'A':
                 {
+                    if (auto pp = player.lock())
+                    {
+                        ostringstream moves;
+                        moves << "Possible moves: " << endl;
+                        vector<pair<int, int>> possible = pp->specialMoves();
+                        for (auto move : possible)
+                        {
+                            moves << "(" << move.first << "," << move.second << ")" << endl;
+                        }
+                        setMessageAndNotify(moves.str());
+                    }
                     setMessageAndNotify("Input Location (x,y)");
                     string x, y;
                     cin >> x >> y;
@@ -207,9 +243,9 @@ void TravelManager::runTravel()
                 case 'U':
                 {
                     setMessageAndNotify("Input Item");
-                    string name;
-                    getline(cin, name);
-                    args.emplace_back(name);
+                    string index;
+                    cin >> index;
+                    args.emplace_back(index);
                     break;
                 }
                 }
@@ -218,10 +254,31 @@ void TravelManager::runTravel()
 
                 makeMove(fullCmd);
             }
-            setMessageAndNotify("Enemy encountered! Starting battle!");
-            toBattle = true;
+            if (!toExit)
+            {
+                setMessageAndNotify("Enemy encountered! Starting battle!");
+                toBattle = true;
+            }
         }
     }
 }
 
 const weak_ptr<Map> TravelManager::getMap() const { return map; }
+
+bool TravelManager::isExiting() const { return toExit; }
+
+bool TravelManager::onEnemies() const
+{
+    if (auto mp = map.lock())
+    {
+        if (auto pp = player.lock())
+        {
+            for (auto enem : (mp->tile(pp->getPosition())).getEnemies())
+            {
+                if (enem->getHealth() > 0)
+                    return true;
+            }
+        }
+    }
+    return false;
+}

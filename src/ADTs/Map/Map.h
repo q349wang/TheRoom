@@ -61,7 +61,7 @@ private:
   std::unordered_map<std::string, std::vector<std::shared_ptr<Item>>> items_;
 
   // Maintain a collection of all enemies on the map
-  std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>> enemies_;
+  std::vector<std::shared_ptr<Enemy>> enemies_;
 
 protected:
 public:
@@ -70,7 +70,7 @@ public:
   Map(std::shared_ptr<Player> player, std::vector<std::vector<char>> map,
       std::pair<int, int> start = {0, 0},
       std::unordered_map<std::string, std::vector<std::shared_ptr<Item>>> items = {},
-      std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>> enemies = {});
+      std::vector<std::shared_ptr<Enemy>> enemies = {});
 
   // Delete Map copy constructor to ensure appropriate behaviour
   Map(Map &other) = delete;
@@ -102,10 +102,10 @@ public:
 
   // Provides a const reference to a specified tile
   // Note: Coordinates are assumed to exist, otherwise will throw exception
-  const Tile& tile(int x, int y) const;
+  Tile& tile(int x, int y) const;
 
   // Calls tile(int x, int y) with a pair of ints
-  const Tile& tile(const std::pair<int, int>& coord) const;
+  Tile& tile(const std::pair<int, int>& coord) const;
 
   // Provides const reference to the current map
   const std::vector<std::vector<std::shared_ptr<Tile>>> &getMap() const;
@@ -127,6 +127,17 @@ public:
 
   // Provides the number of space tiles
   int getNumSpaces();
+
+  // Checks if a specified tile is an exit tile
+  bool checkExit(std::pair<int, int>);
+
+  // Finds the nearest available empty tile
+  std::pair<int, int> findNextEmpty(std::pair<int, int>);
+
+  // Clears a map of all enemies and items
+  void clearMap();
+
+  std::vector<std::shared_ptr<Enemy>>& getEnemies();
 };
 
 #endif

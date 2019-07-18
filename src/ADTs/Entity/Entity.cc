@@ -17,7 +17,7 @@ Entity::Entity(double health, double energy, double attack, double armour,
                vector<shared_ptr<Consumable>> consumables,
                vector<shared_ptr<Equipable>> equipables) :
                health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
-                name_{name}, position_{position}, consumables_{consumables_}, 
+               name_{name}, position_{position}, consumables_{consumables_}, 
                equipables_{equipables} {}
 
 /**
@@ -134,7 +134,7 @@ void Entity::useEnergy(double energy) {
  * Purpose: Determines if the current entity is considered inactive (dead)
  */
 bool Entity::isDead() {
-    return (health_ <= BASE_HEALTH_ENERGY) ? (true) : (false);
+    return (health_ <= BASE_HEALTH_ENERGY);
 }
 
 /**
@@ -142,7 +142,7 @@ bool Entity::isDead() {
  * Purpose: Determines if the current entity is considered out of energy
  */
 bool Entity::isOutOfEnergy() {
-    return (energy_ <= BASE_HEALTH_ENERGY) ? (true) : (false);
+    return (energy_ <= BASE_HEALTH_ENERGY);
 }
 
 /**
@@ -167,7 +167,7 @@ string Entity::getName() {
  * Purpose: Apply the specified stat mod
  */
 void Entity::applyStat(string stat, StatMod mod) {
-    if(stat == "Ranger" || stat == "Mage" || stat == "Warrior") {
+    if((stat == "Ranger") || (stat == "Mage") || (stat == "Warrior")) {
         if(stat == getName()) {
             armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
             health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
@@ -241,3 +241,10 @@ void Entity::dropAllItems() {
     consumables_.clear();
     equipables_.clear();
 }
+
+
+// Force the entity to a certain position
+void Entity::forcePosition(pair<int, int> pos)
+{
+    updatePosition(pos);
+};

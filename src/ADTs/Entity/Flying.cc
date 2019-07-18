@@ -36,7 +36,7 @@ bool Flying::makeMove(char direction)
     switch (direction) {
         case 'E':
 
-            // Determine the first wall or non-existent tile from the
+            // Determine the first space or non-existent tile from the
             // current position in the right direction
             if ((position_.first + right) < current_map_->numColumns(position_.second))
             {
@@ -69,10 +69,10 @@ bool Flying::makeMove(char direction)
 
         case 'W':
 
-            // Determine the first wall or non-existent tile from the
+            // Determine the first space or non-existent tile from the
             // current position in the left direction
             if ((position_.first - left) >= 0) {
-                while (current_map_->tile((position_.first - left), position_.second).available())
+                while (!(current_map_->tile((position_.first - left), position_.second).available()))
                 {
                     if ((position_.first - left) > 0) {
                         left++;
@@ -105,7 +105,7 @@ bool Flying::makeMove(char direction)
             // current position in the down direction
             if ((position_.second + down) < (current_map_->numRows()))
             {
-                while (current_map_->tile(position_.first, (position_.second + down)).available())
+                while (!(current_map_->tile(position_.first, (position_.second + down)).available()))
                 {
                     if ((position_.second + down) < (current_map_->numRows() - 1))
                     {
@@ -139,7 +139,7 @@ bool Flying::makeMove(char direction)
             // current position in the up direction
             if ((position_.second - up) >= 0)
             {
-                while (current_map_->tile(position_.first, (position_.second - up)).available())
+                while (!(current_map_->tile(position_.first, (position_.second - up)).available()))
                 {
                     if ((position_.second - up) > 0)
                     {
@@ -182,11 +182,10 @@ bool Flying::checkMove(char direction)
 {
     int right = 1, left = 1, up = 1, down = 1;
 
-    switch (direction)
-    {
+    switch (direction) {
         case 'E':
 
-            // Determine the first wall or non-existent tile from the
+            // Determine the first space or non-existent tile from the
             // current position in the right direction
             if ((position_.first + right) < current_map_->numColumns(position_.second))
             {
@@ -207,12 +206,11 @@ bool Flying::checkMove(char direction)
             // Insert the furthest available tile from the current tile position after an
             // immediate contigous block of wall tiles in the right direction
             if (((position_.first + right) < current_map_->numColumns(position_.second)) &&
-                (current_map_->tile((position_.first + right), position_.second).available()))
-            {
+                (current_map_->tile((position_.first + right), position_.second).available())) {
+                updatePosition({(position_.first + right), position_.second});
                 return true;
             }
-            else
-            {
+            else {
                 return false;
             }
 
@@ -220,18 +218,15 @@ bool Flying::checkMove(char direction)
 
         case 'W':
 
-            // Determine the first wall or non-existent tile from the
+            // Determine the first space or non-existent tile from the
             // current position in the left direction
-            if ((position_.first - left) >= 0)
-            {
-                while (current_map_->tile((position_.first - left), position_.second).available())
+            if ((position_.first - left) >= 0) {
+                while (!(current_map_->tile((position_.first - left), position_.second).available()))
                 {
-                    if ((position_.first - left) > 0)
-                    {
+                    if ((position_.first - left) > 0) {
                         left++;
                     }
-                    else
-                    {
+                    else {
                         left++;
                         break;
                     }
@@ -243,6 +238,7 @@ bool Flying::checkMove(char direction)
             if (((position_.first - left) >= 0) &&
                 (current_map_->tile((position_.first - left), position_.second).available()))
             {
+                updatePosition({(position_.first - left), position_.second});
                 return true;
             }
             else
@@ -258,7 +254,7 @@ bool Flying::checkMove(char direction)
             // current position in the down direction
             if ((position_.second + down) < (current_map_->numRows()))
             {
-                while (current_map_->tile(position_.first, (position_.second + down)).available())
+                while (!(current_map_->tile(position_.first, (position_.second + down)).available()))
                 {
                     if ((position_.second + down) < (current_map_->numRows() - 1))
                     {
@@ -277,6 +273,7 @@ bool Flying::checkMove(char direction)
             if (((position_.second + down) < current_map_->numRows()) &&
                 (current_map_->tile(position_.first, (position_.second + down)).available()))
             {
+                updatePosition({position_.first, (position_.second + down)});
                 return true;
             }
             else
@@ -287,11 +284,12 @@ bool Flying::checkMove(char direction)
             break;
 
         case 'N':
+        
             // Determine the first wall or non-existent tile from the
             // current position in the up direction
             if ((position_.second - up) >= 0)
             {
-                while (current_map_->tile(position_.first, (position_.second - up)).available())
+                while (!(current_map_->tile(position_.first, (position_.second - up)).available()))
                 {
                     if ((position_.second - up) > 0)
                     {
@@ -310,6 +308,7 @@ bool Flying::checkMove(char direction)
             if (((position_.second - up) >= 0) &&
                 (current_map_->tile(position_.first, (position_.second - up)).available()))
             {
+                updatePosition({position_.first, (position_.second - up)});
                 return true;
             }
             else
