@@ -205,7 +205,7 @@ void XWindowManager::drawEnemyPlates(const vector<shared_ptr<Enemy>> &eList)
 		{
 			if (i >= eList.size())
 				break;
-			drawEntityInfo(rowGap + col * plateW, colGap + row* plateH, eList[i]);
+			drawEntityInfo(rowGap + col * plateW, colGap + row * plateH, eList[i]);
 			i++;
 		}
 		row++;
@@ -252,10 +252,12 @@ void XWindowManager::redrawMap()
 	{
 		XClearWindow(d, w);
 		drawMapStruct(mp->getPlayer(), mp->getMap());
-		drawEntityOnMap(mp->getPlayer());
-		for(auto tile : mp->getEnemies()) {
-			for (auto enemy : tile.second) {
-				drawEntityOnMap(enemy);
+		drawPlayerOnMap(mp->getPlayer());
+		for (auto tile : mp->getEnemies())
+		{
+			for (auto enemy : tile.second)
+			{
+				drawEntityOnMap(mp->getPlayer(), enemy);
 			}
 		}
 		drawAbilityCD(mp->getPlayer());
@@ -267,28 +269,43 @@ void XWindowManager::redrawMap()
 // Redraws correct scene based on current game state
 void XWindowManager::notify(std::string msg)
 {
-	switch (gameManager->getGameState()) {
-		case GameState::Battle:
-		{
-			redrawBattle();
-			break;
-		}
-		case GameState::Travel:
-		{
-			redrawMap();
-			break;
-		}
-		default:
+	switch (gameManager->getGameState())
+	{
+	case GameState::Battle:
+	{
+		redrawBattle();
+		break;
+	}
+	case GameState::Travel:
+	{
+		redrawMap();
+		break;
+	}
+	default:
 		break;
 	}
 	return;
 }
 
-void XWindowManager::drawEntityOnMap(const shared_ptr<Entity> &p)
+void XWindowManager::drawPlayerOnMap(const shared_ptr<Player> &p)
 {
 	drawFillCirc(centerX(0) + mapTileSize / 2 - entityDiameter / 2,
 				 centerY(0) + mapTileSize / 2 - entityDiameter / 2,
 				 entityDiameter, entityDiameter, p->getColour());
+}
+
+void XWindowManager::drawEntityOnMap(const shared_ptr<Player> &p,
+									 const shared_ptr<Entity> &e)
+{
+	pair<int, int> coords = p->getPosition();
+	int xOffset = coords.first;
+	int yOffset = coords.second;
+	coords = e->getPosition();
+	int x = coords.first;
+	int y = coords.second;
+	drawFillCirc(centerX((x - xOffset) * mapTileSize) + mapTileSize / 2 - entityDiameter / 2,
+				 centerY((y - yOffset) * mapTileSize) + mapTileSize / 2 - entityDiameter / 2,
+				 entityDiameter, entityDiameter, e->getColour());
 }
 
 int XWindowManager::centerX(int x)

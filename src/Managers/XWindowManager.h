@@ -78,8 +78,8 @@ public:
     void drawEnemyPlates(const std::vector<std::shared_ptr<Enemy>> &);
     void drawAbilityCD(const std::shared_ptr<Player> &);
 
-    void drawEntityOnMap(const std::shared_ptr<Entity> &);
-
+    void drawEntityOnMap(const std::shared_ptr<Player> &, const std::shared_ptr<Entity> &);
+    void drawPlayerOnMap(const std::shared_ptr<Player> &);
     void redrawMap();
     void redrawBattle();
     void notify(std::string) override;
