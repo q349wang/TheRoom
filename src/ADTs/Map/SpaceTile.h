@@ -14,7 +14,8 @@ class SpaceTile : public Tile {
  private:
  protected:
     // Tile colour to be used for 
-    static const int TILE_COLOUR = 1; 
+    static const int TILE_COLOUR = GameColours::White; 
+    static const int ITEM_TILE_COLOUR = GameColours::Yellow;
 
  public:
     // Default constructor

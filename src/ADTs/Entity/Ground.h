@@ -13,11 +13,13 @@
  *          including but not limited to health, energy, strength, current position,
  *          consumables, equipables, and special move information;
  */
-class Ground : public Enemy
-{
-private:
-protected:
-public:
+class Ground : public Enemy {
+ private:
+   // Defines the ground enemy colour
+   static const int colour = GameColours::Red;
+   
+ protected:
+ public:
     // Constructor which requires health, energy, armour, and attack information
     Ground(double health, double energy, double attack, double armour,
            std::pair<int, int> position,
@@ -32,6 +34,9 @@ public:
 
     // Check if a specified move is valid for the entity
     bool checkMove(char) override;
+
+    // Return color of ground enemy
+    int getColour() override;
 };
 
 #endif

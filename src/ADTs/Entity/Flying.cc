@@ -16,7 +16,7 @@ using namespace std;
 Flying::Flying(double health, double energy, double attack, double armour, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables,
                vector<shared_ptr<Equipable>> equipables) : 
-               Enemy{health, energy, attack, armour, position, "Flying", consumables, equipables} {}
+               Enemy{health, energy, attack, armour, "Flying", position, consumables, equipables} {}
 
 /**
  * Signature: ~Entity()
@@ -33,280 +33,302 @@ bool Flying::makeMove(char direction)
 {
     int right = 1, left = 1, up = 1, down = 1;
 
-    switch (direction)
-    {
-    case 'E':
+    switch (direction) {
+        case 'E':
 
-        // Determine the first wall or non-existent tile from the
-        // current position in the right direction
-        if ((position_.first + right) < current_map_->numColumns())
-        {
-            while (!(current_map_->tile((position_.first + right), position_.second).available()))
+            // Determine the first wall or non-existent tile from the
+            // current position in the right direction
+            if ((position_.first + right) < current_map_->numColumns(position_.second))
             {
-                if ((position_.first + right) < (current_map_->numColumns() - 1))
+                while (!(current_map_->tile((position_.first + right), position_.second).available()))
                 {
-                    right++;
-                }
-                else
-                {
-                    right++;
-                    break;
+                    if ((position_.first + right) < (current_map_->numColumns(position_.second) - 1))
+                    {
+                        right++;
+                    }
+                    else
+                    {
+                        right++;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Insert the furthest available tile from the current tile position after an
-        // immediate contigous block of wall tiles in the right direction
-        if (((position_.first + right) < current_map_->numColumns()) &&
-            (current_map_->tile((position_.first + right), position_.second).available()))
-        {
-            updatePosition({(position_.first + right), position_.second});
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+            // Insert the furthest available tile from the current tile position after an
+            // immediate contigous block of wall tiles in the right direction
+            if (((position_.first + right) < current_map_->numColumns(position_.second)) &&
+                (current_map_->tile((position_.first + right), position_.second).available())) {
+                updatePosition({(position_.first + right), position_.second});
+                return true;
+            }
+            else {
+                return false;
+            }
 
-    case 'W':
+            break;
 
-        // Determine the first wall or non-existent tile from the
-        // current position in the left direction
-        if ((position_.first - left) >= 0)
-        {
-            while (current_map_->tile((position_.first - left), position_.second).available())
-            {
-                if ((position_.first - left) > 0)
+        case 'W':
+
+            // Determine the first wall or non-existent tile from the
+            // current position in the left direction
+            if ((position_.first - left) >= 0) {
+                while (current_map_->tile((position_.first - left), position_.second).available())
                 {
-                    left++;
-                }
-                else
-                {
-                    left++;
-                    break;
+                    if ((position_.first - left) > 0) {
+                        left++;
+                    }
+                    else {
+                        left++;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Insert the furthest available tile from the current tile position after an
-        // immediate contigous block of wall tiles in the left direction
-        if (((position_.first - left) >= 0) &&
-            (current_map_->tile((position_.first - left), position_.second).available()))
-        {
-            updatePosition({(position_.first - left), position_.second});
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    case 'N':
-
-        // Determine the first wall or non-existent tile from the
-        // current position in the up direction
-        if ((position_.second + up) < (current_map_->numRows(position_.first)))
-        {
-            while (current_map_->tile(position_.first, (position_.second + up)).available())
+            // Insert the furthest available tile from the current tile position after an
+            // immediate contigous block of wall tiles in the left direction
+            if (((position_.first - left) >= 0) &&
+                (current_map_->tile((position_.first - left), position_.second).available()))
             {
-                if ((position_.second + up) < (current_map_->numRows(position_.first) - 1))
+                updatePosition({(position_.first - left), position_.second});
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            break;
+
+        case 'S':
+
+            // Determine the first wall or non-existent tile from the
+            // current position in the down direction
+            if ((position_.second + down) < (current_map_->numRows()))
+            {
+                while (current_map_->tile(position_.first, (position_.second + down)).available())
                 {
-                    up++;
-                }
-                else
-                {
-                    up++;
-                    break;
+                    if ((position_.second + down) < (current_map_->numRows() - 1))
+                    {
+                        down++;
+                    }
+                    else
+                    {
+                        down++;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Insert the furthest available tile from the current tile position after an
-        // immediate contigous block of wall tiles in the up direction
-        if (((position_.second + up) < current_map_->numRows(position_.first)) &&
-            (current_map_->tile(position_.first, (position_.second + up)).available()))
-        {
-            updatePosition({position_.first, (position_.second + up)});
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    case 'S':
-        // Determine the first wall or non-existent tile from the
-        // current position in the up direction
-        if ((position_.second - down) >= 0)
-        {
-            while (current_map_->tile(position_.first, (position_.second - down)).available())
+            // Insert the furthest available tile from the current tile position after an
+            // immediate contigous block of wall tiles in the down direction
+            if (((position_.second + down) < current_map_->numRows()) &&
+                (current_map_->tile(position_.first, (position_.second + down)).available()))
             {
-                if ((position_.second - down) > 0)
+                updatePosition({position_.first, (position_.second + down)});
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            break;
+
+        case 'N':
+            // Determine the first wall or non-existent tile from the
+            // current position in the up direction
+            if ((position_.second - up) >= 0)
+            {
+                while (current_map_->tile(position_.first, (position_.second - up)).available())
                 {
-                    down++;
-                }
-                else
-                {
-                    down++;
-                    break;
+                    if ((position_.second - up) > 0)
+                    {
+                        up++;
+                    }
+                    else
+                    {
+                        up++;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Insert the furthest available tile from the current tile position after an
-        // immediate contigous block of wall tiles in the down direction
-        if (((position_.second - down) >= 0) &&
-            (current_map_->tile(position_.first, (position_.second - down)).available()))
-        {
-            updatePosition({position_.first, (position_.second - down)});
-            return true;
-        }
-        else
-        {
+            // Insert the furthest available tile from the current tile position after an
+            // immediate contigous block of wall tiles in the up direction
+            if (((position_.second - up) >= 0) &&
+                (current_map_->tile(position_.first, (position_.second - up)).available()))
+            {
+                updatePosition({position_.first, (position_.second - up)});
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            break;
+
+        default:
+            // Return false if any other input is detected
             return false;
-        }
-
-    default:
-        // Return false if any other input is detected
-        return false;
     }
 }
 
+/**
+ * Signature: bool checkMove(char)
+ * Purpose: Checks if a specified move in a given direction is valid
+ */
 bool Flying::checkMove(char direction)
 {
     int right = 1, left = 1, up = 1, down = 1;
 
     switch (direction)
     {
-    case 'E':
+        case 'E':
 
-        // Determine the first wall or non-existent tile from the
-        // current position in the right direction
-        if ((position_.first + right) < current_map_->numColumns())
-        {
-            while (!(current_map_->tile((position_.first + right), position_.second).available()))
+            // Determine the first wall or non-existent tile from the
+            // current position in the right direction
+            if ((position_.first + right) < current_map_->numColumns(position_.second))
             {
-                if ((position_.first + right) < (current_map_->numColumns() - 1))
+                while (!(current_map_->tile((position_.first + right), position_.second).available()))
                 {
-                    right++;
-                }
-                else
-                {
-                    right++;
-                    break;
+                    if ((position_.first + right) < (current_map_->numColumns(position_.second) - 1))
+                    {
+                        right++;
+                    }
+                    else
+                    {
+                        right++;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Insert the furthest available tile from the current tile position after an
-        // immediate contigous block of wall tiles in the right direction
-        if (((position_.first + right) < current_map_->numColumns()) &&
-            (current_map_->tile((position_.first + right), position_.second).available()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    case 'W':
-
-        // Determine the first wall or non-existent tile from the
-        // current position in the left direction
-        if ((position_.first - left) >= 0)
-        {
-            while (current_map_->tile((position_.first - left), position_.second).available())
+            // Insert the furthest available tile from the current tile position after an
+            // immediate contigous block of wall tiles in the right direction
+            if (((position_.first + right) < current_map_->numColumns(position_.second)) &&
+                (current_map_->tile((position_.first + right), position_.second).available()))
             {
-                if ((position_.first - left) > 0)
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            break;
+
+        case 'W':
+
+            // Determine the first wall or non-existent tile from the
+            // current position in the left direction
+            if ((position_.first - left) >= 0)
+            {
+                while (current_map_->tile((position_.first - left), position_.second).available())
                 {
-                    left++;
-                }
-                else
-                {
-                    left++;
-                    break;
+                    if ((position_.first - left) > 0)
+                    {
+                        left++;
+                    }
+                    else
+                    {
+                        left++;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Insert the furthest available tile from the current tile position after an
-        // immediate contigous block of wall tiles in the left direction
-        if (((position_.first - left) >= 0) &&
-            (current_map_->tile((position_.first - left), position_.second).available()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    case 'N':
-
-        // Determine the first wall or non-existent tile from the
-        // current position in the up direction
-        if ((position_.second + up) < (current_map_->numRows(position_.first)))
-        {
-            while (current_map_->tile(position_.first, (position_.second + up)).available())
+            // Insert the furthest available tile from the current tile position after an
+            // immediate contigous block of wall tiles in the left direction
+            if (((position_.first - left) >= 0) &&
+                (current_map_->tile((position_.first - left), position_.second).available()))
             {
-                if ((position_.second + up) < (current_map_->numRows(position_.first) - 1))
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            break;
+
+        case 'S':
+
+            // Determine the first wall or non-existent tile from the
+            // current position in the down direction
+            if ((position_.second + down) < (current_map_->numRows()))
+            {
+                while (current_map_->tile(position_.first, (position_.second + down)).available())
                 {
-                    up++;
-                }
-                else
-                {
-                    up++;
-                    break;
+                    if ((position_.second + down) < (current_map_->numRows() - 1))
+                    {
+                        down++;
+                    }
+                    else
+                    {
+                        down++;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Insert the furthest available tile from the current tile position after an
-        // immediate contigous block of wall tiles in the up direction
-        if (((position_.second + up) < current_map_->numRows(position_.first)) &&
-            (current_map_->tile(position_.first, (position_.second + up)).available()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    case 'S':
-        // Determine the first wall or non-existent tile from the
-        // current position in the up direction
-        if ((position_.second - down) >= 0)
-        {
-            while (current_map_->tile(position_.first, (position_.second - down)).available())
+            // Insert the furthest available tile from the current tile position after an
+            // immediate contigous block of wall tiles in the down direction
+            if (((position_.second + down) < current_map_->numRows()) &&
+                (current_map_->tile(position_.first, (position_.second + down)).available()))
             {
-                if ((position_.second - down) > 0)
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            break;
+
+        case 'N':
+            // Determine the first wall or non-existent tile from the
+            // current position in the up direction
+            if ((position_.second - up) >= 0)
+            {
+                while (current_map_->tile(position_.first, (position_.second - up)).available())
                 {
-                    down++;
-                }
-                else
-                {
-                    down++;
-                    break;
+                    if ((position_.second - up) > 0)
+                    {
+                        up++;
+                    }
+                    else
+                    {
+                        up++;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Insert the furthest available tile from the current tile position after an
-        // immediate contigous block of wall tiles in the down direction
-        if (((position_.second - down) >= 0) &&
-            (current_map_->tile(position_.first, (position_.second - down)).available()))
-        {
-            return true;
-        }
-        else
-        {
+            // Insert the furthest available tile from the current tile position after an
+            // immediate contigous block of wall tiles in the up direction
+            if (((position_.second - up) >= 0) &&
+                (current_map_->tile(position_.first, (position_.second - up)).available()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            break;
+
+        default:
+            // Return false if any other input is detected
             return false;
-        }
-
-    default:
-        // Return false if any other input is detected
-        return false;
     }
+}
+
+/**
+ * Signature: int getColour()
+ * Purpose: Provides the flying enemy colour
+ */
+int Flying::getColour() { 
+    return colour; 
 }

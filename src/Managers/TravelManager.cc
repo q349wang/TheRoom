@@ -24,12 +24,12 @@ void TravelManager::makeMove(const Command &cmd)
         vector<string> args = cmd.getArgs();
         switch (cmd.getCommand())
         {
-        case 'T':
+        case 'A':
         {
             if (args.size() != 2)
             {
                 setMessageAndNotify("Invalid Command");
-                return;
+                break;
             }
             pair<int, int> coords;
             try
@@ -46,13 +46,13 @@ void TravelManager::makeMove(const Command &cmd)
             if (!pp->specialReady())
             {
                 setMessageAndNotify("Special on cooldown!");
-                return;
+                break;
             }
 
             if (!pp->useSpecial(coords))
             {
                 setMessageAndNotify("Invalid location for special move");
-                return;
+                break;
             }
         }
         case 'M':
@@ -60,14 +60,46 @@ void TravelManager::makeMove(const Command &cmd)
             if (args.size() != 1 || !pp->checkMove(args[0].at(0)))
             {
                 setMessageAndNotify("Invalid Command");
-                return;
+                break;
             }
 
             pp->makeMove(args[0].at(0));
+            pp->decreaseCooldown();
+            if (auto mp = map.lock())
+            {
+                mp->moveEnemies();
+            }
+            break;
         }
         case 'P':
         {
-            // TO DO
+            vector<shared_ptr<Item>> pickedUp = pp->pickUpItems();
+            ostringstream msg;
+            msg << "Picked up:\n";
+            for (auto item : pickedUp)
+            {
+                msg << item->getName() << "\n";
+            }
+            setMessageAndNotify(msg.str());
+            break;
+        }
+        case 'D':
+        {
+            if (args.size() != 1)
+            {
+                setMessageAndNotify("Invalid Command");
+                break;
+            }
+            bool dropped = pp->dropItem(args[0]);
+            if (dropped)
+            {
+                setMessageAndNotify("Dropped item: " + args[0]);
+            }
+            else
+            {
+                setMessageAndNotify("Could not find item");
+            }
+            break;
         }
         case 'L':
         {
@@ -81,14 +113,14 @@ void TravelManager::makeMove(const Command &cmd)
                 desc << pots->getName() << endl;
             }
             setMessageAndNotify(desc.str());
-            return;
+            break;
         }
         case 'U':
         {
             if (args.size() != 1)
             {
                 setMessageAndNotify("Invalid Command");
-                return;
+                break;
             }
             shared_ptr<Item> item = nullptr;
             string name = args[0];
@@ -97,6 +129,7 @@ void TravelManager::makeMove(const Command &cmd)
                 if (equip != nullptr && equip->getName() == name)
                 {
                     item = equip;
+                    pp->equipEquipable(pp, item->getName());
                     break;
                 }
             }
@@ -107,6 +140,7 @@ void TravelManager::makeMove(const Command &cmd)
                     if (pots != nullptr && pots->getName() == name)
                     {
                         item = pots;
+                        pp->consumeConsumable(pp, item->getName());
                         break;
                     }
                 }
@@ -114,10 +148,9 @@ void TravelManager::makeMove(const Command &cmd)
             if (item == nullptr)
             {
                 setMessageAndNotify("Invalid Command");
-                return;
+                break;
             }
-            //TODO
-            //player->useItem(player, item);
+            break;
         }
         }
     }
@@ -142,6 +175,7 @@ void TravelManager::runTravel()
                 cin >> cmd;
                 switch (cmd)
                 {
+                    // Move in a specific direction
                 case 'M':
                 {
                     setMessageAndNotify("Input Direction (N,S,E,W)");
@@ -150,6 +184,7 @@ void TravelManager::runTravel()
                     args.emplace_back(dir);
                     break;
                 }
+                // Use ability to move to location
                 case 'A':
                 {
                     setMessageAndNotify("Input Location (x,y)");
@@ -159,11 +194,16 @@ void TravelManager::runTravel()
                     args.emplace_back(y);
                     break;
                 }
+                // List items that you have
+                case 'L':
+                // Pick up item
                 case 'P':
                 {
                     break;
                 }
-                case 'L':
+                // Drop item
+                case 'D':
+                // Use item on self
                 case 'U':
                 {
                     setMessageAndNotify("Input Item");

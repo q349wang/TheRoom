@@ -14,7 +14,7 @@ class WallTile : public Tile {
  private:
  protected:
     // Tile colour to be used for 
-    static const int TILE_COLOUR = 2; 
+    static const int TILE_COLOUR = GameColours::Black; 
 
  public:
    // Default constructor

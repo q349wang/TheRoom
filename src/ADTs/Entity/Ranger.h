@@ -15,6 +15,9 @@
  */
 class Ranger : public Player {
  private:
+    // Defines the ranger colour
+   static const int colour = GameColours::DarkGreen;
+
  protected:
  public:
     // Constructor which requires health, energy, and attack information
@@ -32,6 +35,9 @@ class Ranger : public Player {
 
     // Provides a collection of coordinates that can be moved to under a special move
     std::vector<std::pair<int, int>> specialMoves() override;
+
+   // Get colour of the player
+    int getColour() override;
 };
 
 #endif

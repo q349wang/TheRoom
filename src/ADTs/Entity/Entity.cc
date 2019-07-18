@@ -13,12 +13,12 @@ using namespace std;
  * Purpose: Constructor which requires intial entity's health, energy, and position
  */
 Entity::Entity(double health, double energy, double attack, double armour, 
-               pair<int, int> position, string name,
+               string name, pair<int, int> position,
                vector<shared_ptr<Consumable>> consumables,
                vector<shared_ptr<Equipable>> equipables) :
                health_{health}, energy_{energy}, attackStrength_{attack}, armour_{armour},
-               position_{position}, consumables_{consumables_}, 
-               equipables_{equipables}, name_{name} {}
+                name_{name}, position_{position}, consumables_{consumables_}, 
+               equipables_{equipables} {}
 
 /**
  * Signature: ~Entity()
@@ -89,7 +89,7 @@ void Entity::addConsumable(shared_ptr<Consumable> new_consume) {
  * Signature: const vector<shared_ptr<Equipable>>& currentEquipables()
  * Purpose: Provides a const reference to all the current equipables
  */
-const vector<shared_ptr<Equipable>>& Entity::currentEquipables() {
+vector<shared_ptr<Equipable>>& Entity::currentEquipables() {
     return equipables_;
 }
 
@@ -97,7 +97,7 @@ const vector<shared_ptr<Equipable>>& Entity::currentEquipables() {
  * Signature: const vector<shared_ptr<Consumable>>& currentConsumable()
  * Purpose: Provides a const reference to all the current consumables
  */
-const vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
+vector<shared_ptr<Consumable>>& Entity::currentConsumables() {
     return consumables_;
 }
 
@@ -160,4 +160,84 @@ void Entity::updatePosition(pair<int, int> location) {
  */
 string Entity::getName() {
     return name_;
+}
+
+/**
+ * Signature: void applyStat(string, StatMod)
+ * Purpose: Apply the specified stat mod
+ */
+void Entity::applyStat(string stat, StatMod mod) {
+    if(stat == "Ranger" || stat == "Mage" || stat == "Warrior") {
+        if(stat == getName()) {
+            armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
+            health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
+            energy_ = (energy_ + mod.getAdder()) * mod.getMultiplier();
+            attackStrength_ = (attackStrength_ + mod.getAdder()) * mod.getMultiplier();
+        }
+    }
+
+    else {
+        if(stat == "Health") {
+            health_ = (health_ + mod.getAdder()) * mod.getMultiplier();
+        }
+        else if(stat == "Attack") {
+            attackStrength_ = (attackStrength_ + mod.getAdder()) * mod.getMultiplier();
+        }
+        else if(stat == "Damage") {
+            health_ = (health_ - mod.getAdder()) * mod.getMultiplier();
+        }
+        else if(stat == "Energy") {
+            energy_ = (energy_ + mod.getAdder()) * mod.getMultiplier();
+        }   
+        else if(stat == "Armor") {
+            armour_ = (armour_ + mod.getAdder()) * mod.getMultiplier();
+        }
+    }
+}
+
+/**
+ * Signature: void setMap(shared_ptr<Map>)
+ * Purpose: Sets the map of an entity
+ */
+void Entity::setMap(shared_ptr<Map> map) {
+    current_map_ = map;
+}
+
+/**
+ * Signature: bool dropItems(string)
+ * Purpose: Drops first instance of item specified by provided name
+ */
+bool Entity::dropItem(string name) {
+    for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
+        if((*it)->getName() == name) {
+            consumables_.erase(it);
+            return true;
+        }
+    }
+
+    for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
+        if((*it)->getName() == name) {
+            equipables_.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Signature: void dropAllItems()
+ * Purpose: Drops all items onto current tile
+ */
+void Entity::dropAllItems() {
+    for(auto it = consumables_.begin(); it != consumables_.end(); ++it) {
+        current_map_->insertItem(*it, position_);
+    }
+
+    for(auto it = equipables_.begin(); it != equipables_.end(); ++it) {
+        current_map_->insertItem(*it, position_);
+    }
+
+    consumables_.clear();
+    equipables_.clear();
 }
