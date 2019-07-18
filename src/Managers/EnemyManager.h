@@ -1,7 +1,7 @@
 #ifndef ENEMYMANAGER_H_
 #define ENEMYMANAGER_H_
 
-#include "Enemy.h"
+#include "../ADTs/Entity/Enemy.h"
 #include "../ADTs/Entity/EnemyConf.h"
 
 #include <map>

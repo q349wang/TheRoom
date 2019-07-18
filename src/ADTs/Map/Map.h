@@ -136,6 +136,8 @@ public:
 
   // Clears a map of all enemies and items
   void clearMap();
+
+  std::unordered_map<std::string, std::vector<std::shared_ptr<Enemy>>>& getEnemies();
 };
 
 #endif

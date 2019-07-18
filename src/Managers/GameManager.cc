@@ -2,8 +2,14 @@
 #include "BattleManager.h"
 #include "TravelManager.h"
 #include "MapManager.h"
+#include "MsgDisplayManager.h"
+#include "XWindowManager.h"
 #include "../ADTs/Entity/Player.h"
+#include "../ADTs/Entity/Warrior.h"
+#include "../ADTs/Entity/Mage.h"
+#include "../ADTs/Entity/Ranger.h"
 #include "../ADTs/Map/Map.h"
+#include "../ADTs/Map/Tile.h"
 #include "../ADTs/Entity/EnemyConf.h"
 #include <memory>
 #include <utility>
@@ -11,15 +17,25 @@
 using namespace std;
 
 GameManager::GameManager()
-    : travelManager{},
+    : startCoord{0, 0},
       mapManager{},
+      travelManager{},
       battleManager{},
       msgDisplayerManager{},
       windowManager{},
       gameMap{},
       player{},
-      state{GameState::None}
+      state{GameState::NoState}
 {
+}
+
+GameManager::~GameManager()
+{
+    battleManager->detach(windowManager.get());
+    battleManager->detach(msgDisplayerManager.get());
+
+    travelManager->detach(windowManager.get());
+    travelManager->detach(msgDisplayerManager.get());
 }
 
 void GameManager::setStartCoord(pair<int, int> input)
@@ -34,14 +50,54 @@ void GameManager::startGame()
 {
     unordered_map<string, vector<shared_ptr<Item>>> items;
     unordered_map<string, vector<shared_ptr<Enemy>>> enemies;
-    gameMap = make_shared<Map>(player, inputMap(), startCoord, items, enemies);
-    player = make_shared<Player>();
-    mapManager->populateMap(gameMap, level);
-    player->setMap(gameMap);
+
+    cout << "Choose hero: Warrior = 0, Mage = 1, Ranger = 2" << endl;
+    int hero = 0;
+    cin >> hero;
+    switch (hero)
+    {
+    case 1:
+        player = make_shared<Mage>(150, 300, 30, 10, make_pair(1, 1));
+        break;
+    case 2:
+        player = make_shared<Ranger>(200, 200, 20, 15, make_pair(1, 1));
+        break;
+    default:
+        player = make_shared<Warrior>(300, 200, 15, 20, make_pair(1, 1));
+        break;
+    }
+    vector<vector<char>> current_map = inputMap();
+
+    current_map.erase(current_map.begin());
+    current_map.pop_back();
+
+    for(auto it = current_map.begin(); it != current_map.end(); ++it) {
+        cout << "hello" << endl;
+        for(auto bi = (*it).begin(); bi != (*it).end(); ++bi) {
+            cout << (*bi) << " ";
+        }
+        cout << endl;
+    }
+
+    
+
+    gameMap = make_shared<Map>(player, current_map, make_pair(1, 1), items, enemies);
+
+
+
     battleManager = make_shared<BattleManager>(player);
     travelManager = make_shared<TravelManager>(gameMap, player);
-    msgDisplayerManager = make_shared<MsgDisplayerManager>(cin);
+    mapManager = make_shared<MapManager>(inputEnemyConf());
+    mapManager->populateMap(gameMap, level);
+    player->setMap(gameMap);
+    msgDisplayerManager = make_shared<MsgDisplayManager>(cout);
     windowManager = make_shared<XWindowManager>(this, gameMap);
+
+    battleManager->attach(windowManager.get());
+    battleManager->attach(msgDisplayerManager.get());
+
+    travelManager->attach(windowManager.get());
+    travelManager->attach(msgDisplayerManager.get());
     playGame();
 }
 
@@ -53,8 +109,8 @@ void GameManager::startTravel()
 
 void GameManager::startBattle()
 {
-    state == GameState::Battle;
-    battleManager->startBattle();
+    state = GameState::Battle;
+    battleManager->startBattle(gameMap->tile(player->getPosition()).getEnemies());
 }
 
 void GameManager::endGame()
@@ -66,7 +122,6 @@ void GameManager::endGame()
 }
 void GameManager::playGame()
 {
-    gameMap = mapManager->setCustomMap(inputMap());
     while (true)
     {
         startTravel();
@@ -128,13 +183,9 @@ map<string, EnemyConf> GameManager::inputEnemyConf()
 {
     map<string, EnemyConf> confMap;
     string filename;
-    string token;
-    cout << "Input a file for input map" << endl;
+    cout << "Input a file for enemy config" << endl;
     cin >> filename;
-    string mapInput;
     ifstream input;
-    int y;
-    int x;
     input.open(filename);
     while (!input)
     {
@@ -166,11 +217,15 @@ map<string, EnemyConf> GameManager::inputEnemyConf()
         // Base and scale of attack
         pair<double, double> attack;
         input >> attack.first >> attack.second;
-
         EnemyConf conf{weight, health, energy, armour, attack};
         confMap[name] = conf;
     }
     input.close();
 
     return confMap;
+}
+
+GameState GameManager::getGameState() const
+{
+    return state;
 }

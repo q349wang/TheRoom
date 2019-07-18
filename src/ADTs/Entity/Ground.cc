@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 #include <utility>
-
+#include <iostream>
 using namespace std;
 
 /**
@@ -32,6 +32,7 @@ Ground::~Ground(){}
  */
 bool Ground::makeMove(char direction)
 {
+    cout << "enemy" <<  endl;
     pair<int, int> updated_position = position_;
 
     switch (direction)
@@ -73,6 +74,7 @@ bool Ground::makeMove(char direction)
  */
 bool Ground::checkMove(char direction)
 {
+    cout << "checking move" << endl;
     pair<int, int> updated_position = position_;
 
     // Update the modified position dependent on the input direction
@@ -97,11 +99,11 @@ bool Ground::checkMove(char direction)
     default:
         return false;
     }
-
+cout << "dsada" << endl;
     if(updated_position.second >= 0  && updated_position.second < current_map_->numRows()) {
-
+cout << "fuck me" << endl;
         if(updated_position.first >= 0 && updated_position.first < current_map_->numColumns(updated_position.second)) {    
-            
+            cout << "updated pos: " << updated_position.first << " " << updated_position.second << endl;
             if(current_map_->tile(updated_position.first, updated_position.second).available()) {
                     return true;
             }

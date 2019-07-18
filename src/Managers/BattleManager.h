@@ -14,7 +14,7 @@ class Player;
 
 class BattleManager : public Subject
 {
-	std::vector<std::shared_ptr<Enemy>>* eList;
+	std::vector<std::shared_ptr<Enemy>> eList;
 	std::shared_ptr<Player> player;
 
 	bool battleEnded;
@@ -28,7 +28,7 @@ public:
 
 	void runEnemyTurn();
 	bool runPlayerTurn(const Command &);
-	void startBattle(std::vector<std::shared_ptr<Enemy>> *);
+	void startBattle(const std::vector<std::shared_ptr<Enemy>>&);
 	void runBattle();
 
 	bool isBattleEnded() const;

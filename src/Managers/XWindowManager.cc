@@ -186,7 +186,7 @@ void XWindowManager::drawAbilityCD(const shared_ptr<Player> &p)
 // Draws enemy nameplates
 void XWindowManager::drawEnemyPlates(const vector<shared_ptr<Enemy>> &eList)
 {
-	int rowLen = 5;
+	size_t rowLen = 5;
 	int colGap = 10;
 	int rowGap = 0;
 	if (eList.size() <= rowLen)
@@ -198,10 +198,10 @@ void XWindowManager::drawEnemyPlates(const vector<shared_ptr<Enemy>> &eList)
 		rowGap = (width - (rowLen * plateW) % width) / eList.size();
 	}
 	int row = 0;
-	for (int i = 0; i < eList.size(); i++)
+	for (size_t i = 0; i < eList.size(); i++)
 	{
 
-		for (int col = 0; col < rowLen; col++)
+		for (size_t col = 0; col < rowLen; col++)
 		{
 			if (i >= eList.size())
 				break;
@@ -253,6 +253,11 @@ void XWindowManager::redrawMap()
 		XClearWindow(d, w);
 		drawMapStruct(mp->getPlayer(), mp->getMap());
 		drawEntityOnMap(mp->getPlayer());
+		for(auto tile : mp->getEnemies()) {
+			for (auto enemy : tile.second) {
+				drawEntityOnMap(enemy);
+			}
+		}
 		drawAbilityCD(mp->getPlayer());
 	}
 

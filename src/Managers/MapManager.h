@@ -4,6 +4,7 @@
 #include "../ADTs/Map/Map.h"
 
 #include <memory>
+#include <map>
 
 class EnemyConf;
 
