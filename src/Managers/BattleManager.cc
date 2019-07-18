@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <iomanip>
 
 using namespace std;
 
@@ -71,7 +72,16 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             invalidCmd = true;
             break;
         }
-        setMessageAndNotify(item->getName());
+        ostringstream itemDesc;
+        itemDesc << fixed << setprecision(2);
+        itemDesc << item->getName() << endl;
+        map<string, StatMod> desc = item->getModifiers();
+        for(auto it = desc.begin(); it != desc.end(); ++it) {
+            itemDesc << it->first << ": Adder: "
+            << it->second.getAdder() << " Multiplier: "
+            << it->second.getMultiplier() << endl;
+        }
+        setMessageAndNotify(itemDesc.str());
         return false;
         break;
     }
@@ -249,6 +259,7 @@ void BattleManager::runBattle()
             cin >> cmd;
             switch (cmd)
             {
+            // Get details of item
             case 'D':
             {
                 setMessageAndNotify("Input Item");
@@ -257,6 +268,7 @@ void BattleManager::runBattle()
                 args.emplace_back(name);
                 break;
             }
+            // Use item on target
             case 'U':
             {
                 setMessageAndNotify("Input Item");
@@ -269,7 +281,7 @@ void BattleManager::runBattle()
                 args.emplace_back(target);
                 break;
             }
-
+            // Attack target
             case 'A':
             {
                 setMessageAndNotify("Input Target");
