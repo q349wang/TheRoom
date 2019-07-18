@@ -5,13 +5,15 @@
 
 #include <memory>
 
+class EnemyConf;
+
 class MapManager {
  private:
-    std::map<std::string, EnemyConfig> enemy_configuration_;
+    std::map<std::string, EnemyConf> enemy_configuration_;
  protected:
  public:
     // Constructor which takes enemy configuration information
-    MapManager(std::map<std::string, EnemyConfig>);
+    MapManager(std::map<std::string, EnemyConf>);
 
     //Default destructor
     ~MapManager();

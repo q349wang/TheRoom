@@ -2,19 +2,20 @@
 #define ENEMYMANAGER_H_
 
 #include "Enemy.h"
+#include "../ADTs/Entity/EnemyConf.h"
 
 #include <map>
 
 class EnemyManager {
  private:
     // Maintains enemy scalling/configuration information
-    EnemyConfig ground_scaling_, flying_scaling_;
+    EnemyConf ground_scaling_, flying_scaling_;
 
  protected:
  public:
     // Constructor requires a map of enemy types and their
     // respective configuration
-    EnemyManager(std::map<std::string, EnemyConfig>);
+    EnemyManager(std::map<std::string, EnemyConf>);
 
     // Default destructor
     ~EnemyManager();
