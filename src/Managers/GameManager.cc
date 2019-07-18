@@ -72,15 +72,6 @@ void GameManager::startGame()
     }
     vector<vector<char>> current_map = inputMap();
 
-
-    for(auto it = current_map.begin(); it != current_map.end(); ++it) {
-        cout << "hello" << endl;
-        for(auto bi = (*it).begin(); bi != (*it).end(); ++bi) {
-            cout << (*bi) << " ";
-        }
-        cout << endl;
-    }
-
     gameMap = make_shared<Map>(player, current_map, make_pair(1, 1), items, enemies);
 
 

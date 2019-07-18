@@ -191,7 +191,6 @@ void Map::moveEnemies()
             continue;
         }
 
-        cout << "start for loop 2" << endl;
         coord position = coord{enem->getPosition()};
         coord currentPlayer = coord{player_->getPosition()};
         vector<char> movement;
@@ -206,12 +205,10 @@ void Map::moveEnemies()
                 if (y_difference >= 0)
                 {
                     movement = {'E', 'S'};
-                    cout << " ES" << endl;
                 }
                 else
                 {
                     movement = {'E', 'N'};
-                    cout << " EN" << endl;
                 }
             }
             else
@@ -219,12 +216,10 @@ void Map::moveEnemies()
                 if (y_difference >= 0)
                 {
                     movement = {'W', 'S'};
-                    cout << " WS" << endl;
                 }
                 else
                 {
                     movement = {'W', 'N'};
-                    cout << " WN" << endl;
                 }
             }
         }
@@ -235,12 +230,10 @@ void Map::moveEnemies()
                 if (y_difference >= 0)
                 {
                     movement = {'S', 'E'};
-                    cout << " SE" << endl;
                 }
                 else
                 {
                     movement = {'N', 'E'};
-                    cout << " NE" << endl;
                 }
             }
             else
@@ -248,12 +241,10 @@ void Map::moveEnemies()
                 if (y_difference >= 0)
                 {
                     movement = {'S', 'W'};
-                    cout << " SW" << endl;
                 }
                 else
                 {
                     movement = {'N', 'W'};
-                    cout << " NW" << endl;
                 }
             }
         }
@@ -267,7 +258,6 @@ void Map::moveEnemies()
 
             if (enem->makeMove(*direction))
             {
-                cout << "Moving enem to " << *direction << endl;
                 ((map_.at(oldPos.second)).at(oldPos.first))->removeEnemy(enem);
 
                 coord updatedCoord{enem->getPosition()};

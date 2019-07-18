@@ -59,13 +59,13 @@ class Player: public Entity {
     bool makeMove(char) override;
 
     // Consume item, specified by the consumable name
-    void consumeConsumable(std::shared_ptr<Entity>, std::string);
+    bool consumeConsumable(std::shared_ptr<Entity>, std::string);
 
     // Equips an equipable and also activates all passive stat mods
     void addEquipable(std::shared_ptr<Equipable>) override;
 
     // Equip item, specified by equipable name
-    void equipEquipable(std::shared_ptr<Entity>, std::string);
+    bool equipEquipable(std::shared_ptr<Entity>, std::string);
     
     // Drop equipped item from the current collection
     void dropEquipable(std::string);

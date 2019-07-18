@@ -67,7 +67,6 @@ void TravelManager::makeMove(const Command &cmd)
             }
 
             pp->makeMove(args[0].at(0));
-            cout << "made move" << endl;
             pp->decreaseCooldown();
             if (auto mp = map.lock())
             {
@@ -188,8 +187,6 @@ void TravelManager::runTravel()
         {
             while (!toExit && !onEnemies())
             {
-                cout << "Current enemies on tile: " << (mp->tile(pp->getPosition())).getEnemies().size() << endl;
-                cout << "player pos" << pp->getPosition().first << " " << pp->getPosition().second << endl;
                 char cmd;
                 vector<string> args;
                 setMessageAndNotify("Input Command (M, A, L, P, D, U)");

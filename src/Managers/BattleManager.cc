@@ -120,7 +120,6 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             break;
         }
         string name = args[1];
-        cout << name << endl;
         shared_ptr<Entity> target = player;
         if (name != "me")
         {
@@ -166,37 +165,47 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
             return false;
         }
         shared_ptr<Item> item;
+        bool success = false;
         if (itemIndex < player->currentEquipables().size())
         {
             item = player->currentEquipables()[itemIndex];
-            player->equipEquipable(target, item->getName());
+            success = player->equipEquipable(target, item->getName());
         }
         else
         {
             item = player->currentConsumables()[itemIndex - player->currentEquipables().size()];
-            player->consumeConsumable(target,
-                                      item->getName());
+            success = player->consumeConsumable(target,
+                                                item->getName());
         }
-        string info = "Player used item " + item->getName() + " on " +
-                      target->getName() + " .";
-        setMessageAndNotify(info);
-        if (target->getHealth() <= 0)
+        if (success)
         {
-            for (auto enemy : eList)
+            string info = "Player used item " + item->getName() + " on " +
+                          target->getName() + " .";
+            setMessageAndNotify(info);
+            if (target->getHealth() <= 0)
             {
-                if (enemy == target)
+                for (auto enemy : eList)
                 {
-                    enemy == nullptr;
+                    if (enemy == target)
+                    {
+                        enemy == nullptr;
+                    }
+                }
+                eLeft--;
+                target->dropAllItems();
+                setMessageAndNotify(target->getName() + " has died.");
+                if (eLeft == 0)
+                {
+                    battleEnded = true;
                 }
             }
-            eLeft--;
-            target->dropAllItems();
-            setMessageAndNotify(target->getName() + " has died.");
-            if (eLeft == 0)
-            {
-                battleEnded = true;
-            }
         }
+        else
+        {
+            setMessageAndNotify("Could not use item on target");
+            return false;
+        }
+
         break;
     }
 

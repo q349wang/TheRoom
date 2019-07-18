@@ -155,9 +155,9 @@ bool Player::makeMove(char direction)
  * Signature: void consumeConsumable(shared_ptr<Consumable>);
  * Purpose: Utilizes a specified consumable item
  */
-void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
+bool Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
 {
-    vector<shared_ptr<Consumable>> consumables = (entity->currentConsumables());
+    vector<shared_ptr<Consumable>> consumables = currentConsumables();
 
     for (auto existing = consumables.begin(); existing != consumables.end(); ++existing)
     {
@@ -169,18 +169,20 @@ void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
                 entity->applyStat((*it).first, (*it).second);
             }
             consumables.erase(existing);
-            break;
+            return true;
         }
     }
+
+    return false;
 }
 
 /**
  * Signature: void equipEquipable(shared_ptr<Equipable>);
  * Purpose: Utilizes a specified equipable item
  */
-void Player::equipEquipable(shared_ptr<Entity> entity, string equip_name)
+bool Player::equipEquipable(shared_ptr<Entity> entity, string equip_name)
 {
-    vector<shared_ptr<Equipable>> equipables = (entity->currentEquipables());
+    vector<shared_ptr<Equipable>> equipables = currentEquipables();
     for (auto existing = equipables.begin(); existing != equipables.end(); ++existing)
     {
         if (equip_name == (*existing)->getName())
@@ -194,10 +196,13 @@ void Player::equipEquipable(shared_ptr<Entity> entity, string equip_name)
                     entity->applyStat((*it).first, (*it).second);
                 }
             }
-
-            break;
+            if ((*existing)->getDurability() == 0) {
+                equipables.erase(existing);
+            }
+            return true;
         }
     }
+    return false;
 }
 
 /**

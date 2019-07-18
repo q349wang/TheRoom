@@ -32,8 +32,6 @@ EnemyManager::~EnemyManager() {}
 shared_ptr<Enemy> EnemyManager::createEnemy(int level, pair<int, int> location)
 {
     int random_selection = rand() % (ground_scaling_.weight + flying_scaling_.weight);
-    cout << "rand" << random_selection << endl;
-    cout << "location "<< location.first << " " << location.second << endl;
     if (random_selection < ground_scaling_.weight)
     {
         shared_ptr<Ground> enemy = make_shared<Ground>((ground_scaling_.health.first + (ground_scaling_.health.second * level)),
