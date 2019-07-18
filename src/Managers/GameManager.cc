@@ -44,6 +44,7 @@ void GameManager::setStartCoord(pair<int, int> input)
 }
 void GameManager::reset()
 {
+    player->forcePosition(startCoord);
     mapManager->populateMap(gameMap, level);
 }
 void GameManager::startGame()
@@ -62,14 +63,15 @@ void GameManager::startGame()
     case 2:
         player = make_shared<Ranger>(200, 200, 20, 15, make_pair(1, 1));
         break;
-    default:
+    case 0:
         player = make_shared<Warrior>(300, 200, 15, 20, make_pair(1, 1));
         break;
+    default:
+        cout << "Invalid hero. Exiting..." << endl;
+        return;
     }
     vector<vector<char>> current_map = inputMap();
 
-    current_map.erase(current_map.begin());
-    current_map.pop_back();
 
     for(auto it = current_map.begin(); it != current_map.end(); ++it) {
         cout << "hello" << endl;
@@ -164,16 +166,19 @@ vector<vector<char>> GameManager::inputMap()
     }
     input >> y >> x;
     setStartCoord(make_pair(y, x));
+    getline(input,mapInput);
     while (input)
     {
-        toReturn.resize(yCoordinate + 1);
         getline(input, mapInput);
-        istringstream tokenStream(mapInput);
-        while (getline(tokenStream, token, ' '))
-        {
-            toReturn[yCoordinate].emplace_back(token.at(0));
+        if(mapInput.size()!=0){
+            toReturn.resize(yCoordinate + 1);
+            istringstream tokenStream(mapInput);
+            while (getline(tokenStream, token, ' '))
+            {
+                toReturn[yCoordinate].emplace_back(token.at(0));
+            }
+            yCoordinate++;
         }
-        yCoordinate++;
     }
     input.close();
     return toReturn;

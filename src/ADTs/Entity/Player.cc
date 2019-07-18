@@ -157,7 +157,7 @@ bool Player::makeMove(char direction)
  */
 void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
 {
-    vector<shared_ptr<Consumable>>& consumables = (entity->currentConsumables());
+    vector<shared_ptr<Consumable>> &consumables = (entity->currentConsumables());
 
     for (auto existing = consumables.begin(); existing != consumables.end(); ++existing)
     {
@@ -181,7 +181,7 @@ void Player::consumeConsumable(shared_ptr<Entity> entity, string consume_name)
  */
 void Player::equipEquipable(shared_ptr<Entity> entity, string equip_name)
 {
-    vector<shared_ptr<Equipable>>& equipables = (entity->currentEquipables());
+    vector<shared_ptr<Equipable>> &equipables = (entity->currentEquipables());
 
     for (auto existing = equipables.begin(); existing != equipables.end(); ++existing)
     {
@@ -291,11 +291,14 @@ vector<shared_ptr<Item>> Player::pickUpItems()
     if (auto mp = current_map_.lock())
     {
         vector<shared_ptr<Item>> items = mp->pickUpItems(position_.first, position_.second);
-        for(auto item : items) {
-            if (item->getType() == 0) {
+        for (auto item : items)
+        {
+            if (item->getType() == 0)
+            {
                 consumables_.push_back(static_pointer_cast<Consumable>(item));
             }
-            else {
+            else
+            {
                 equipables_.push_back(static_pointer_cast<Equipable>(item));
             }
         }
@@ -303,3 +306,8 @@ vector<shared_ptr<Item>> Player::pickUpItems()
     }
     return vector<shared_ptr<Item>>{};
 }
+// Force the player to a certain position
+void Player::forcePosition(pair<int, int> pos)
+{
+    updatePosition(pos);
+};

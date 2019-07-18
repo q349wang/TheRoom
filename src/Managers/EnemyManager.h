@@ -5,6 +5,8 @@
 #include "../ADTs/Entity/EnemyConf.h"
 
 #include <map>
+#include <memory>
+#include <utility>
 
 class EnemyManager {
  private:

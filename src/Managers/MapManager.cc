@@ -35,7 +35,7 @@ MapManager::~MapManager() {}
  * Purpose: Populates a map with enemies and items,
  *          all scaled dependent on the current level
  */
-void MapManager::populateMap(shared_ptr<Map> empty_map, int level)
+void MapManager::populateMap(shared_ptr<Map>& empty_map, int level)
 {
     empty_map->clearMap();
     cout << "cleared" << endl;

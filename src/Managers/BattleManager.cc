@@ -60,31 +60,29 @@ bool BattleManager::runPlayerTurn(const Command &cmd)
     }
     case 'D':
     {
-        shared_ptr<Item> item = nullptr;
-        string name = args[1];
-        for (auto equip : player->currentEquipables())
+        unsigned int itemIndex = 0;
+        try
         {
-            if (equip != nullptr && equip->getName() == name)
-            {
-                item = equip;
-                break;
-            }
+            itemIndex = stoi(args[0]);
         }
-        if (item == nullptr)
+        catch (const invalid_argument &e)
         {
-            for (auto pots : player->currentConsumables())
-            {
-                if (pots != nullptr && pots->getName() == name)
-                {
-                    item = pots;
-                    break;
-                }
-            }
+            setMessageAndNotify("Invalid Item");
+            return false;
         }
-        if (item == nullptr)
+        if (itemIndex >= player->currentEquipables().size() + player->currentConsumables().size())
         {
-            invalidCmd = true;
-            break;
+            setMessageAndNotify("Invalid Item");
+            return false;
+        }
+        shared_ptr<Item> item;
+        if (itemIndex < player->currentEquipables().size())
+        {
+            item = player->currentEquipables()[itemIndex];
+        }
+        else
+        {
+            item = player->currentConsumables()[itemIndex - player->currentEquipables().size()];
         }
         ostringstream itemDesc;
         itemDesc << fixed << setprecision(2);
@@ -286,18 +284,18 @@ void BattleManager::runBattle()
             case 'D':
             {
                 setMessageAndNotify("Input Item");
-                string name;
-                getline(cin, name);
-                args.emplace_back(name);
+                string index;
+                cin >> index;
+                args.emplace_back(index);
                 break;
             }
             // Use item on target
             case 'U':
             {
                 setMessageAndNotify("Input Item");
-                string name;
-                getline(cin, name);
-                args.emplace_back(name);
+                string index;
+                cin >> index;
+                args.emplace_back(index);
                 setMessageAndNotify("Input Target (\"me\" for self)");
                 string target;
                 cin >> target;

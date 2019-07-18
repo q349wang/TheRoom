@@ -82,6 +82,8 @@ class Player: public Entity {
 
     // Picks up all items from current tile and empties tile as well
     std::vector<std::shared_ptr<Item>> pickUpItems(); 
+
+    void forcePosition(std::pair<int, int>);
 };
 
 #endif

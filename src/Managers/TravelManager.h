@@ -26,7 +26,7 @@ class TravelManager : public Subject {
     void runTravel();
 
     const std::weak_ptr<Map> getMap() const;
-
+    bool onEnemies() const;
     bool isExiting() const;
 };
 #endif

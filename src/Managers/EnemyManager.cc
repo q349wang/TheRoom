@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <iostream>
 
 using namespace std;
 
@@ -12,7 +13,10 @@ using namespace std;
  * Purpose: Constructs a map manager which will provide scaled enemies
  *          dependent on the congfiguration information initially provided
  */
-EnemyManager::EnemyManager(map<string, EnemyConf> configuration) : ground_scaling_{configuration.at("Ground")}, flying_scaling_{configuration.at("Flying")} {}
+EnemyManager::EnemyManager(map<string, EnemyConf> configuration) : ground_scaling_{configuration.at("Ground")}, flying_scaling_{configuration.at("Flying")} {
+        // Create seed for psuedorandom number
+    srand(time(NULL));
+}
 
 /**
  * Signature: ~EnemyManager()
@@ -27,10 +31,9 @@ EnemyManager::~EnemyManager() {}
  */
 shared_ptr<Enemy> EnemyManager::createEnemy(int level, pair<int, int> location)
 {
-    // Create seed for psuedorandom number
-    srand(time(NULL));
     int random_selection = rand() % (ground_scaling_.weight + flying_scaling_.weight);
-
+    cout << "rand" << random_selection << endl;
+    cout << "location "<< location.first << " " << location.second << endl;
     if (random_selection < ground_scaling_.weight)
     {
         shared_ptr<Ground> enemy = make_shared<Ground>((ground_scaling_.health.first + (ground_scaling_.health.second * level)),
